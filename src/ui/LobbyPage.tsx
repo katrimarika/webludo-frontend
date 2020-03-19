@@ -1,5 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+import { setHash } from '../utils/hash';
 import { SocketActions } from '../utils/socket';
 
 const LobbyPage: FunctionalComponent<{ socket: SocketActions }> = ({
@@ -14,7 +15,7 @@ const LobbyPage: FunctionalComponent<{ socket: SocketActions }> = ({
         onSubmit={e => {
           e.preventDefault();
           if (inputText) {
-            location.hash = `#${inputText}`;
+            setHash(inputText);
           }
         }}
       >
@@ -34,7 +35,7 @@ const LobbyPage: FunctionalComponent<{ socket: SocketActions }> = ({
           onClick={() =>
             socket.create(id => {
               if (id && typeof id === 'string') {
-                location.hash = `#${inputText}`;
+                setHash(id);
               }
             })
           }
