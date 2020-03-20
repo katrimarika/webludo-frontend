@@ -1,41 +1,85 @@
+import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { SocketActions } from '../utils/socket';
-
-type Game = {
-  id: string;
-  players: string[];
-};
+import Game from './Game';
+import GameInfo from './GameInfo';
 
 const GamePage: FunctionalComponent<{ id: string; socket: SocketActions }> = ({
   id,
   socket,
 }) => {
-  const [gameData, setGameData] = useState<Game | null>(null);
+  const [gameData, setGameData] = useState<RemoteData<Game>>({
+    status: 'NOT_ASKED',
+  });
+  const [gameState, setGameState] = useState<RemoteData<GameState>>({
+    status: 'NOT_ASKED',
+  });
+
+  const loadGame = () => {
+    setGameData({ status: 'ASKED' });
+    setGameState({ status: 'ASKED' });
+    socket.getGame(id);
+    socket.getGameState(id);
+  };
 
   useEffect(() => {
-    socket.getGame(id, data => {
-      setGameData(data);
-    });
+    loadGame();
     socket.registerHandler((message, data) => {
       if (message === 'gameData') {
         setGameData(data);
+      } else if (message === 'state') {
+        setGameState(data);
       }
     });
+    socket.onError(() => {
+      setGameData({ status: 'ERROR', error: 'Connection error' });
+      setGameState({ status: 'ERROR', error: 'Connection error' });
+    });
+    return socket.unregisterHandler();
   }, []);
 
   return (
     <div>
-      <h1>Game: {id}</h1>
-      {!gameData ? (
-        <div>No data</div>
-      ) : (
-        <ol>
-          {gameData.players.map(p => (
-            <li key={`player-${p}`}>{p}</li>
-          ))}
-        </ol>
-      )}
+      <h1
+        className={css`
+          padding: 0 1.2rem;
+        `}
+      >
+        <span
+          className={css`
+            margin-right: 0.6rem;
+          `}
+        >
+          Game: {id}
+        </span>
+        <button type="button" onClick={loadGame}>
+          Reload
+        </button>
+      </h1>
+      <div
+        className={css`
+          @media screen and (orientation: landscape) {
+            display: flex;
+          }
+        `}
+      >
+        <div
+          className={css`
+            margin-bottom: 1.2rem;
+            padding: 0 1.2rem;
+          `}
+        >
+          <GameInfo
+            gameData={gameData}
+            currentColor={
+              (gameState.status === 'SUCCESS' && gameState.data.currentColor) ||
+              null
+            }
+          />
+        </div>
+        <Game gameState={gameState} />
+      </div>
     </div>
   );
 };

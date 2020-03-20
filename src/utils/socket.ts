@@ -5,10 +5,12 @@ const noop = () => null;
 export type SocketActions = {
   registerHandler: (handler: (...args: any[]) => void) => void;
   unregisterHandler: () => void;
-  create: (callback: (id: string) => void) => void;
-  join: (id: string, callback: (success: boolean) => void) => void;
-  leave: (id: string, callback: (success: boolean) => void) => void;
-  getGame: (id: string, callback: (data: Game) => void) => void;
+  onError: (callBack: (err: any) => void) => void;
+  create: (callback?: (id: string) => void) => void;
+  join: (id: string, callback?: (success: boolean) => void) => void;
+  leave: (id: string, callback?: (success: boolean) => void) => void;
+  getGame: (id: string, callback?: (data: Game) => void) => void;
+  getGameState: (id: string, callback?: (data: GameState) => void) => void;
 };
 
 export const initSocket = (): SocketActions => {
@@ -18,10 +20,12 @@ export const initSocket = (): SocketActions => {
     return {
       registerHandler: noop,
       unregisterHandler: noop,
+      onError: noop,
       create: noop,
       join: noop,
       leave: noop,
       getGame: noop,
+      getGameState: noop,
     };
   }
 
@@ -35,10 +39,9 @@ export const initSocket = (): SocketActions => {
     socket.off('message');
   };
 
-  socket.on('error', (err: any) => {
-    console.log('received socket error:');
-    console.log(err);
-  });
+  const onError: SocketActions['onError'] = callback => {
+    socket.on('error', callback);
+  };
 
   const create: SocketActions['create'] = callback => {
     socket.emit('create', null, callback);
@@ -56,12 +59,18 @@ export const initSocket = (): SocketActions => {
     socket.emit('getGame', id, callback);
   };
 
+  const getGameState: SocketActions['getGameState'] = (id, callback) => {
+    socket.emit('getGameState', id, callback);
+  };
+
   return {
     create,
     join,
     leave,
     getGame,
+    getGameState,
     registerHandler,
     unregisterHandler,
+    onError,
   };
 };
