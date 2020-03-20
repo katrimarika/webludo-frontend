@@ -1,11 +1,9 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { setHash } from '../utils/hash';
-import { SocketActions } from '../utils/socket';
+import { Socket } from '../utils/socket';
 
-const LobbyPage: FunctionalComponent<{ socket: SocketActions }> = ({
-  socket,
-}) => {
+const LobbyPage: FunctionalComponent<{ socket: Socket }> = ({ socket }) => {
   const [inputText, setInputText] = useState('');
 
   return (
@@ -14,7 +12,7 @@ const LobbyPage: FunctionalComponent<{ socket: SocketActions }> = ({
       <form
         onSubmit={e => {
           e.preventDefault();
-          if (inputText) {
+          if (inputText && socket) {
             setHash(inputText);
           }
         }}
@@ -32,12 +30,15 @@ const LobbyPage: FunctionalComponent<{ socket: SocketActions }> = ({
       <div>
         <button
           type="button"
+          disabled={!socket}
           onClick={() =>
-            socket.create(id => {
-              if (id && typeof id === 'string') {
-                setHash(id);
-              }
-            })
+            socket
+              ? socket.create(id => {
+                  if (id && typeof id === 'string') {
+                    setHash(id);
+                  }
+                })
+              : null
           }
         >
           New game

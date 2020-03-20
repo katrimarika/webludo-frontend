@@ -1,11 +1,11 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { SocketActions } from '../utils/socket';
+import { Socket } from '../utils/socket';
 import Game from './Game';
 import GameInfo from './GameInfo';
 
-const GamePage: FunctionalComponent<{ id: string; socket: SocketActions }> = ({
+const GamePage: FunctionalComponent<{ id: string; socket: Socket }> = ({
   id,
   socket,
 }) => {
@@ -17,26 +17,33 @@ const GamePage: FunctionalComponent<{ id: string; socket: SocketActions }> = ({
   });
 
   const loadGame = () => {
-    setGameData({ status: 'ASKED' });
-    setGameState({ status: 'ASKED' });
-    socket.getGame(id);
-    socket.getGameState(id);
+    if (socket) {
+      setGameData({ status: 'ASKED' });
+      setGameState({ status: 'ASKED' });
+      socket.getGame(id);
+      socket.getGameState(id);
+    } else {
+      setGameData({ status: 'ERROR', error: 'No connection' });
+      setGameState({ status: 'ERROR', error: 'No connection' });
+    }
   };
 
   useEffect(() => {
     loadGame();
-    socket.registerHandler((message, data) => {
-      if (message === 'gameData') {
-        setGameData(data);
-      } else if (message === 'state') {
-        setGameState(data);
-      }
-    });
-    socket.onError(() => {
-      setGameData({ status: 'ERROR', error: 'Connection error' });
-      setGameState({ status: 'ERROR', error: 'Connection error' });
-    });
-    return socket.unregisterHandler();
+    if (socket) {
+      socket.registerHandler((message, data) => {
+        if (message === 'gameData') {
+          setGameData(data);
+        } else if (message === 'state') {
+          setGameState(data);
+        }
+      });
+      socket.onError(() => {
+        setGameData({ status: 'ERROR', error: 'Connection error' });
+        setGameState({ status: 'ERROR', error: 'Connection error' });
+      });
+      return socket.unregisterHandler();
+    }
   }, []);
 
   return (

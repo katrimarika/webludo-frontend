@@ -1,8 +1,7 @@
 import * as io from 'socket.io-client';
 
-const noop = () => null;
-
-export type SocketActions = {
+export type Socket = SocketActions | undefined;
+type SocketActions = {
   registerHandler: (handler: (...args: any[]) => void) => void;
   unregisterHandler: () => void;
   onError: (callBack: (err: any) => void) => void;
@@ -13,20 +12,11 @@ export type SocketActions = {
   getGameState: (id: string, callback?: (data: GameState) => void) => void;
 };
 
-export const initSocket = (): SocketActions => {
+export const initSocket = (): Socket => {
   const url = process.env.SOCKET_URL;
   if (!url) {
     console.error('No socket connection url!');
-    return {
-      registerHandler: noop,
-      unregisterHandler: noop,
-      onError: noop,
-      create: noop,
-      join: noop,
-      leave: noop,
-      getGame: noop,
-      getGameState: noop,
-    };
+    return;
   }
 
   const socket = io.connect(url);
