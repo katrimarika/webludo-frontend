@@ -1,6 +1,8 @@
 // Helper functions for game position calculations
 // Game starts from top left "corner" and proceeds clockwise
 
+export const colors = ['red', 'blue', 'yellow', 'green'] as const;
+
 const playDist = 15;
 const playStart = 90 + 45;
 
@@ -35,5 +37,19 @@ export const goalCoord = (type: 'x' | 'y', i: number, j: number) => {
     return 50 + (39.5 - j * dist) * Math.cos(rad);
   } else {
     return 50 - (39.5 - j * dist) * Math.sin(rad);
+  }
+};
+
+export const pieceCoord = (type: 'x' | 'y', piece: Piece) => {
+  const colorIndex = colors.indexOf(piece.color);
+  switch (piece.area) {
+    case 'goal':
+      return goalCoord(type, colorIndex, piece.index);
+    case 'home':
+      return homeCoord(type, colorIndex, piece.index);
+    case 'play':
+      return playCoord(type, piece.index);
+    default:
+      return 0;
   }
 };

@@ -51,6 +51,7 @@ const Game: FunctionalComponent<{ gameState: RemoteData<GameState> }> = ({
         @media screen and (orientation: landscape) {
           width: 18rem;
           height: 18rem;
+          margin: 2rem 1.2rem;
         }
       `}
     >

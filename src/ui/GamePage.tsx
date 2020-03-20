@@ -47,30 +47,30 @@ const GamePage: FunctionalComponent<{ id: string; socket: Socket }> = ({
   }, []);
 
   return (
-    <div>
-      <h1
-        className={css`
-          padding: 0 1.2rem;
-        `}
-      >
-        <span
+    <div
+      className={css`
+        @media screen and (orientation: landscape) {
+          display: flex;
+        }
+      `}
+    >
+      <div>
+        <h1
           className={css`
-            margin-right: 0.6rem;
+            padding: 0 1.2rem;
           `}
         >
-          Game: {id}
-        </span>
-        <button type="button" onClick={loadGame}>
-          Reload
-        </button>
-      </h1>
-      <div
-        className={css`
-          @media screen and (orientation: landscape) {
-            display: flex;
-          }
-        `}
-      >
+          <span
+            className={css`
+              margin-right: 0.6rem;
+            `}
+          >
+            Game: {id}
+          </span>
+          <button type="button" onClick={loadGame}>
+            Reload
+          </button>
+        </h1>
         <div
           className={css`
             margin-bottom: 1.2rem;
@@ -85,8 +85,8 @@ const GamePage: FunctionalComponent<{ id: string; socket: Socket }> = ({
             }
           />
         </div>
-        <Game gameState={gameState} />
       </div>
+      <Game gameState={gameState} />
     </div>
   );
 };
