@@ -6,7 +6,7 @@ import { theme } from '../utils/theme';
 const spotCss = css`
   stroke: black;
   stroke-width: 0.1rem;
-  fill: white;
+  fill: transparent;
 `;
 const highlightCss = (i: number) => css`
   stroke-width: 0.15rem;
@@ -82,6 +82,7 @@ const GameBoard: FunctionalComponent = () => (
         />
       </Fragment>
     ))}
+    <circle cx="50%" cy="50%" r="10%" className={spotCss} />
   </svg>
 );
 

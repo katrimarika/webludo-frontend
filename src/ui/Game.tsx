@@ -1,36 +1,22 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h, JSX } from 'preact';
 import GameBoard from './GameBoard';
+import GameOverlay from './GameOverlay';
 import GamePieces from './GamePieces';
 
 const Game: FunctionalComponent<{ gameState: RemoteData<GameState> }> = ({
   gameState,
 }) => {
   let stateContent: JSX.Element | null = null;
-  const textCss = css`
-    text-anchor: middle;
-  `;
   switch (gameState.status) {
     case 'NOT_ASKED':
-      stateContent = (
-        <text x="50%" y="50%" className={textCss}>
-          No game state!
-        </text>
-      );
+      stateContent = <GameOverlay text="No game state!" />;
       break;
     case 'ASKED':
-      stateContent = (
-        <text x="50%" y="50%" className={textCss}>
-          Loading game state...
-        </text>
-      );
+      stateContent = <GameOverlay text="Loading game state..." />;
       break;
     case 'ERROR':
-      stateContent = (
-        <text x="50%" y="50%" className={textCss}>
-          Error loading game state: {gameState.error}
-        </text>
-      );
+      stateContent = <GameOverlay text={`Error: ${gameState.error}`} />;
       break;
     case 'SUCCESS':
       const { currentColor, pieces } = gameState.data;

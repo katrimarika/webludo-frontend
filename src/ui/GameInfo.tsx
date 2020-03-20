@@ -10,7 +10,7 @@ const GameInfo: FunctionalComponent<{
     case 'ASKED':
       return <div>Loading game details...</div>;
     case 'ERROR':
-      return <div>Error loading game details: {gameData.error}</div>;
+      return <div>Error: {gameData.error}</div>;
     case 'SUCCESS':
       const { players, status } = gameData.data;
       return (
