@@ -55,7 +55,7 @@ export const pieceCoord = (type: 'x' | 'y', piece: Piece) => {
 };
 
 export const arrowCoord = (type: 'x' | 'y', i: number) => {
-  const rad = toRad(playStart + 7.5 - 90 * i);
+  const rad = toRad(playStart + 7.5 - 1 - 90 * i);
   if (type === 'x') {
     return 50 + 46 * Math.cos(rad) - (i === 1 || i === 2 ? 10 : 0);
   } else {

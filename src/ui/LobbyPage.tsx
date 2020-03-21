@@ -36,7 +36,7 @@ const LobbyPage: FunctionalComponent<{ socket: SocketHandler }> = ({
           margin: 0 0 1.2rem;
         `}
       >
-        WEBKimble
+        KimbIe
       </h1>
       <ErrorMessage prefix="Lobby error: " text={lobbyError} />
       <MiniForm

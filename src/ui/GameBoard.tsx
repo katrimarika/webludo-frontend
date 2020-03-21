@@ -13,26 +13,96 @@ import { theme } from '../utils/style';
 const spotCss = css`
   stroke: black;
   stroke-width: 0.1rem;
-  fill: transparent;
+  fill: ${theme.colors.white};
 `;
 const highlightCss = (i: number) => css`
   stroke-width: 0.15rem;
   stroke: ${theme.colors[colors[i]].main};
   fill: transparent;
 `;
-const bd1 = 180; // board cut-corner distance
+const backgroundLineCss = css`
+  stroke-width: 5rem;
+  stroke: ${theme.colors.boardPath};
+  fill: transparent;
+  stroke-linecap: round;
+`;
+const bd1 = 160; // board cut-corner distance
 const bd2 = 998 - bd1;
+const bid1 = 220; // board inner cut-corner distance
+const bid2 = 995 - bid1;
 const cd1 = 105; // center cut-corner start distance
 const cd2 = 145; // center cut-corner end distance
 
 const GameBoard: FunctionalComponent = () => (
   <svg width="100%" height="100%">
     <svg width="100%" height="100%" viewBox="0 0 1000 1000">
-      <polygon
-        points={`${bd1},2 ${bd2},2 998,${bd1} 998,${bd2} ${bd2},998 ${bd1},998 2,${bd2} 2,${bd1}`}
-        className={spotCss}
+      <path
+        d={`M${bd1},2 ${bd2},2 Q944,56 998,${bd1} L998,${bd2} Q944,944 ${bd2},998 L${bd1},998 Q56,944 2,${bd2} L2,${bd1} Q56,56 ${bd1},2`}
+        className={css`
+          stroke: black;
+          stroke-width: 0.2rem;
+          fill: ${theme.colors.boardCorner};
+        `}
+      />
+      <path
+        d={`M${bid1},5 ${bid2},5 Q924,76 995,${bid1} L995,${bid2} Q924,924 ${bid2},995 L${bid1},995 Q76,924 5,${bid2} L5,${bid1} Q76,76 ${bid1},5`}
+        className={css`
+          stroke: black;
+          stroke-width: 0.2rem;
+          fill: ${theme.colors.white};
+        `}
       />
     </svg>
+    <circle
+      cx="50%"
+      cy="50%"
+      r="44.5%"
+      className={css`
+        fill: ${theme.colors.boardCenter};
+      `}
+    />
+    <svg width="100%" height="100%" viewBox="0 0 1000 1000">
+      <path d="M250,250 Q195,172 260,125" className={backgroundLineCss} />
+      <path d="M250,250 Q172,195 125,260" className={backgroundLineCss} />
+      <path d="M750,750 Q805,828 740,875" className={backgroundLineCss} />
+      <path d="M750,750 Q828,805 875,740" className={backgroundLineCss} />
+      <path d="M750,250 Q805,172 740,125" className={backgroundLineCss} />
+      <path d="M750,250 Q828,195 875,260" className={backgroundLineCss} />
+      <path d="M250,750 Q195,828 260,875" className={backgroundLineCss} />
+      <path d="M250,750 Q172,805 125,740" className={backgroundLineCss} />
+    </svg>
+    <line
+      x1="16%"
+      y1="16%"
+      x2="84%"
+      y2="84%"
+      className={css`
+        stroke: ${theme.colors.boardPath};
+        stroke-width: 2.3rem;
+        fill: transparent;
+      `}
+    />
+    <line
+      x1="16%"
+      y1="84%"
+      x2="84%"
+      y2="16%"
+      className={css`
+        stroke: ${theme.colors.boardPath};
+        stroke-width: 2.3rem;
+        fill: transparent;
+      `}
+    />
+    <circle
+      cx="50%"
+      cy="50%"
+      r="44.5%"
+      className={css`
+        stroke: ${theme.colors.boardPath};
+        stroke-width: 2.1rem;
+        fill: transparent;
+      `}
+    />
     {[...new Array(24)].map((_, i) => (
       <circle
         key={`play-${i}`}
@@ -124,7 +194,7 @@ const GameBoard: FunctionalComponent = () => (
             d="M10,80 Q35,25 75,65 L71,70 80,71 79,61.5 75,65"
             transform={`rotate(${90 * i} 50 50)`}
             className={css`
-              stroke-width: 0.4rem;
+              stroke-width: 0.5rem;
               stroke: ${theme.colors[colors[i]].main};
               fill: transparent;
             `}
@@ -135,7 +205,11 @@ const GameBoard: FunctionalComponent = () => (
     <svg x="35%" y="35%" width="30%" height="30%" viewBox="0 0 250 250">
       <polygon
         points={`${cd1},2 ${cd2},2 248,${cd1} 248,${cd2} ${cd2},248 ${cd1},248 2,${cd2} 2,${cd1}`}
-        className={spotCss}
+        className={css`
+          stroke: black;
+          stroke-width: 0.1rem;
+          fill: ${theme.colors.lightgray};
+        `}
       />
     </svg>
   </svg>

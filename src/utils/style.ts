@@ -7,7 +7,7 @@ export const theme = {
       text: '#b60000',
     },
     blue: {
-      main: '#0000ff',
+      main: '#0046ff',
       text: '#0000b7',
     },
     yellow: {
@@ -21,7 +21,12 @@ export const theme = {
     black: '#000',
     gray: '#757575',
     silver: '#c0c0c0',
+    lightgray: '#f1f1f1',
+    white: '#fff',
     ivory: '#fffff0',
+    boardPath: '#1f1f56',
+    boardCenter: '#70b1de',
+    boardCorner: '#272525',
   },
 };
 
