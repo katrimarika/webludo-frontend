@@ -6,7 +6,7 @@ export const colors = ['red', 'blue', 'yellow', 'green'] as const;
 const playDist = 15;
 const playStart = 90 + 45;
 
-const toRad = (deg: number) => (deg / 360) * 2 * Math.PI;
+export const toRad = (deg: number) => (deg / 360) * 2 * Math.PI;
 
 export const playCoord = (type: 'x' | 'y', i: number) => {
   // 24 play "squares": i = 0..23
@@ -63,8 +63,17 @@ export const arrowCoord = (type: 'x' | 'y', i: number) => {
   }
 };
 
+export const dieCoord = (type: 'x' | 'y', rand: number) => {
+  const rad = toRad(Math.floor(rand * 360));
+  if (type === 'x') {
+    return 47 + 5 * Math.cos(rad);
+  } else {
+    return 47 - 5 * Math.sin(rad);
+  }
+};
+
 export const toStr = (val: any) => (typeof val === 'string' ? val : '');
-export const toNum = (val: any) => (typeof val === 'number' ? val : 0);
+export const toInt = (val: any) => parseInt(val, 10) || 0;
 
 export const toGame = (data: any): Game | false => {
   if (!data) {
@@ -117,11 +126,12 @@ export const toGameState = (data: any): GameState | false => {
   const pieces = Array.isArray(data.pieces)
     ? (data.pieces as any[]).reduce<Piece[]>((list, p) => {
         const area = toStr(p.area) as Piece['area'];
-        const index = toNum(p.index);
+        const index = toInt(p.index);
         const color = toStr(p.color) as Color;
         if (
           area &&
           ['home', 'play', 'goal'].indexOf(area) !== -1 &&
+          index >= 0 &&
           color &&
           colors.indexOf(color) !== -1
         ) {

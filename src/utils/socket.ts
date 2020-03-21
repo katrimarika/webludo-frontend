@@ -1,5 +1,5 @@
 import { Channel as PhoenixChannel, Socket } from 'phoenix';
-import { toGame, toGameState, toStr } from './helpers';
+import { toGame, toGameState, toStr, toInt } from './helpers';
 
 export type Channel = PhoenixChannel;
 
@@ -59,6 +59,7 @@ export const initSocket = () => {
     code: string,
     onGameChange: (data: Game) => void,
     onStateChange: (state: GameState) => void,
+    onRoll: (val: number) => void,
     onError: OnError,
   ) => {
     const channel = socket.channel(`games:${code.toLowerCase()}`, {});
@@ -78,7 +79,7 @@ export const initSocket = () => {
         }
       })
       .receive('error', onErrorStr(onError));
-    // Listen go game change events
+    // Listen to game change events
     channel.on('game_change', resp => {
       const game = toGame(resp && resp.game);
       if (game) {
@@ -95,6 +96,12 @@ export const initSocket = () => {
         onError('Received invalid game state');
       }
     });
+    channel.on('roll', resp => {
+      const val = toInt(resp);
+      if (val > 0 && val <= 6) {
+        onRoll(val);
+      }
+    });
     return channel;
   };
 
@@ -107,12 +114,29 @@ export const initSocket = () => {
     channel
       .push('join_game', { name })
       .receive('ok', resp => {
-        console.log(resp);
         const game = toGame(resp && resp.game);
         if (game) {
           onSuccess(game);
         } else {
           onError('Invalid game data');
+        }
+      })
+      .receive('error', onErrorStr(onError));
+  };
+
+  const rollDie = (
+    channel: Channel,
+    onSuccess: (result: RollResult) => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('roll', {})
+      .receive('ok', resp => {
+        const roll = toInt(resp && resp.result);
+        if (roll) {
+          onSuccess({ roll, actions: [] });
+        } else {
+          onError('Invalid roll data');
         }
       })
       .receive('error', onErrorStr(onError));
@@ -124,6 +148,7 @@ export const initSocket = () => {
     createGame,
     joinGameChannel,
     joinGame,
+    rollDie,
   };
 };
 

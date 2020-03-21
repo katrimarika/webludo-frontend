@@ -22,3 +22,10 @@ type GameState = {
   currentColor: Color | null;
   pieces: Piece[];
 };
+
+type RollResult = {
+  roll: number;
+  actions: []; // TODO
+};
+
+type DieState = { roll: number; position: number; orientation: number };

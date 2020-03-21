@@ -1,5 +1,6 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
+import { memo } from 'preact/compat';
 import { pieceCoord } from '../utils/helpers';
 import { pulseAnimation, theme } from '../utils/style';
 
@@ -25,4 +26,4 @@ const GamePieces: FunctionalComponent<GameState> = ({
   </svg>
 );
 
-export default GamePieces;
+export default memo(GamePieces);

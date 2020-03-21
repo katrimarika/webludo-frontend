@@ -16,6 +16,12 @@ const GamePage: FunctionalComponent<{
   const [error, setError] = useState('');
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
+  const [gameError, setGameError] = useState('');
+  const [die, setDie] = useState<DieState>({
+    roll: Math.ceil(Math.random() * 6),
+    position: Math.random(),
+    orientation: Math.random(),
+  });
 
   useEffect(() => {
     if (socket && !channel) {
@@ -23,6 +29,8 @@ const GamePage: FunctionalComponent<{
         code,
         game => setGame(game),
         state => setGameState(state),
+        roll =>
+          setDie({ roll, position: Math.random(), orientation: Math.random() }),
         e => setError(e),
       );
       setChannel(gameChannel);
@@ -109,7 +117,23 @@ const GamePage: FunctionalComponent<{
       >
         <Game
           gameState={gameState}
+          die={die}
+          onRoll={() => {
+            if (socket && channel) {
+              socket.rollDie(
+                channel,
+                v =>
+                  setDie({
+                    roll: v.roll,
+                    position: Math.random(),
+                    orientation: Math.random(),
+                  }),
+                e => setGameError(e),
+              );
+            }
+          }}
           disabled={!game || game.status !== 'ongoing' || !!error}
+          message={gameError}
         />
       </div>
     </div>

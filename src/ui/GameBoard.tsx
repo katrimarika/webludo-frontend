@@ -1,5 +1,6 @@
 import { css } from 'emotion';
 import { Fragment, FunctionalComponent, h } from 'preact';
+import { memo } from 'preact/compat';
 import {
   arrowCoord,
   colors,
@@ -131,8 +132,6 @@ const GameBoard: FunctionalComponent = () => (
         </svg>
       </Fragment>
     ))}
-    <circle cx="50%" cy="50%" r="10%" className={spotCss} />
-    <circle cx="50%" cy="50%" r="9%" className={spotCss} />
     <svg x="35%" y="35%" width="30%" height="30%" viewBox="0 0 250 250">
       <polygon
         points={`${cd1},2 ${cd2},2 248,${cd1} 248,${cd2} ${cd2},248 ${cd1},248 2,${cd2} 2,${cd1}`}
@@ -142,4 +141,4 @@ const GameBoard: FunctionalComponent = () => (
   </svg>
 );
 
-export default GameBoard;
+export default memo(GameBoard);

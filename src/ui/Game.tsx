@@ -1,14 +1,17 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
+import DieSystem from './DieSystem';
 import GameBoard from './GameBoard';
 import GameOverlay from './GameOverlay';
 import GamePieces from './GamePieces';
 
 const Game: FunctionalComponent<{
   gameState: GameState | null;
+  die: DieState;
+  onRoll: () => void;
   disabled?: boolean;
   message?: string;
-}> = ({ gameState, disabled, message }) => (
+}> = ({ gameState, die, onRoll, disabled, message }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={css`
@@ -25,6 +28,7 @@ const Game: FunctionalComponent<{
   >
     <GameBoard />
     {gameState && <GamePieces {...gameState} />}
+    <DieSystem die={die} onRoll={onRoll} disabled={disabled} />
     {(message || disabled) && <GameOverlay text={message || ''} />}
   </svg>
 );

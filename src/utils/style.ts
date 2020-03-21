@@ -20,6 +20,8 @@ export const theme = {
     },
     black: '#000',
     gray: '#757575',
+    silver: '#c0c0c0',
+    ivory: '#fffff0',
   },
 };
 
