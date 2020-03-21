@@ -1,10 +1,13 @@
-import { Socket, Channel as PhoenixChannel } from 'phoenix';
+import { Channel as PhoenixChannel, Socket } from 'phoenix';
+import { toGame, toGameState, toStr } from './helpers';
 
 export type Channel = PhoenixChannel;
 
 type OnError = (e: string) => void;
-const onErrorStr = (onError: OnError) => (e: any) =>
-  onError(JSON.stringify(e, null, 2));
+const onErrorStr = (onError: OnError) => (e: any) => {
+  const errorStr = JSON.stringify(e, null, 2);
+  return onError(errorStr);
+};
 
 export const initSocket = () => {
   const url = process.env.SOCKET_URL;
@@ -35,14 +38,16 @@ export const initSocket = () => {
 
   const createGame = (
     channel: Channel,
-    onSuccess: (id: string) => void,
+    name: string,
+    onSuccess: (code: string) => void,
     onError: OnError,
   ) => {
     channel
-      .push('create_game', {})
+      .push('create_game', { name })
       .receive('ok', resp => {
-        if (resp && resp.code && typeof resp.code === 'string') {
-          onSuccess(resp.code);
+        const code = toStr(resp && resp.code);
+        if (code) {
+          onSuccess(code);
         } else {
           onError('No valid code received');
         }
@@ -51,18 +56,45 @@ export const initSocket = () => {
   };
 
   const joinGameChannel = (
-    id: string,
-    onSuccess: (data: { game: Game; state: GameState }) => void,
+    code: string,
+    onGameChange: (data: Game) => void,
+    onStateChange: (state: GameState) => void,
     onError: OnError,
   ) => {
-    const channel = socket.channel(`games:${id}`, {});
+    const channel = socket.channel(`games:${code.toLowerCase()}`, {});
     channel
       .join()
       .receive('ok', resp => {
-        // TODO: validate
-        onSuccess(resp);
+        const game = toGame(resp && resp.game);
+        const state = toGameState(resp && resp.gamestate);
+        if (!game && !state) {
+          onError('Invalid game data');
+        }
+        if (game) {
+          onGameChange(game);
+        }
+        if (state) {
+          onStateChange(state);
+        }
       })
       .receive('error', onErrorStr(onError));
+    // Listen go game change events
+    channel.on('game_change', resp => {
+      const game = toGame(resp && resp.game);
+      if (game) {
+        onGameChange(game);
+      } else {
+        onError('Received invalid game data');
+      }
+    });
+    channel.on('gamestate_change', resp => {
+      const state = toGameState(resp && resp.gamestate);
+      if (state) {
+        onStateChange(state);
+      } else {
+        onError('Received invalid game state');
+      }
+    });
     return channel;
   };
 
@@ -75,8 +107,13 @@ export const initSocket = () => {
     channel
       .push('join_game', { name })
       .receive('ok', resp => {
-        // TODO: validate data
-        onSuccess(resp);
+        console.log(resp);
+        const game = toGame(resp && resp.game);
+        if (game) {
+          onSuccess(game);
+        } else {
+          onError('Invalid game data');
+        }
       })
       .receive('error', onErrorStr(onError));
   };

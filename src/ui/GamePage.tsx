@@ -2,15 +2,16 @@ import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { Channel, SocketHandler } from '../utils/socket';
+import { theme } from '../utils/style';
 import ErrorMessage from './ErrorMessage';
 import Game from './Game';
 import GameInfo from './GameInfo';
 import MiniForm from './MiniForm';
 
-const GamePage: FunctionalComponent<{ id: string; socket: SocketHandler }> = ({
-  id,
-  socket,
-}) => {
+const GamePage: FunctionalComponent<{
+  code: string;
+  socket: SocketHandler;
+}> = ({ code, socket }) => {
   const [channel, setChannel] = useState<Channel | null>(null);
   const [error, setError] = useState('');
   const [game, setGame] = useState<Game | null>(null);
@@ -19,22 +20,18 @@ const GamePage: FunctionalComponent<{ id: string; socket: SocketHandler }> = ({
   useEffect(() => {
     if (socket && !channel) {
       const gameChannel = socket.joinGameChannel(
-        id,
-        data => {
-          setGame(data.game);
-          setGameState(data.state);
-        },
-        e => {
-          setChannel(null);
-          setError(JSON.stringify(e, null, 2));
-        },
+        code,
+        game => setGame(game),
+        state => setGameState(state),
+        e => setError(e),
       );
       setChannel(gameChannel);
       return () => socket.leaveChannel(gameChannel);
     }
   }, []);
 
-  const canJoin = socket && channel && !!game && game.players.length < 4;
+  const canJoin =
+    socket && channel && !error && !!game && game.players.length < 4;
 
   return (
     <div
@@ -51,22 +48,31 @@ const GamePage: FunctionalComponent<{ id: string; socket: SocketHandler }> = ({
       >
         <h1
           className={css`
-            display: flex;
-            align-items: center;
+            font-size: 1.5rem;
             margin: 0 0 0.8rem;
           `}
         >
+          {game && game.name ? (
+            <span>{game.name}</span>
+          ) : (
+            <span
+              className={css`
+                color: ${theme.colors.gray};
+              `}
+            >
+              {'<No name>'}
+            </span>
+          )}
           <span
             className={css`
-              margin-right: 0.8rem;
+              font-size: 1rem;
+              color: ${theme.colors.gray};
             `}
-          >
-            Game: {id}
-          </span>
+          >{` ${code}`}</span>
         </h1>
         <ErrorMessage
-          prefix={error ? 'Channel error: ' : ''}
-          text={error || (!game ? 'No game data :(' : '')}
+          prefix="Error: "
+          text={error}
           styles={css`
             margin-bottom: 0.6rem;
           `}
@@ -79,7 +85,7 @@ const GamePage: FunctionalComponent<{ id: string; socket: SocketHandler }> = ({
         )}
         {canJoin && (
           <MiniForm
-            name="player-name"
+            inputName="player-name"
             label="Name"
             buttonText="Join"
             buttonColor="green"
@@ -96,10 +102,16 @@ const GamePage: FunctionalComponent<{ id: string; socket: SocketHandler }> = ({
           />
         )}
       </div>
-      <Game
-        gameState={gameState}
-        disabled={!game || game.status !== 'ongoing' || !!error}
-      />
+      <div
+        className={css`
+          margin: 0 auto;
+        `}
+      >
+        <Game
+          gameState={gameState}
+          disabled={!game || game.status !== 'ongoing' || !!error}
+        />
+      </div>
     </div>
   );
 };

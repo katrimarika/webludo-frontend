@@ -62,3 +62,82 @@ export const arrowCoord = (type: 'x' | 'y', i: number) => {
     return 50 - 46 * Math.sin(rad) - (i > 1 ? 10 : 0);
   }
 };
+
+export const toStr = (val: any) => (typeof val === 'string' ? val : '');
+export const toNum = (val: any) => (typeof val === 'number' ? val : 0);
+
+export const toGame = (data: any): Game | false => {
+  if (!data) {
+    console.error('No game details when expected');
+    return false;
+  }
+  const code = toStr(data.code);
+  const status = toStr(data.status);
+  const name = toStr(data.name);
+  if (!code || !status || !name) {
+    console.error('Invalid game details', data);
+    return false;
+  }
+  const invalidPlayers: any[] = [];
+  const players = Array.isArray(data.players)
+    ? (data.players as any[]).reduce<Player[]>((list, p) => {
+        const name = toStr(p.name);
+        const color = toStr(p.color) as Color;
+        if (name && color && colors.indexOf(color) !== -1) {
+          list.push({ name, color });
+        } else {
+          invalidPlayers.push(p);
+        }
+        return list;
+      }, [])
+    : [];
+  if (invalidPlayers.length) {
+    console.error('Invalid players', invalidPlayers);
+    return false;
+  }
+  return {
+    code,
+    name,
+    status,
+    players,
+  };
+};
+
+export const toGameState = (data: any): GameState | false => {
+  if (!data) {
+    console.error('No game state when expected');
+    return false;
+  }
+  const currentColor = toStr(data.currentColor) as Color;
+  if (!!currentColor && colors.indexOf(currentColor) === -1) {
+    console.error('Invalid game state', data);
+    return false;
+  }
+  const invalidPieces: any[] = [];
+  const pieces = Array.isArray(data.pieces)
+    ? (data.pieces as any[]).reduce<Piece[]>((list, p) => {
+        const area = toStr(p.area) as Piece['area'];
+        const index = toNum(p.index);
+        const color = toStr(p.color) as Color;
+        if (
+          area &&
+          ['home', 'play', 'goal'].indexOf(area) !== -1 &&
+          color &&
+          colors.indexOf(color) !== -1
+        ) {
+          list.push({ area, index, color });
+        } else {
+          invalidPieces.push(p);
+        }
+        return list;
+      }, [])
+    : [];
+  if (invalidPieces.length) {
+    console.error('Invalid pieces', invalidPieces);
+    return false;
+  }
+  return {
+    currentColor: currentColor || null,
+    pieces,
+  };
+};

@@ -12,9 +12,10 @@ type Piece = {
 };
 
 type Game = {
-  id: string;
+  code: string;
+  name: string;
   players: Player[];
-  status: 'not_started' | 'ongoing' | 'ended' | 'interrupted';
+  status: 'not_started' | 'ongoing' | 'ended' | 'interrupted' | string;
 };
 
 type GameState = {

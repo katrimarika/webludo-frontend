@@ -18,7 +18,7 @@ const App: FunctionalComponent = () => {
   }, []);
 
   if (selectedGame) {
-    return <GamePage id={selectedGame} socket={socket} />;
+    return <GamePage code={selectedGame} socket={socket} />;
   }
 
   return <LobbyPage socket={socket} />;

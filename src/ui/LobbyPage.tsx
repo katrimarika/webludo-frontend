@@ -3,7 +3,6 @@ import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { setHash } from '../utils/hash';
 import { Channel, SocketHandler } from '../utils/socket';
-import { buttonCss } from '../utils/style';
 import ErrorMessage from './ErrorMessage';
 import MiniForm from './MiniForm';
 
@@ -18,10 +17,7 @@ const LobbyPage: FunctionalComponent<{ socket: SocketHandler }> = ({
     if (socket && !channel) {
       const lobbyChannel = socket.joinLobbyChannel(
         () => null,
-        e => {
-          setChannel(null);
-          setLobbyError(e);
-        },
+        e => setLobbyError(e),
       );
       setChannel(lobbyChannel);
       return () => socket.leaveChannel(lobbyChannel);
@@ -36,39 +32,41 @@ const LobbyPage: FunctionalComponent<{ socket: SocketHandler }> = ({
     >
       <h1
         className={css`
-          display: flex;
-          align-items: center;
+          font-size: 1.5rem;
           margin: 0 0 1.2rem;
         `}
       >
-        Kimble
+        WEBKimble
       </h1>
       <ErrorMessage prefix="Lobby error: " text={lobbyError} />
       <MiniForm
-        name="game-id"
-        label="Game"
+        inputName="game-code"
+        title="Open an existing game"
+        label="Game code"
         buttonText="Open"
-        onSubmit={v => setHash(v)}
+        onSubmit={v => setHash(v.toLowerCase())}
       />
-      <button
-        type="button"
-        disabled={!socket || !channel}
-        className={buttonCss('green')}
-        onClick={() =>
+      <MiniForm
+        inputName="game-name"
+        title="Create a game"
+        label="Name"
+        buttonText="Create"
+        buttonColor="green"
+        inputWidth="long"
+        onSubmit={v =>
           channel && socket
-            ? socket.createGame(channel, setHash, e => setCreateError(e))
+            ? socket.createGame(channel, v, setHash, e => setCreateError(e))
             : null
         }
       >
-        New game
-      </button>
-      <ErrorMessage
-        prefix="Create game failed: "
-        text={createError}
-        styles={css`
-          margin-top: 0.6rem;
-        `}
-      />
+        <ErrorMessage
+          prefix="Create game failed: "
+          text={createError}
+          styles={css`
+            margin-top: 0.6rem;
+          `}
+        />
+      </MiniForm>
     </div>
   );
 };

@@ -17,8 +17,8 @@ const Game: FunctionalComponent<{
       height: 22.5rem;
       margin: 0 1.2rem;
       @media screen and (orientation: landscape) {
-        width: 18rem;
-        height: 18rem;
+        width: 20rem;
+        height: 20rem;
         margin: 2rem 1.2rem;
       }
     `}
