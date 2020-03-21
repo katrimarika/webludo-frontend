@@ -8,7 +8,7 @@ const GamePieces: FunctionalComponent<GameState> = ({
   pieces,
   currentColor,
 }) => (
-  <svg width="100%" height="100%" viewBox="0 0 1000 1000">
+  <g>
     {pieces.map(p => (
       <circle
         key={`piece-${p.color}-${p.area}-${p.index}`}
@@ -23,7 +23,7 @@ const GamePieces: FunctionalComponent<GameState> = ({
         `}
       />
     ))}
-  </svg>
+  </g>
 );
 
 export default memo(GamePieces);

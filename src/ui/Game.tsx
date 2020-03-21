@@ -26,10 +26,12 @@ const Game: FunctionalComponent<{
       }
     `}
   >
-    <GameBoard />
-    {gameState && <GamePieces {...gameState} />}
-    <DieSystem die={die} onRoll={onRoll} disabled={disabled} />
-    {(message || disabled) && <GameOverlay text={message || ''} />}
+    <svg width="100%" height="100%" viewBox="0 0 1000 1000">
+      <GameBoard />
+      {gameState && <GamePieces {...gameState} />}
+      <DieSystem die={die} onRoll={onRoll} disabled={disabled} />
+      {(message || disabled) && <GameOverlay text={message || ''} />}
+    </svg>
   </svg>
 );
 

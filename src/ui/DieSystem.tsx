@@ -10,24 +10,24 @@ const DieSystem: FunctionalComponent<{
 }> = ({ die, onRoll, disabled }) => (
   <g>
     <circle
-      cx="50%"
-      cy="50%"
-      r="10%"
+      cx="500"
+      cy="500"
+      r="100"
       className={css`
         stroke: black;
-        stroke-width: 0.08rem;
+        stroke-width: 3;
         fill: ${theme.colors.silver};
       `}
     />
     <Die {...die} />
     <circle
-      cx="50%"
-      cy="50%"
-      r="9%"
+      cx="500"
+      cy="500"
+      r="90"
       disabled={disabled}
       className={css`
         stroke: black;
-        stroke-width: 0.08rem;
+        stroke-width: 3;
         fill: transparent;
         &:not(:disabled) {
           cursor: pointer;
@@ -35,7 +35,7 @@ const DieSystem: FunctionalComponent<{
           &:focus,
           &:active {
             fill: rgba(128, 128, 128, 0.6);
-            stroke-width: 0.1rem;
+            stroke-width: 4;
           }
         }
       `}

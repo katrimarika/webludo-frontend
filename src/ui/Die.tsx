@@ -32,7 +32,7 @@ const Die: FunctionalComponent<DieState> = ({
           rx="20"
           className={css`
             stroke: ${theme.colors.black};
-            stroke-width: 0.2rem;
+            stroke-width: 10;
             fill: ${theme.colors.ivory};
           `}
         />
