@@ -11,7 +11,7 @@ injectGlobal`
     color: ${theme.colors.black};
     font-size: 4vw;
     @media screen and (orientation: landscape) {
-      font-size: 4vh;
+      font-size: 3vh;
     }
   }
   body {

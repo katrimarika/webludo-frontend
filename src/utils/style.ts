@@ -1,4 +1,4 @@
-import { css, keyframes } from 'emotion';
+import { css } from 'emotion';
 
 export const theme = {
   colors: {
@@ -51,13 +51,4 @@ export const buttonCss = (color: Color = 'blue') => css`
     color: ${theme.colors.gray};
     border-color: ${theme.colors.gray};
   }
-`;
-
-export const pulseAnimation = keyframes`
-from {
-  opacity: 1;
-}
-to {
-  opacity: 0.6;
-}
 `;

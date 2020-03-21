@@ -1,6 +1,15 @@
-import { css } from 'emotion';
+import { css, keyframes } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
-import { pulseAnimation, theme } from '../utils/style';
+import { theme } from '../utils/style';
+
+const pulseAnimation = (color: Color) => keyframes`
+  from {
+    background-color: ${theme.colors[color].main};
+  }
+  to {
+    background-color: ${theme.colors[color].text};
+  }
+`;
 
 const GameInfo: FunctionalComponent<{
   game: Game;
@@ -31,7 +40,7 @@ const GameInfo: FunctionalComponent<{
             border-radius: 0.6rem;
             margin-right: 0.4rem;
             animation: ${p.color === currentColor
-              ? `${pulseAnimation} 1s alternate infinite`
+              ? `${pulseAnimation(p.color)} 1s alternate infinite`
               : 'none'};
           `}
         />

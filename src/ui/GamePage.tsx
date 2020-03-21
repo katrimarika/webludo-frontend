@@ -44,8 +44,10 @@ const GamePage: FunctionalComponent<{
   return (
     <div
       className={css`
+        display: flex;
+        flex-direction: column;
         @media screen and (orientation: landscape) {
-          display: flex;
+          flex-direction: row;
         }
       `}
     >
