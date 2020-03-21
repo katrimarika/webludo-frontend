@@ -1,22 +1,13 @@
-import { css, keyframes } from 'emotion';
+import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { pieceCoord } from '../utils/helpers';
-import { theme } from '../utils/theme';
-
-const pulseAnimation = keyframes`
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0.6;
-  }
-`;
+import { pulseAnimation, theme } from '../utils/style';
 
 const GamePieces: FunctionalComponent<GameState> = ({
   pieces,
   currentColor,
 }) => (
-  <svg width="100%" height="100%">
+  <svg width="100%" height="100%" viewBox="0 0 1000 1000">
     {pieces.map(p => (
       <circle
         key={`piece-${p.color}-${p.area}-${p.index}`}
@@ -27,7 +18,7 @@ const GamePieces: FunctionalComponent<GameState> = ({
           animation: ${p.color === currentColor
             ? `${pulseAnimation} 1s alternate infinite`
             : 'none'};
-          fill: ${theme.colors[p.color]};
+          fill: ${theme.colors[p.color].main};
         `}
       />
     ))}

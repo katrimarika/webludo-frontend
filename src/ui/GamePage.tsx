@@ -2,8 +2,10 @@ import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { Socket } from '../utils/socket';
+import { buttonCss } from '../utils/style';
 import Game from './Game';
 import GameInfo from './GameInfo';
+import MiniForm from './MiniForm';
 
 const GamePage: FunctionalComponent<{ id: string; socket: Socket }> = ({
   id,
@@ -46,6 +48,9 @@ const GamePage: FunctionalComponent<{ id: string; socket: Socket }> = ({
     }
   }, []);
 
+  const canJoin =
+    gameData.status === 'SUCCESS' && gameData.data.players.length < 4;
+
   return (
     <div
       className={css`
@@ -54,37 +59,49 @@ const GamePage: FunctionalComponent<{ id: string; socket: Socket }> = ({
         }
       `}
     >
-      <div>
+      <div
+        className={css`
+          padding: 1.2rem;
+        `}
+      >
         <h1
           className={css`
-            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+            margin: 0 0 0.8rem;
           `}
         >
           <span
             className={css`
-              margin-right: 0.6rem;
+              margin-right: 0.8rem;
             `}
           >
             Game: {id}
           </span>
-          <button type="button" onClick={loadGame}>
+          <button type="button" onClick={loadGame} className={buttonCss()}>
             Reload
           </button>
         </h1>
-        <div
-          className={css`
-            margin-bottom: 1.2rem;
-            padding: 0 1.2rem;
-          `}
-        >
-          <GameInfo
-            gameData={gameData}
-            currentColor={
-              (gameState.status === 'SUCCESS' && gameState.data.currentColor) ||
-              null
-            }
+        <GameInfo
+          gameData={gameData}
+          currentColor={
+            (gameState.status === 'SUCCESS' && gameState.data.currentColor) ||
+            null
+          }
+        />
+        {canJoin && (
+          <MiniForm
+            name="player-name"
+            label="Name"
+            buttonText="Join"
+            buttonColor="green"
+            onSubmit={name => {
+              if (socket) {
+                socket.join(id, name);
+              }
+            }}
           />
-        </div>
+        )}
       </div>
       <Game gameState={gameState} />
     </div>

@@ -53,3 +53,12 @@ export const pieceCoord = (type: 'x' | 'y', piece: Piece) => {
       return 0;
   }
 };
+
+export const arrowCoord = (type: 'x' | 'y', i: number) => {
+  const rad = toRad(playStart + 7.5 - 90 * i);
+  if (type === 'x') {
+    return 50 + 46 * Math.cos(rad) - (i === 1 || i === 2 ? 10 : 0);
+  } else {
+    return 50 - 46 * Math.sin(rad) - (i > 1 ? 10 : 0);
+  }
+};

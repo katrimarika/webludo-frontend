@@ -6,7 +6,11 @@ type SocketActions = {
   unregisterHandler: () => void;
   onError: (callBack: (err: any) => void) => void;
   create: (callback?: (id: string) => void) => void;
-  join: (id: string, callback?: (success: boolean) => void) => void;
+  join: (
+    gameId: string,
+    name: string,
+    callback?: (success: boolean) => void,
+  ) => void;
   leave: (id: string, callback?: (success: boolean) => void) => void;
   getGame: (id: string, callback?: (data: Game) => void) => void;
   getGameState: (id: string, callback?: (data: GameState) => void) => void;
@@ -37,8 +41,8 @@ export const initSocket = (): Socket => {
     socket.emit('create', null, callback);
   };
 
-  const join: SocketActions['join'] = (id, callback) => {
-    socket.emit('join', id, callback);
+  const join: SocketActions['join'] = (id, name, callback) => {
+    socket.emit('join', [id, name], callback);
   };
 
   const leave: SocketActions['leave'] = (id, callback) => {

@@ -83,3 +83,22 @@ export const mockGameState: GameState = {
     },
   ],
 };
+
+export const mockPlayers: Player[] = [
+  {
+    name: 'Teemu',
+    color: 'red',
+  },
+  {
+    name: 'Mikko',
+    color: 'blue',
+  },
+  {
+    name: 'Jussi',
+    color: 'yellow',
+  },
+  {
+    name: 'Pasi',
+    color: 'green',
+  },
+];
