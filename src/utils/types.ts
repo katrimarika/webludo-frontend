@@ -21,9 +21,3 @@ type GameState = {
   currentColor: Color | null;
   pieces: Piece[];
 };
-
-type RemoteData<T> =
-  | { status: 'NOT_ASKED' }
-  | { status: 'ASKED' }
-  | { status: 'SUCCESS'; data: T }
-  | { status: 'ERROR'; error: string };

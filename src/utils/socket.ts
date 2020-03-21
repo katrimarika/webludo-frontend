@@ -1,70 +1,93 @@
-import * as io from 'socket.io-client';
+import { Socket, Channel as PhoenixChannel } from 'phoenix';
 
-export type Socket = SocketActions | undefined;
-type SocketActions = {
-  registerHandler: (handler: (...args: any[]) => void) => void;
-  unregisterHandler: () => void;
-  onError: (callBack: (err: any) => void) => void;
-  create: (callback?: (id: string) => void) => void;
-  join: (
-    gameId: string,
-    name: string,
-    callback?: (success: boolean) => void,
-  ) => void;
-  leave: (id: string, callback?: (success: boolean) => void) => void;
-  getGame: (id: string, callback?: (data: Game) => void) => void;
-  getGameState: (id: string, callback?: (data: GameState) => void) => void;
-};
+export type Channel = PhoenixChannel;
 
-export const initSocket = (): Socket => {
+type OnError = (e: string) => void;
+const onErrorStr = (onError: OnError) => (e: any) =>
+  onError(JSON.stringify(e, null, 2));
+
+export const initSocket = () => {
   const url = process.env.SOCKET_URL;
   if (!url) {
     console.error('No socket connection url!');
     return;
   }
 
-  const socket = io.connect(url);
+  const socket = new Socket(url);
+  socket.connect();
 
-  const registerHandler: SocketActions['registerHandler'] = handler => {
-    socket.on('message', handler);
+  // For testing
+  // channel.push('throw', payload) returns an error with given payload
+  // channel.push('noreply', {}) returns no response, i.e. no receive is triggered
+
+  const joinLobbyChannel = (onSuccess: () => void, onError: OnError) => {
+    const channel = socket.channel('lobby', {});
+    channel
+      .join()
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+    return channel;
   };
 
-  const unregisterHandler = () => {
-    socket.off('message');
+  const leaveChannel = (channel: Channel) => {
+    channel.leave();
   };
 
-  const onError: SocketActions['onError'] = callback => {
-    socket.on('error', callback);
+  const createGame = (
+    channel: Channel,
+    onSuccess: (id: string) => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('create_game', {})
+      .receive('ok', resp => {
+        if (resp && resp.code && typeof resp.code === 'string') {
+          onSuccess(resp.code);
+        } else {
+          onError('No valid code received');
+        }
+      })
+      .receive('error', onErrorStr(onError));
   };
 
-  const create: SocketActions['create'] = callback => {
-    socket.emit('create', null, callback);
+  const joinGameChannel = (
+    id: string,
+    onSuccess: (data: { game: Game; state: GameState }) => void,
+    onError: OnError,
+  ) => {
+    const channel = socket.channel(`games:${id}`, {});
+    channel
+      .join()
+      .receive('ok', resp => {
+        // TODO: validate
+        onSuccess(resp);
+      })
+      .receive('error', onErrorStr(onError));
+    return channel;
   };
 
-  const join: SocketActions['join'] = (id, name, callback) => {
-    socket.emit('join', [id, name], callback);
-  };
-
-  const leave: SocketActions['leave'] = (id, callback) => {
-    socket.emit('leave', id, callback);
-  };
-
-  const getGame: SocketActions['getGame'] = (id, callback) => {
-    socket.emit('getGame', id, callback);
-  };
-
-  const getGameState: SocketActions['getGameState'] = (id, callback) => {
-    socket.emit('getGameState', id, callback);
+  const joinGame = (
+    channel: Channel,
+    name: string,
+    onSuccess: (game: Game) => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('join_game', { name })
+      .receive('ok', resp => {
+        // TODO: validate data
+        onSuccess(resp);
+      })
+      .receive('error', onErrorStr(onError));
   };
 
   return {
-    create,
-    join,
-    leave,
-    getGame,
-    getGameState,
-    registerHandler,
-    unregisterHandler,
-    onError,
+    joinLobbyChannel,
+    leaveChannel,
+    createGame,
+    joinGameChannel,
+    joinGame,
   };
 };
+
+export type SocketHandler = ReturnType<typeof initSocket>;

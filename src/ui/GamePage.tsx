@@ -1,55 +1,40 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { Socket } from '../utils/socket';
-import { buttonCss } from '../utils/style';
+import { Channel, SocketHandler } from '../utils/socket';
+import ErrorMessage from './ErrorMessage';
 import Game from './Game';
 import GameInfo from './GameInfo';
 import MiniForm from './MiniForm';
 
-const GamePage: FunctionalComponent<{ id: string; socket: Socket }> = ({
+const GamePage: FunctionalComponent<{ id: string; socket: SocketHandler }> = ({
   id,
   socket,
 }) => {
-  const [gameData, setGameData] = useState<RemoteData<Game>>({
-    status: 'NOT_ASKED',
-  });
-  const [gameState, setGameState] = useState<RemoteData<GameState>>({
-    status: 'NOT_ASKED',
-  });
-
-  const loadGame = () => {
-    if (socket) {
-      setGameData({ status: 'ASKED' });
-      setGameState({ status: 'ASKED' });
-      socket.getGame(id);
-      socket.getGameState(id);
-    } else {
-      setGameData({ status: 'ERROR', error: 'No connection' });
-      setGameState({ status: 'ERROR', error: 'No connection' });
-    }
-  };
+  const [channel, setChannel] = useState<Channel | null>(null);
+  const [error, setError] = useState('');
+  const [game, setGame] = useState<Game | null>(null);
+  const [gameState, setGameState] = useState<GameState | null>(null);
 
   useEffect(() => {
-    loadGame();
-    if (socket) {
-      socket.registerHandler((message, data) => {
-        if (message === 'gameData') {
-          setGameData(data);
-        } else if (message === 'state') {
-          setGameState(data);
-        }
-      });
-      socket.onError(() => {
-        setGameData({ status: 'ERROR', error: 'Connection error' });
-        setGameState({ status: 'ERROR', error: 'Connection error' });
-      });
-      return socket.unregisterHandler();
+    if (socket && !channel) {
+      const gameChannel = socket.joinGameChannel(
+        id,
+        data => {
+          setGame(data.game);
+          setGameState(data.state);
+        },
+        e => {
+          setChannel(null);
+          setError(JSON.stringify(e, null, 2));
+        },
+      );
+      setChannel(gameChannel);
+      return () => socket.leaveChannel(gameChannel);
     }
   }, []);
 
-  const canJoin =
-    gameData.status === 'SUCCESS' && gameData.data.players.length < 4;
+  const canJoin = socket && channel && !!game && game.players.length < 4;
 
   return (
     <div
@@ -78,17 +63,20 @@ const GamePage: FunctionalComponent<{ id: string; socket: Socket }> = ({
           >
             Game: {id}
           </span>
-          <button type="button" onClick={loadGame} className={buttonCss()}>
-            Reload
-          </button>
         </h1>
-        <GameInfo
-          gameData={gameData}
-          currentColor={
-            (gameState.status === 'SUCCESS' && gameState.data.currentColor) ||
-            null
-          }
+        <ErrorMessage
+          prefix={error ? 'Channel error: ' : ''}
+          text={error || (!game ? 'No game data :(' : '')}
+          styles={css`
+            margin-bottom: 0.6rem;
+          `}
         />
+        {game && (
+          <GameInfo
+            game={game}
+            currentColor={(gameState && gameState.currentColor) || null}
+          />
+        )}
         {canJoin && (
           <MiniForm
             name="player-name"
@@ -96,14 +84,22 @@ const GamePage: FunctionalComponent<{ id: string; socket: Socket }> = ({
             buttonText="Join"
             buttonColor="green"
             onSubmit={name => {
-              if (socket) {
-                socket.join(id, name);
+              if (socket && channel) {
+                socket.joinGame(
+                  channel,
+                  name,
+                  data => setGame(data),
+                  e => setError(e),
+                );
               }
             }}
           />
         )}
       </div>
-      <Game gameState={gameState} />
+      <Game
+        gameState={gameState}
+        disabled={!game || game.status !== 'ongoing' || !!error}
+      />
     </div>
   );
 };
