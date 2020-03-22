@@ -36,6 +36,7 @@ export const buttonCss = (color: Color = 'blue') => css`
   border-radius: 0.2rem;
   padding: 0.4rem 0.6rem;
   color: ${theme.colors[color].text};
+  background: ${theme.colors.white};
   box-shadow: 0.1rem 0.1rem 0.4rem 0 rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
   &:not(:disabled) {

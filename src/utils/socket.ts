@@ -66,8 +66,8 @@ export const initSocket = () => {
     channel
       .join()
       .receive('ok', resp => {
-        const game = toGame(resp && resp.game);
-        const state = toGameState(resp && resp.gamestate);
+        const game = toGame(resp);
+        const state = toGameState(resp && resp.game_state);
         if (!game && !state) {
           onError('Invalid game data');
         }

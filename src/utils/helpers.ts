@@ -81,9 +81,9 @@ export const toGame = (data: any): Game | false => {
     return false;
   }
   const code = toStr(data.code);
-  const status = toStr(data.status);
+  const status = toStr(data.status) || 'not_started';
   const name = toStr(data.name);
-  if (!code || !status || !name) {
+  if (!code || !name) {
     console.error('Invalid game details', data);
     return false;
   }
@@ -117,7 +117,7 @@ export const toGameState = (data: any): GameState | false => {
     console.error('No game state when expected');
     return false;
   }
-  const currentColor = toStr(data.currentColor) as Color;
+  const currentColor = toStr(data.current_player) as Color;
   if (!!currentColor && colors.indexOf(currentColor) === -1) {
     console.error('Invalid game state', data);
     return false;
@@ -126,8 +126,8 @@ export const toGameState = (data: any): GameState | false => {
   const pieces = Array.isArray(data.pieces)
     ? (data.pieces as any[]).reduce<Piece[]>((list, p) => {
         const area = toStr(p.area) as Piece['area'];
-        const index = toInt(p.index);
-        const color = toStr(p.color) as Color;
+        const index = toInt(p.position_index);
+        const color = toStr(p.player_color) as Color;
         if (
           area &&
           ['home', 'play', 'goal'].indexOf(area) !== -1 &&
