@@ -98,6 +98,7 @@ const GamePage: FunctionalComponent<{
       >
         <Game
           gameState={gameState}
+          playerColor={playerColor}
           die={die}
           onRoll={rollDie}
           disabled={!game || !!error}

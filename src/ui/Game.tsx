@@ -7,11 +7,12 @@ import GamePieces from './GamePieces';
 
 const Game: FunctionalComponent<{
   gameState: GameState | null;
+  playerColor: Color | null;
   die: DieState;
   onRoll: () => void;
   disabled?: boolean;
   message?: string;
-}> = ({ gameState, die, onRoll, disabled, message }) => (
+}> = ({ gameState, playerColor, die, onRoll, disabled, message }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={css`
@@ -33,7 +34,16 @@ const Game: FunctionalComponent<{
     <svg width="100%" height="100%" viewBox="0 0 1000 1000">
       <GameBoard />
       {gameState && <GamePieces {...gameState} />}
-      <DieSystem die={die} onRoll={onRoll} disabled={disabled} />
+      <DieSystem
+        die={die}
+        onRoll={onRoll}
+        disabled={
+          disabled ||
+          !playerColor ||
+          !gameState ||
+          gameState.currentColor !== playerColor
+        }
+      />
       {(message || disabled) && <GameOverlay text={message || ''} />}
     </svg>
   </svg>

@@ -15,6 +15,8 @@ const DieSystem: FunctionalComponent<{
     setLoading(false);
   }, [die]);
 
+  const canRoll = !disabled && !loading;
+
   return (
     <g>
       <circle
@@ -32,20 +34,20 @@ const DieSystem: FunctionalComponent<{
         cx="500"
         cy="500"
         r="90"
-        disabled={disabled || loading}
         className={css`
           stroke: black;
           stroke-width: 3;
           fill: transparent;
-          &:not(:disabled) {
-            cursor: pointer;
-            &:hover,
-            &:focus,
-            &:active {
-              fill: rgba(128, 128, 128, 0.6);
-              stroke-width: 4;
-            }
-          }
+          ${canRoll &&
+            css`
+              cursor: pointer;
+              &:hover,
+              &:focus,
+              &:active {
+                fill: rgba(128, 128, 128, 0.6);
+                stroke-width: 4;
+              }
+            `}
         `}
         onClick={
           disabled || loading

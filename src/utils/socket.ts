@@ -120,11 +120,12 @@ const initSocketWithUrl = (url: string) => {
 
   const rollDie = (
     channel: Channel,
+    token: string,
     onSuccess: () => void,
     onError: OnError,
   ) => {
     channel
-      .push('roll', {})
+      .push('roll', { token })
       .receive('ok', onSuccess)
       .receive('error', onErrorStr(onError));
   };
