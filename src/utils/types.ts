@@ -29,3 +29,5 @@ type RollResult = {
 };
 
 type DieState = { roll: number; position: number; orientation: number };
+
+type OnError = (e: string) => void;

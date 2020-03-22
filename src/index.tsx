@@ -2,8 +2,14 @@ import { injectGlobal } from 'emotion';
 import { h, render } from 'preact';
 import App from './ui/App';
 import { theme } from './utils/style';
+import { SocketProvider } from './utils/context';
 
-render(<App />, document.body);
+render(
+  <SocketProvider>
+    <App />
+  </SocketProvider>,
+  document.body,
+);
 
 injectGlobal`
   html {

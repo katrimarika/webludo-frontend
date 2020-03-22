@@ -1,28 +1,14 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
+import { useLobbyChannel } from '../utils/context';
 import { setHash } from '../utils/hash';
-import { Channel, SocketHandler } from '../utils/socket';
 import ErrorMessage from './ErrorMessage';
 import MiniForm from './MiniForm';
 
-const LobbyPage: FunctionalComponent<{ socket: SocketHandler }> = ({
-  socket,
-}) => {
-  const [channel, setChannel] = useState<Channel | null>(null);
-  const [lobbyError, setLobbyError] = useState('');
+const LobbyPage: FunctionalComponent = () => {
+  const [channelError, createGame] = useLobbyChannel();
   const [createError, setCreateError] = useState('');
-
-  useEffect(() => {
-    if (socket && !channel) {
-      const lobbyChannel = socket.joinLobbyChannel(
-        () => null,
-        e => setLobbyError(e),
-      );
-      setChannel(lobbyChannel);
-      return () => socket.leaveChannel(lobbyChannel);
-    }
-  }, []);
 
   return (
     <div
@@ -38,7 +24,7 @@ const LobbyPage: FunctionalComponent<{ socket: SocketHandler }> = ({
       >
         KimbIe
       </h1>
-      <ErrorMessage prefix="Lobby error: " text={lobbyError} />
+      <ErrorMessage prefix="Error: " text={channelError} />
       <MiniForm
         inputName="game-code"
         title="Open an existing game"
@@ -53,11 +39,7 @@ const LobbyPage: FunctionalComponent<{ socket: SocketHandler }> = ({
         buttonText="Create"
         buttonColor="green"
         inputWidth="long"
-        onSubmit={v =>
-          channel && socket
-            ? socket.createGame(channel, v, setHash, e => setCreateError(e))
-            : null
-        }
+        onSubmit={v => createGame(v, setHash, e => setCreateError(e))}
       >
         <ErrorMessage
           prefix="Create game failed: "

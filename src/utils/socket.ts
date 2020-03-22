@@ -3,19 +3,12 @@ import { toGame, toGameState, toStr, toInt } from './helpers';
 
 export type Channel = PhoenixChannel;
 
-type OnError = (e: string) => void;
 const onErrorStr = (onError: OnError) => (e: any) => {
   const errorStr = JSON.stringify(e, null, 2);
   return onError(errorStr);
 };
 
-export const initSocket = () => {
-  const url = process.env.SOCKET_URL;
-  if (!url) {
-    console.error('No socket connection url!');
-    return;
-  }
-
+const initSocketWithUrl = (url: string) => {
   const socket = new Socket(url);
   socket.connect();
 
@@ -59,7 +52,7 @@ export const initSocket = () => {
     code: string,
     onGameChange: (data: Game) => void,
     onStateChange: (state: GameState) => void,
-    onRoll: (val: number) => void,
+    onRoll: (result: RollResult) => void,
     onError: OnError,
   ) => {
     const channel = socket.channel(`games:${code.toLowerCase()}`, {});
@@ -97,9 +90,9 @@ export const initSocket = () => {
       }
     });
     channel.on('roll', resp => {
-      const val = toInt(resp);
+      const val = toInt(resp.result);
       if (val > 0 && val <= 6) {
-        onRoll(val);
+        onRoll({ roll: val, actions: [] });
       }
     });
     return channel;
@@ -152,4 +145,25 @@ export const initSocket = () => {
   };
 };
 
-export type SocketHandler = ReturnType<typeof initSocket>;
+export type SocketActions = ReturnType<typeof initSocketWithUrl>;
+
+const noop: (...args: any[]) => any = () => {
+  // no-op
+};
+export const NO_SOCKET: SocketActions = {
+  joinLobbyChannel: noop,
+  joinGameChannel: noop,
+  leaveChannel: noop,
+  createGame: noop,
+  joinGame: noop,
+  rollDie: noop,
+};
+
+export const initSocket = (): SocketActions => {
+  const url = process.env.SOCKET_URL;
+  if (!url) {
+    console.error('No socket connection url!');
+    return NO_SOCKET;
+  }
+  return initSocketWithUrl(url);
+};

@@ -1,12 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { parseHash } from '../utils/hash';
-import { initSocket } from '../utils/socket';
 import GamePage from './GamePage';
 import LobbyPage from './LobbyPage';
 
 const App: FunctionalComponent = () => {
-  const [socket] = useState(initSocket());
   const [selectedGame, setSelectedGame] = useState(parseHash());
 
   useEffect(() => {
@@ -18,10 +16,10 @@ const App: FunctionalComponent = () => {
   }, []);
 
   if (selectedGame) {
-    return <GamePage code={selectedGame} socket={socket} />;
+    return <GamePage code={selectedGame} />;
   }
 
-  return <LobbyPage socket={socket} />;
+  return <LobbyPage />;
 };
 
 export default App;

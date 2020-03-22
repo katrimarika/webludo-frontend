@@ -1,7 +1,7 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
-import { Channel, SocketHandler } from '../utils/socket';
+import { useState } from 'preact/hooks';
+import { useGameChannel } from '../utils/context';
 import { theme } from '../utils/style';
 import ErrorMessage from './ErrorMessage';
 import Game from './Game';
@@ -10,36 +10,26 @@ import MiniForm from './MiniForm';
 
 const GamePage: FunctionalComponent<{
   code: string;
-  socket: SocketHandler;
-}> = ({ code, socket }) => {
-  const [channel, setChannel] = useState<Channel | null>(null);
-  const [error, setError] = useState('');
+}> = ({ code }) => {
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
-  const [gameError, setGameError] = useState('');
   const [die, setDie] = useState<DieState>({
     roll: Math.ceil(Math.random() * 6),
     position: Math.random(),
     orientation: Math.random(),
   });
+  // const error = 'ERROR';
+  // const joinGame = (name: string, onSuccess: (data: Game) => void) => null;
+  // const rollDie = () => null;
+  const [error, joinGame, rollDie] = useGameChannel(
+    code,
+    game => setGame(game),
+    state => setGameState(state),
+    ({ roll }) =>
+      setDie({ roll, position: Math.random(), orientation: Math.random() }),
+  );
 
-  useEffect(() => {
-    if (socket && !channel) {
-      const gameChannel = socket.joinGameChannel(
-        code,
-        game => setGame(game),
-        state => setGameState(state),
-        roll =>
-          setDie({ roll, position: Math.random(), orientation: Math.random() }),
-        e => setError(e),
-      );
-      setChannel(gameChannel);
-      return () => socket.leaveChannel(gameChannel);
-    }
-  }, []);
-
-  const canJoin =
-    socket && channel && !error && !!game && game.players.length < 4;
+  const canJoin = !error && !!game && game.players.length < 4;
 
   return (
     <div
@@ -99,16 +89,7 @@ const GamePage: FunctionalComponent<{
             label="Name"
             buttonText="Join"
             buttonColor="green"
-            onSubmit={name => {
-              if (socket && channel) {
-                socket.joinGame(
-                  channel,
-                  name,
-                  data => setGame(data),
-                  e => setError(e),
-                );
-              }
-            }}
+            onSubmit={name => joinGame(name, data => setGame(data))}
           />
         )}
       </div>
@@ -120,22 +101,8 @@ const GamePage: FunctionalComponent<{
         <Game
           gameState={gameState}
           die={die}
-          onRoll={() => {
-            if (socket && channel) {
-              socket.rollDie(
-                channel,
-                v =>
-                  setDie({
-                    roll: v.roll,
-                    position: Math.random(),
-                    orientation: Math.random(),
-                  }),
-                e => setGameError(e),
-              );
-            }
-          }}
+          onRoll={rollDie}
           disabled={!game || game.status !== 'ongoing' || !!error}
-          message={gameError}
         />
       </div>
     </div>
