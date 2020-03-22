@@ -13,8 +13,9 @@ const pulseAnimation = (color: Color) => keyframes`
 
 const GameInfo: FunctionalComponent<{
   game: Game;
+  playerColor: Color | null;
   currentColor: Color | null;
-}> = ({ game, currentColor }) => (
+}> = ({ game, playerColor, currentColor }) => (
   <ul
     className={css`
       margin: 0;
@@ -44,8 +45,8 @@ const GameInfo: FunctionalComponent<{
               : 'none'};
           `}
         />
-        <div>{`${p.name}${
-          status === 'ongoing' && p.color === currentColor ? ' PLAY!' : ''
+        <div>{`${p.name}${p.color === playerColor ? ' (you)' : ''}${
+          p.color === currentColor ? ' PLAY!' : ''
         }`}</div>
       </li>
     ))}

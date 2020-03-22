@@ -33,6 +33,7 @@ const MiniForm: FunctionalComponent<{
         e.preventDefault();
         if (inputText) {
           onSubmit(inputText);
+          setInputText('');
         }
       }}
     >
@@ -67,7 +68,11 @@ const MiniForm: FunctionalComponent<{
           `}
           onInput={e => setInputText(e.currentTarget.value)}
         />
-        <button type="submit" className={buttonCss(buttonColor)}>
+        <button
+          type="submit"
+          disabled={!inputText}
+          className={buttonCss(buttonColor)}
+        >
           {buttonText}
         </button>
       </div>

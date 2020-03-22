@@ -18,10 +18,7 @@ const GamePage: FunctionalComponent<{
     position: Math.random(),
     orientation: Math.random(),
   });
-  // const error = 'ERROR';
-  // const joinGame = (name: string, onSuccess: (data: Game) => void) => null;
-  // const rollDie = () => null;
-  const [error, joinGame, rollDie] = useGameChannel(
+  const [playerColor, error, joinGame, rollDie] = useGameChannel(
     code,
     game => setGame(game),
     state => setGameState(state),
@@ -29,7 +26,7 @@ const GamePage: FunctionalComponent<{
       setDie({ roll, position: Math.random(), orientation: Math.random() }),
   );
 
-  const canJoin = !error && !!game && game.players.length < 4;
+  const canJoin = !error && !playerColor && !!game && game.players.length < 4;
 
   return (
     <div
@@ -80,6 +77,7 @@ const GamePage: FunctionalComponent<{
         {game && (
           <GameInfo
             game={game}
+            playerColor={playerColor}
             currentColor={(gameState && gameState.currentColor) || null}
           />
         )}
@@ -89,7 +87,7 @@ const GamePage: FunctionalComponent<{
             label="Name"
             buttonText="Join"
             buttonColor="green"
-            onSubmit={name => joinGame(name, data => setGame(data))}
+            onSubmit={name => joinGame(name)}
           />
         )}
       </div>
@@ -102,7 +100,7 @@ const GamePage: FunctionalComponent<{
           gameState={gameState}
           die={die}
           onRoll={rollDie}
-          disabled={!game || game.status !== 'ongoing' || !!error}
+          disabled={!game || !!error}
         />
       </div>
     </div>

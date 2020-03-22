@@ -1,6 +1,7 @@
 import { createContext, FunctionComponent, h } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { Channel, initSocket, NO_SOCKET, SocketActions } from './socket';
+import { colors } from './helpers';
 
 const SocketContext = createContext<SocketActions>(NO_SOCKET);
 
@@ -48,6 +49,9 @@ export const useGameChannel = (
   const socket = useSocket();
   const [channel, setChannel] = useState<Channel | null>(null);
   const [error, setError] = useState('');
+  const [player, setPlayer] = useState<{ color: Color; token: string } | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!channel) {
@@ -63,15 +67,52 @@ export const useGameChannel = (
     }
   }, []);
 
-  const joinGame = (name: string, onSuccess: (game: Game) => void) =>
-    channel
-      ? socket.joinGame(channel, name, onSuccess, setError)
-      : setError('No channel found');
+  useEffect(() => {
+    if (!player) {
+      try {
+        const storedPlayer = window.localStorage.getItem(code);
+        if (storedPlayer) {
+          try {
+            const { color, token } = JSON.parse(storedPlayer);
+            if (
+              color &&
+              colors.indexOf(color) !== -1 &&
+              typeof token === 'string'
+            ) {
+              setPlayer({ color, token });
+            }
+          } catch (e) {
+            console.error('Could not parse stored player');
+          }
+        }
+      } catch (e) {
+        console.error('Could not read from local storage');
+      }
+    }
+  }, []);
+
+  const playerColor = player ? player.color : null;
+
+  const joinGame = (name: string) => {
+    if (channel) {
+      const onSuccess = (color: Color, token: string) => {
+        setPlayer({ color, token });
+        try {
+          window.localStorage.setItem(code, token);
+        } catch (e) {
+          console.error('Could not save token to local storage');
+        }
+      };
+      socket.joinGame(channel, name, onSuccess, setError);
+    } else {
+      setError('No channel found');
+    }
+  };
 
   const rollDie = () =>
     channel
-      ? socket.rollDie(channel, onRoll, setError)
+      ? socket.rollDie(channel, () => null, setError)
       : setError('No channel found');
 
-  return [error, joinGame, rollDie] as const;
+  return [playerColor, error, joinGame, rollDie] as const;
 };

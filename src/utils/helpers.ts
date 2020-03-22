@@ -87,19 +87,22 @@ export const toGame = (data: any): Game | false => {
     console.error('Invalid game details', data);
     return false;
   }
+  // Ensure the players are in join order
+  const sortedPlayers = (Array.isArray(data.players)
+    ? (data.players as any[])
+    : []
+  ).sort((a, b) => (a.inserted_at > b.inserted_at ? 1 : -1));
   const invalidPlayers: any[] = [];
-  const players = Array.isArray(data.players)
-    ? (data.players as any[]).reduce<Player[]>((list, p) => {
-        const name = toStr(p.name);
-        const color = toStr(p.color) as Color;
-        if (name && color && colors.indexOf(color) !== -1) {
-          list.push({ name, color });
-        } else {
-          invalidPlayers.push(p);
-        }
-        return list;
-      }, [])
-    : [];
+  const players = sortedPlayers.reduce<Player[]>((list, p) => {
+    const name = toStr(p.name);
+    const color = toStr(p.color) as Color;
+    if (name && color && colors.indexOf(color) !== -1) {
+      list.push({ name, color });
+    } else {
+      invalidPlayers.push(p);
+    }
+    return list;
+  }, []);
   if (invalidPlayers.length) {
     console.error('Invalid players', invalidPlayers);
     return false;

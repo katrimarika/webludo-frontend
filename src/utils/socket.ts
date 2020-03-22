@@ -1,5 +1,5 @@
 import { Channel as PhoenixChannel, Socket } from 'phoenix';
-import { toGame, toGameState, toStr, toInt } from './helpers';
+import { colors, toGame, toGameState, toInt, toStr } from './helpers';
 
 export type Channel = PhoenixChannel;
 
@@ -73,16 +73,16 @@ const initSocketWithUrl = (url: string) => {
       })
       .receive('error', onErrorStr(onError));
     // Listen to game change events
-    channel.on('game_change', resp => {
-      const game = toGame(resp && resp.game);
+    channel.on('game_updated', resp => {
+      const game = toGame(resp);
       if (game) {
         onGameChange(game);
       } else {
         onError('Received invalid game data');
       }
     });
-    channel.on('gamestate_change', resp => {
-      const state = toGameState(resp && resp.gamestate);
+    channel.on('gamestate_updated', resp => {
+      const state = toGameState(resp && resp.game_state);
       if (state) {
         onStateChange(state);
       } else {
@@ -101,17 +101,18 @@ const initSocketWithUrl = (url: string) => {
   const joinGame = (
     channel: Channel,
     name: string,
-    onSuccess: (game: Game) => void,
+    onSuccess: (color: Color, token: string) => void,
     onError: OnError,
   ) => {
     channel
       .push('join_game', { name })
       .receive('ok', resp => {
-        const game = toGame(resp && resp.game);
-        if (game) {
-          onSuccess(game);
+        const token = toStr(resp.token);
+        const color = toStr(resp.color) as Color;
+        if (token && color && colors.indexOf(color) !== -1) {
+          onSuccess(color, token);
         } else {
-          onError('Invalid game data');
+          onError('No valid token received');
         }
       })
       .receive('error', onErrorStr(onError));
@@ -119,19 +120,12 @@ const initSocketWithUrl = (url: string) => {
 
   const rollDie = (
     channel: Channel,
-    onSuccess: (result: RollResult) => void,
+    onSuccess: () => void,
     onError: OnError,
   ) => {
     channel
       .push('roll', {})
-      .receive('ok', resp => {
-        const roll = toInt(resp && resp.result);
-        if (roll) {
-          onSuccess({ roll, actions: [] });
-        } else {
-          onError('Invalid roll data');
-        }
-      })
+      .receive('ok', onSuccess)
       .receive('error', onErrorStr(onError));
   };
 
