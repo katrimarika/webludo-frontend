@@ -35,6 +35,7 @@ const GamePage: FunctionalComponent<{
         flex-direction: column;
         @media screen and (orientation: landscape) {
           flex-direction: row;
+          justify-content: space-around;
         }
       `}
     >
@@ -91,11 +92,7 @@ const GamePage: FunctionalComponent<{
           />
         )}
       </div>
-      <div
-        className={css`
-          margin: 0 auto;
-        `}
-      >
+      <div>
         <Game
           gameState={gameState}
           playerColor={playerColor}
