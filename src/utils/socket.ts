@@ -92,7 +92,10 @@ const initSocketWithUrl = (url: string) => {
     channel.on('roll', resp => {
       const val = toInt(resp.result);
       if (val > 0 && val <= 6) {
-        onRoll({ roll: val, actions: [] });
+        onRoll({
+          roll: val,
+          actions: { red: [], blue: [], yellow: [], green: [] },
+        });
       }
     });
     return channel;
@@ -118,14 +121,15 @@ const initSocketWithUrl = (url: string) => {
       .receive('error', onErrorStr(onError));
   };
 
-  const rollDie = (
+  const takeAction = (
     channel: Channel,
     token: string,
+    action: Action,
     onSuccess: () => void,
     onError: OnError,
   ) => {
     channel
-      .push('roll', { token })
+      .push('action', { token, ...action })
       .receive('ok', onSuccess)
       .receive('error', onErrorStr(onError));
   };
@@ -136,7 +140,7 @@ const initSocketWithUrl = (url: string) => {
     createGame,
     joinGameChannel,
     joinGame,
-    rollDie,
+    takeAction,
   };
 };
 
@@ -151,7 +155,7 @@ export const NO_SOCKET: SocketActions = {
   leaveChannel: noop,
   createGame: noop,
   joinGame: noop,
-  rollDie: noop,
+  takeAction: noop,
 };
 
 export const initSocket = (): SocketActions => {

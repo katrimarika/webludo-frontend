@@ -23,9 +23,17 @@ type GameState = {
   pieces: Piece[];
 };
 
+type Action =
+  | { type: 'roll' }
+  | {
+      type: 'move';
+      piece: Piece;
+      moveTo: Piece;
+    };
+
 type RollResult = {
   roll: number;
-  actions: []; // TODO
+  actions: { [color in Color]: Action[] };
 };
 
 type DieState = { roll: number; position: number; orientation: number };

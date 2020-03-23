@@ -111,7 +111,13 @@ export const useGameChannel = (
 
   const rollDie = () =>
     channel && player
-      ? socket.rollDie(channel, player.token, () => null, setError)
+      ? socket.takeAction(
+          channel,
+          player.token,
+          { type: 'roll' },
+          () => null,
+          setError,
+        )
       : setError(!channel ? 'No channel found' : 'No player found');
 
   return [playerColor, error, joinGame, rollDie] as const;
