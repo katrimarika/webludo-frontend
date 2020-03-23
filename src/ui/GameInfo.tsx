@@ -30,6 +30,11 @@ const GameInfo: FunctionalComponent<{
           display: flex;
           align-items: center;
           line-height: 1.4;
+          padding: 0.1rem 0.4rem;
+          border-radius: 0.15rem;
+          background: ${p.color === currentColor
+            ? theme.colors.highlight
+            : 'transparent'};
         `}
       >
         <div

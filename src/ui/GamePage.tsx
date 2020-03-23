@@ -40,19 +40,28 @@ const GamePage: FunctionalComponent<{
         flex-direction: column;
         @media screen and (orientation: landscape) {
           flex-direction: row;
-          justify-content: space-around;
+          justify-content: center;
         }
       `}
     >
       <div
         className={css`
           padding: 1.2rem;
+          @media screen and (orientation: landscape) {
+            flex-grow: 1;
+            width: 35%;
+            max-width: 25rem;
+          }
         `}
       >
         <h1
           className={css`
             font-size: 1.5rem;
             margin: 0 0 0.8rem;
+            text-align: center;
+            @media screen and (orientation: landscape) {
+              text-align: initial;
+            }
           `}
         >
           {game && game.name ? (
@@ -97,7 +106,15 @@ const GamePage: FunctionalComponent<{
           />
         )}
       </div>
-      <div>
+      <div
+        className={css`
+          flex-shrink: 0;
+          align-self: center;
+          @media screen and (orientation: landscape) {
+            align-self: flex-start;
+          }
+        `}
+      >
         <Game
           gameState={gameState}
           playerColor={playerColor}

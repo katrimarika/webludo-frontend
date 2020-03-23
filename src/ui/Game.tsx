@@ -25,10 +25,9 @@ const Game: FunctionalComponent<{
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={css`
-      flex-shrink: 0;
       width: 22.5rem;
       height: 22.5rem;
-      margin: 0 1.2rem;
+      margin: 0.6rem 1.2rem 1.2rem;
       max-width: 67vh;
       max-height: 67vh;
       @media screen and (orientation: landscape) {
@@ -45,6 +44,7 @@ const Game: FunctionalComponent<{
       {gameState && (
         <GamePieces
           {...gameState}
+          playerColor={playerColor}
           pieceActions={
             availableActions.filter(a => a.type === 'move') as MoveAction[]
           }

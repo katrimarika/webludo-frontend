@@ -23,5 +23,6 @@ injectGlobal`
   body {
     margin: 0;
     font-size: 1rem;
+    background: ${theme.colors.lightgray};
   }
 `;

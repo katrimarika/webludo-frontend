@@ -15,21 +15,20 @@ const pulseAnimation = (color: Color) => keyframes`
 
 const GamePiece: FunctionalComponent<{
   piece: Piece;
-  isCurrentColor: boolean;
+  isCurrentAndOwnColor: boolean;
   onClick?: () => void;
-}> = ({ piece, isCurrentColor, onClick }) => (
+}> = ({ piece, isCurrentAndOwnColor, onClick }) => (
   <circle
     key={`piece-${piece.color}-${piece.area}-${piece.index}`}
     cx={`${pieceCoord('x', piece) * 10}`}
     cy={`${pieceCoord('y', piece) * 10}`}
     r="25"
     className={css`
-      animation: ${isCurrentColor
-        ? `${pulseAnimation(piece.color)} 1s alternate infinite`
-        : 'none'};
       fill: ${theme.colors[piece.color].main};
-      ${!!onClick &&
+      ${isCurrentAndOwnColor &&
+        !!onClick &&
         css`
+          animation: ${pulseAnimation(piece.color)} 1s alternate infinite;
           cursor: pointer;
           &:hover,
           &:focus,

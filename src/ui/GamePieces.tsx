@@ -3,9 +3,10 @@ import { memo } from 'preact/compat';
 import GamePiece from './GamePiece';
 
 const GamePieces: FunctionalComponent<GameState & {
+  playerColor: Color | null;
   pieceActions: MoveAction[];
   takeAction: (action: Action) => void;
-}> = ({ pieces, currentColor, pieceActions, takeAction }) => (
+}> = ({ pieces, currentColor, playerColor, pieceActions, takeAction }) => (
   <g>
     {pieces.map(p => {
       const availableAction = pieceActions.find(
@@ -18,7 +19,9 @@ const GamePieces: FunctionalComponent<GameState & {
         <GamePiece
           key={`piece-${p.color}-${p.area}-${p.index}`}
           piece={p}
-          isCurrentColor={p.color === currentColor}
+          isCurrentAndOwnColor={
+            p.color === currentColor && p.color === playerColor
+          }
           onClick={
             availableAction ? () => takeAction(availableAction) : undefined
           }

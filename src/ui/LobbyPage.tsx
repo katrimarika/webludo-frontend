@@ -14,6 +14,9 @@ const LobbyPage: FunctionalComponent = () => {
     <div
       className={css`
         padding: 1.2rem;
+        @media screen and (orientation: landscape) {
+          padding: 1.2rem 3rem;
+        }
       `}
     >
       <h1

@@ -24,6 +24,7 @@ export const theme = {
     lightgray: '#f1f1f1',
     white: '#fff',
     ivory: '#fffff0',
+    highlight: '#d6e8f5',
     boardPath: '#1f1f56',
     boardCenter: '#70b1de',
     boardCorner: '#272525',
