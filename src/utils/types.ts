@@ -23,18 +23,13 @@ type GameState = {
   pieces: Piece[];
 };
 
-type Action =
-  | { type: 'roll' }
-  | {
-      type: 'move';
-      piece: Piece;
-      moveTo: Piece;
-    };
-
-type RollResult = {
-  roll: number;
-  actions: { [color in Color]: Action[] };
+type MoveAction = {
+  type: 'move';
+  piece: Piece;
+  moveTo: Piece;
 };
+type Action = { type: 'roll' } | MoveAction;
+type Actions = { [color in Color]: Action[] };
 
 type DieState = { roll: number; position: number; orientation: number };
 

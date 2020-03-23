@@ -9,10 +9,19 @@ const Game: FunctionalComponent<{
   gameState: GameState | null;
   playerColor: Color | null;
   die: DieState;
-  onRoll: () => void;
   disabled?: boolean;
   message?: string;
-}> = ({ gameState, playerColor, die, onRoll, disabled, message }) => (
+  takeAction: (action: Action) => void;
+  availableActions: Action[];
+}> = ({
+  gameState,
+  playerColor,
+  die,
+  takeAction,
+  disabled,
+  message,
+  availableActions,
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={css`
@@ -33,10 +42,18 @@ const Game: FunctionalComponent<{
   >
     <svg width="100%" height="100%" viewBox="0 0 1000 1000">
       <GameBoard />
-      {gameState && <GamePieces {...gameState} />}
+      {gameState && (
+        <GamePieces
+          {...gameState}
+          pieceActions={
+            availableActions.filter(a => a.type === 'move') as MoveAction[]
+          }
+          takeAction={takeAction}
+        />
+      )}
       <DieSystem
         die={die}
-        onRoll={onRoll}
+        rollDie={() => takeAction({ type: 'roll' })}
         disabled={
           disabled ||
           !playerColor ||

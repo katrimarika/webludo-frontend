@@ -6,9 +6,9 @@ import Die from './Die';
 
 const DieSystem: FunctionalComponent<{
   die: DieState;
-  onRoll: () => void;
+  rollDie: () => void;
   disabled?: boolean;
-}> = ({ die, onRoll, disabled }) => {
+}> = ({ die, rollDie, disabled }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const DieSystem: FunctionalComponent<{
             ? undefined
             : () => {
                 setLoading(true);
-                onRoll();
+                rollDie();
               }
         }
       />

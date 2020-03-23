@@ -1,37 +1,30 @@
-import { css, keyframes } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { memo } from 'preact/compat';
-import { pieceCoord } from '../utils/helpers';
-import { theme } from '../utils/style';
+import GamePiece from './GamePiece';
 
-const pulseAnimation = (color: Color) => keyframes`
-  from {
-    fill: ${theme.colors[color].main};
-  }
-  to {
-    fill: ${theme.colors[color].text};
-  }
-`;
-
-const GamePieces: FunctionalComponent<GameState> = ({
-  pieces,
-  currentColor,
-}) => (
+const GamePieces: FunctionalComponent<GameState & {
+  pieceActions: MoveAction[];
+  takeAction: (action: Action) => void;
+}> = ({ pieces, currentColor, pieceActions, takeAction }) => (
   <g>
-    {pieces.map(p => (
-      <circle
-        key={`piece-${p.color}-${p.area}-${p.index}`}
-        cx={`${pieceCoord('x', p) * 10}`}
-        cy={`${pieceCoord('y', p) * 10}`}
-        r="25"
-        className={css`
-          animation: ${p.color === currentColor
-            ? `${pulseAnimation(p.color)} 1s alternate infinite`
-            : 'none'};
-          fill: ${theme.colors[p.color].main};
-        `}
-      />
-    ))}
+    {pieces.map(p => {
+      const availableAction = pieceActions.find(
+        a =>
+          a.piece.area === p.area &&
+          a.piece.color === p.color &&
+          a.piece.index === p.index,
+      );
+      return (
+        <GamePiece
+          key={`piece-${p.color}-${p.area}-${p.index}`}
+          piece={p}
+          isCurrentColor={p.color === currentColor}
+          onClick={
+            availableAction ? () => takeAction(availableAction) : undefined
+          }
+        />
+      );
+    })}
   </g>
 );
 

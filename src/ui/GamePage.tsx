@@ -2,6 +2,7 @@ import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { useGameChannel } from '../utils/context';
+import { noActions } from '../utils/helpers';
 import { theme } from '../utils/style';
 import ErrorMessage from './ErrorMessage';
 import Game from './Game';
@@ -18,12 +19,16 @@ const GamePage: FunctionalComponent<{
     position: Math.random(),
     orientation: Math.random(),
   });
-  const [playerColor, error, joinGame, rollDie] = useGameChannel(
+  const [actions, setActions] = useState<Actions>(noActions);
+  const [playerColor, error, joinGame, takeAction] = useGameChannel(
     code,
     game => setGame(game),
     state => setGameState(state),
-    ({ roll }) =>
-      setDie({ roll, position: Math.random(), orientation: Math.random() }),
+    (roll, actions) => {
+      setDie({ roll, position: Math.random(), orientation: Math.random() });
+      setActions(actions);
+    },
+    actions => setActions(actions),
   );
 
   const canJoin = !error && !playerColor && !!game && game.players.length < 4;
@@ -97,8 +102,9 @@ const GamePage: FunctionalComponent<{
           gameState={gameState}
           playerColor={playerColor}
           die={die}
-          onRoll={rollDie}
           disabled={!game || !!error}
+          availableActions={playerColor ? actions[playerColor] : []}
+          takeAction={takeAction}
         />
       </div>
     </div>

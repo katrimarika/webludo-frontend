@@ -1,5 +1,12 @@
 import { Channel as PhoenixChannel, Socket } from 'phoenix';
-import { colors, toGame, toGameState, toInt, toStr } from './helpers';
+import {
+  colors,
+  toActions,
+  toGame,
+  toGameState,
+  toInt,
+  toStr,
+} from './helpers';
 
 export type Channel = PhoenixChannel;
 
@@ -52,7 +59,8 @@ const initSocketWithUrl = (url: string) => {
     code: string,
     onGameChange: (data: Game) => void,
     onStateChange: (state: GameState) => void,
-    onRoll: (result: RollResult) => void,
+    onRoll: (roll: number, actions: Actions) => void,
+    onAction: (actions: Actions) => void,
     onError: OnError,
   ) => {
     const channel = socket.channel(`games:${code.toLowerCase()}`, {});
@@ -91,11 +99,19 @@ const initSocketWithUrl = (url: string) => {
     });
     channel.on('roll', resp => {
       const val = toInt(resp.result);
-      if (val > 0 && val <= 6) {
-        onRoll({
-          roll: val,
-          actions: { red: [], blue: [], yellow: [], green: [] },
-        });
+      const actions = toActions(resp.actions);
+      if (val > 0 && val <= 6 && actions) {
+        onRoll(val, actions);
+      } else {
+        onError('Received invalid roll result');
+      }
+    });
+    channel.on('action', resp => {
+      const actions = toActions(resp.actions);
+      if (actions) {
+        onAction(actions);
+      } else {
+        onError('Received invalid actions');
       }
     });
     return channel;

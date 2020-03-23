@@ -115,6 +115,24 @@ export const toGame = (data: any): Game | false => {
   };
 };
 
+const toPiece = (data: any): Piece | false => {
+  if (!data) {
+    console.error('No game piece when expected');
+    return false;
+  }
+  const area = toStr(data.area) as Piece['area'];
+  const index = toInt(data.position_index);
+  const color = toStr(data.player_color) as Color;
+  if (
+    ['home', 'play', 'goal'].indexOf(area) === -1 ||
+    index < 0 ||
+    colors.indexOf(color) === -1
+  ) {
+    return false;
+  }
+  return { area, index, color };
+};
+
 export const toGameState = (data: any): GameState | false => {
   if (!data) {
     console.error('No game state when expected');
@@ -128,19 +146,11 @@ export const toGameState = (data: any): GameState | false => {
   const invalidPieces: any[] = [];
   const pieces = Array.isArray(data.pieces)
     ? (data.pieces as any[]).reduce<Piece[]>((list, p) => {
-        const area = toStr(p.area) as Piece['area'];
-        const index = toInt(p.position_index);
-        const color = toStr(p.player_color) as Color;
-        if (
-          area &&
-          ['home', 'play', 'goal'].indexOf(area) !== -1 &&
-          index >= 0 &&
-          color &&
-          colors.indexOf(color) !== -1
-        ) {
-          list.push({ area, index, color });
-        } else {
+        const piece = toPiece(p);
+        if (!piece) {
           invalidPieces.push(p);
+        } else {
+          list.push(piece);
         }
         return list;
       }, [])
@@ -153,4 +163,46 @@ export const toGameState = (data: any): GameState | false => {
     currentColor: currentColor || null,
     pieces,
   };
+};
+
+export const noActions = { red: [], blue: [], yellow: [], green: [] };
+export const toActions = (data: any): Actions | false => {
+  if (!data) {
+    console.error('No actions when expected');
+    return false;
+  }
+  const invalidActions: any[] = [];
+  const actions = colors.reduce<Actions>((obj, color) => {
+    const colorData = data[color];
+    if (Array.isArray(colorData)) {
+      colorData.forEach(d => {
+        const type = toStr(d.type) as Action['type'];
+        switch (type) {
+          case 'roll':
+            obj[color] = [...obj[color], { type }];
+            break;
+          case 'move':
+            const piece = toPiece(d.current);
+            const moveTo = toPiece(d.target);
+            if (!piece || !moveTo) {
+              invalidActions.push(d);
+            } else {
+              obj[color] = [...obj[color], { type, piece, moveTo }];
+            }
+            break;
+          default:
+            invalidActions.push(d);
+        }
+      });
+    }
+    return obj;
+  }, noActions);
+
+  if (invalidActions.length) {
+    console.error('Invalid actions', invalidActions);
+    return false;
+  }
+  return actions;
+
+  return false;
 };
