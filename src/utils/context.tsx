@@ -100,7 +100,7 @@ export const useGameChannel = (
       const onSuccess = (color: Color, token: string) => {
         setPlayer({ color, token });
         try {
-          window.localStorage.setItem(code, token);
+          window.localStorage.setItem(code, JSON.stringify({ color, token }));
         } catch (e) {
           console.error('Could not save token to local storage');
         }
