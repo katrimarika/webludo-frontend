@@ -30,8 +30,8 @@ const GameInfo: FunctionalComponent<{
           display: flex;
           align-items: center;
           line-height: 1.4;
-          padding: 0.1rem 0.4rem;
-          border-radius: 0.15rem;
+          padding: 0.1875rem 0.5rem;
+          border-radius: 0.1875rem;
           background: ${p.color === currentColor
             ? theme.colors.highlight
             : 'transparent'};
@@ -39,12 +39,12 @@ const GameInfo: FunctionalComponent<{
       >
         <div
           className={css`
-            flex: 0 0 0.6rem;
+            flex: 0 0 0.625rem;
             background: ${theme.colors[p.color].main};
-            height: 0.6rem;
-            width: 0.6rem;
-            border-radius: 0.6rem;
-            margin-right: 0.4rem;
+            height: 0.625rem;
+            width: 0.625rem;
+            border-radius: 0.625rem;
+            margin-right: 0.5rem;
             animation: ${p.color === currentColor
               ? `${pulseAnimation(p.color)} 1s alternate infinite`
               : 'none'};

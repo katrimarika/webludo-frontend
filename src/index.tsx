@@ -15,14 +15,19 @@ injectGlobal`
   html {
     font-family: 'Segoe UI', Roboto, Oxygen, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: ${theme.colors.black};
-    font-size: 4vw;
-    @media screen and (orientation: landscape) {
-      font-size: 3vh;
+    font-size: 16px;
+    @media screen and (min-width: 600px) {
+      font-size: 20px;
+    }
+    @media screen and (min-width: 1200px) {
+      font-size: 24px;
     }
   }
   body {
     margin: 0;
-    font-size: 1rem;
     background: ${theme.colors.lightgray};
+  }
+  * {
+    box-sizing: border-box;
   }
 `;

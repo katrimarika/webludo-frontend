@@ -25,15 +25,19 @@ const Game: FunctionalComponent<{
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={css`
-      width: 22.5rem;
-      height: 22.5rem;
+      width: calc(100vw - 3rem);
+      height: calc(100vw - 3rem);
       max-width: 67vh;
       max-height: 67vh;
       @media screen and (orientation: landscape) {
-        width: 27.5rem;
-        height: 27.5rem;
-        max-width: 55vw;
-        max-height: 55vw;
+        width: calc(100vh - 3.5rem);
+        height: calc(100vh - 3.5rem);
+        max-width: 50vw;
+        max-height: 50vw;
+      }
+      @media screen and (orientation: landscape) and (min-width: 1440px) {
+        max-width: 700px;
+        max-height: 700px;
       }
     `}
   >

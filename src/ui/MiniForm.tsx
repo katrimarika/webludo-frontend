@@ -9,7 +9,6 @@ const MiniForm: FunctionalComponent<{
   label: string;
   buttonText: string;
   buttonColor?: Color;
-  inputWidth?: 'long' | 'short';
   onSubmit: (v: string) => void;
 }> = ({
   inputName,
@@ -17,7 +16,6 @@ const MiniForm: FunctionalComponent<{
   label,
   buttonText,
   buttonColor,
-  inputWidth = 'short',
   onSubmit,
   children,
 }) => {
@@ -27,7 +25,7 @@ const MiniForm: FunctionalComponent<{
   return (
     <form
       className={css`
-        margin: 0.6rem 0 1.2rem;
+        margin: 0.5rem 0 1.5rem;
       `}
       onSubmit={e => {
         e.preventDefault();
@@ -40,7 +38,8 @@ const MiniForm: FunctionalComponent<{
       {!!title && (
         <h2
           className={css`
-            font-size: 1.2rem;
+            font-size: 1.25rem;
+            margin: 0 0 1rem;
           `}
         >
           {title}
@@ -49,25 +48,40 @@ const MiniForm: FunctionalComponent<{
       <div
         className={css`
           display: flex;
-          align-items: center;
+          align-items: flex-end;
         `}
       >
-        <label htmlFor={id}>{label}</label>
-        <input
-          id={id}
-          name={inputName}
-          autoComplete="off"
-          value={inputText}
+        <div
           className={css`
-            font-size: 0.9rem;
-            border: 0.08rem solid ${theme.colors.black};
-            border-radius: 0.15rem;
-            padding: 0.4rem;
-            margin: 0 0.6rem;
-            width: ${inputWidth === 'short' ? '6rem' : '10rem'};
+            flex-grow: 1;
+            max-width: 20rem;
+            margin-right: 0.5rem;
           `}
-          onInput={e => setInputText(e.currentTarget.value)}
-        />
+        >
+          <label
+            htmlFor={id}
+            className={css`
+              display: block;
+              margin-bottom: 0.5rem;
+            `}
+          >
+            {label}
+          </label>
+          <input
+            id={id}
+            name={inputName}
+            autoComplete="off"
+            value={inputText}
+            className={css`
+              width: 100%;
+              font-size: 0.9375rem;
+              border: 2px solid ${theme.colors.black};
+              border-radius: 3px;
+              padding: 0.375rem 0.5rem 0.4375rem;
+            `}
+            onInput={e => setInputText(e.currentTarget.value)}
+          />
+        </div>
         <button
           type="submit"
           disabled={!inputText}

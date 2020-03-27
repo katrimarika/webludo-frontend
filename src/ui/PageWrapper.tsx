@@ -3,7 +3,7 @@ import { FunctionalComponent, h } from 'preact';
 import { theme } from '../utils/style';
 
 const PageWrapper: FunctionalComponent<{ styles?: string }> = ({
-  styles = '',
+  styles,
   children,
 }) => (
   <div
@@ -11,18 +11,17 @@ const PageWrapper: FunctionalComponent<{ styles?: string }> = ({
       background: ${theme.colors.white};
       min-height: 100vh;
       @media screen and (orientation: landscape) {
-        max-width: 60rem;
+        max-width: 1440px;
         margin: 0 auto;
-        padding: 0 0.8rem;
-      }
-      @media screen and (orientation: landscape) and (min-width: 60rem) {
-        padding: 0 1.8rem;
       }
     `}
   >
     <div
       className={css`
-        padding: 1.2rem;
+        padding: 1rem 1.5rem 2rem;
+        @media screen and (orientation: landscape) and (min-width: 1440px) {
+          padding: 1.5rem 3rem 3rem;
+        }
         ${styles}
       `}
     >

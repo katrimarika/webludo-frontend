@@ -32,10 +32,10 @@ export const theme = {
 };
 
 export const buttonCss = (color: Color = 'blue') => css`
-  font-size: 0.9rem;
-  border: 0.08rem solid ${theme.colors[color].main};
-  border-radius: 0.2rem;
-  padding: 0.4rem 0.6rem;
+  font-size: 0.9375rem;
+  border: 2px solid ${theme.colors[color].main};
+  border-radius: 4px;
+  padding: 0.375rem 0.5rem 0.4375rem;
   color: ${theme.colors[color].text};
   background: ${theme.colors.white};
   box-shadow: 0.1rem 0.1rem 0.4rem 0 rgba(0, 0, 0, 0.15);

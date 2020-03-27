@@ -16,7 +16,7 @@ const LobbyPage: FunctionalComponent = () => {
       <h1
         className={css`
           font-size: 1.5rem;
-          margin: 0 0 1.2rem;
+          margin: 0 0 1.25rem;
         `}
       >
         KimbIe
@@ -32,17 +32,16 @@ const LobbyPage: FunctionalComponent = () => {
       <MiniForm
         inputName="game-name"
         title="Create a game"
-        label="Name"
+        label="Game name"
         buttonText="Create"
         buttonColor="green"
-        inputWidth="long"
         onSubmit={v => createGame(v, setHash, e => setCreateError(e))}
       >
         <ErrorMessage
           prefix="Create game failed: "
           text={createError}
           styles={css`
-            margin-top: 0.6rem;
+            margin-top: 0.5rem;
           `}
         />
       </MiniForm>

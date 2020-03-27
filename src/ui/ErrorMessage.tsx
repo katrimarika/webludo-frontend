@@ -14,7 +14,7 @@ const ErrorMessage: FunctionalComponent<{
   return (
     <div
       className={css`
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: ${theme.colors.red.text};
         ${styles}
       `}

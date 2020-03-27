@@ -39,27 +39,29 @@ const GamePage: FunctionalComponent<{
       styles={css`
         display: flex;
         flex-direction: column;
+        align-items: center;
         @media screen and (orientation: landscape) {
           flex-direction: row;
-          justify-content: center;
+          align-items: flex-start;
         }
       `}
     >
       <div
         className={css`
-          padding-bottom: 1.2rem;
+          padding-bottom: 1.5rem;
+          width: 100%;
+          max-width: 67vh;
           @media screen and (orientation: landscape) {
-            padding: 0 2.4rem 0 0;
+            max-width: 45%;
+            padding: 0 2rem 0 0;
             flex-grow: 1;
-            width: 35%;
-            max-width: 25rem;
           }
         `}
       >
         <h1
           className={css`
             font-size: 1.5rem;
-            margin: 0 0 0.8rem;
+            margin: 0 0 0.75rem;
             text-align: center;
             @media screen and (orientation: landscape) {
               text-align: initial;
@@ -88,7 +90,7 @@ const GamePage: FunctionalComponent<{
           prefix="Error: "
           text={error}
           styles={css`
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.5rem;
           `}
         />
         {game && (
@@ -111,10 +113,9 @@ const GamePage: FunctionalComponent<{
       <div
         className={css`
           flex-shrink: 0;
-          padding-top: 0.6rem;
-          align-self: center;
+          padding-top: 0.5rem;
           @media screen and (orientation: landscape) {
-            align-self: flex-start;
+            margin: 0 auto;
           }
         `}
       >
