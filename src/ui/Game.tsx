@@ -27,13 +27,11 @@ const Game: FunctionalComponent<{
     className={css`
       width: 22.5rem;
       height: 22.5rem;
-      margin: 0.6rem 1.2rem 1.2rem;
       max-width: 67vh;
       max-height: 67vh;
       @media screen and (orientation: landscape) {
         width: 27.5rem;
         height: 27.5rem;
-        margin: 2rem 1.2rem;
         max-width: 55vw;
         max-height: 55vw;
       }

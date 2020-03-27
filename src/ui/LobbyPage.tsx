@@ -5,20 +5,14 @@ import { useLobbyChannel } from '../utils/context';
 import { setHash } from '../utils/hash';
 import ErrorMessage from './ErrorMessage';
 import MiniForm from './MiniForm';
+import PageWrapper from './PageWrapper';
 
 const LobbyPage: FunctionalComponent = () => {
   const [channelError, createGame] = useLobbyChannel();
   const [createError, setCreateError] = useState('');
 
   return (
-    <div
-      className={css`
-        padding: 1.2rem;
-        @media screen and (orientation: landscape) {
-          padding: 1.2rem 3rem;
-        }
-      `}
-    >
+    <PageWrapper>
       <h1
         className={css`
           font-size: 1.5rem;
@@ -52,7 +46,7 @@ const LobbyPage: FunctionalComponent = () => {
           `}
         />
       </MiniForm>
-    </div>
+    </PageWrapper>
   );
 };
 

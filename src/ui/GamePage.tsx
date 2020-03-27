@@ -8,6 +8,7 @@ import ErrorMessage from './ErrorMessage';
 import Game from './Game';
 import GameInfo from './GameInfo';
 import MiniForm from './MiniForm';
+import PageWrapper from './PageWrapper';
 
 const GamePage: FunctionalComponent<{
   code: string;
@@ -34,8 +35,8 @@ const GamePage: FunctionalComponent<{
   const canJoin = !error && !playerColor && !!game && game.players.length < 4;
 
   return (
-    <div
-      className={css`
+    <PageWrapper
+      styles={css`
         display: flex;
         flex-direction: column;
         @media screen and (orientation: landscape) {
@@ -46,8 +47,9 @@ const GamePage: FunctionalComponent<{
     >
       <div
         className={css`
-          padding: 1.2rem;
+          padding-bottom: 1.2rem;
           @media screen and (orientation: landscape) {
+            padding: 0 2.4rem 0 0;
             flex-grow: 1;
             width: 35%;
             max-width: 25rem;
@@ -109,6 +111,7 @@ const GamePage: FunctionalComponent<{
       <div
         className={css`
           flex-shrink: 0;
+          padding-top: 0.6rem;
           align-self: center;
           @media screen and (orientation: landscape) {
             align-self: flex-start;
@@ -124,7 +127,7 @@ const GamePage: FunctionalComponent<{
           takeAction={takeAction}
         />
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 
