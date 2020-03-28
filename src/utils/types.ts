@@ -6,6 +6,7 @@ type Player = {
 };
 
 type Piece = {
+  id: number;
   area: 'home' | 'play' | 'goal';
   index: number; // home/goal: 0-3, play: 0-23
   color: Color;
@@ -21,11 +22,12 @@ type Game = {
 type GameState = {
   currentColor: Color | null;
   pieces: Piece[];
+  previousMove: MoveAction | null;
 };
 
 type MoveAction = {
   type: 'move';
-  piece: Piece;
+  moveFrom: Piece;
   moveTo: Piece;
 };
 type Action = { type: 'roll' } | MoveAction;

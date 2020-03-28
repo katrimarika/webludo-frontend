@@ -6,14 +6,23 @@ const GamePieces: FunctionalComponent<GameState & {
   playerColor: Color | null;
   pieceActions: MoveAction[];
   takeAction: (action: Action) => void;
-}> = ({ pieces, currentColor, playerColor, pieceActions, takeAction }) => (
+  onMoveComplete: () => void;
+}> = ({
+  pieces,
+  currentColor,
+  playerColor,
+  pieceActions,
+  takeAction,
+  previousMove,
+  onMoveComplete,
+}) => (
   <g>
     {pieces.map(p => {
       const availableAction = pieceActions.find(
         a =>
-          a.piece.area === p.area &&
-          a.piece.color === p.color &&
-          a.piece.index === p.index,
+          a.moveFrom.area === p.area &&
+          a.moveFrom.color === p.color &&
+          a.moveFrom.index === p.index,
       );
       return (
         <GamePiece
@@ -25,6 +34,12 @@ const GamePieces: FunctionalComponent<GameState & {
           onClick={
             availableAction ? () => takeAction(availableAction) : undefined
           }
+          moveFrom={
+            previousMove && previousMove.moveFrom.id === p.id
+              ? previousMove.moveFrom
+              : undefined
+          }
+          onMoveComplete={onMoveComplete}
         />
       );
     })}

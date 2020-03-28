@@ -13,6 +13,7 @@ const Game: FunctionalComponent<{
   message?: string;
   takeAction: (action: Action) => void;
   availableActions: Action[];
+  onMoveComplete: () => void;
 }> = ({
   gameState,
   playerColor,
@@ -21,6 +22,7 @@ const Game: FunctionalComponent<{
   disabled,
   message,
   availableActions,
+  onMoveComplete,
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -51,6 +53,7 @@ const Game: FunctionalComponent<{
             availableActions.filter(a => a.type === 'move') as MoveAction[]
           }
           takeAction={takeAction}
+          onMoveComplete={onMoveComplete}
         />
       )}
       <DieSystem

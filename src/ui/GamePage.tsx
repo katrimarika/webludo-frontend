@@ -126,6 +126,11 @@ const GamePage: FunctionalComponent<{
           disabled={!game || !!error}
           availableActions={playerColor ? actions[playerColor] : []}
           takeAction={takeAction}
+          onMoveComplete={() =>
+            setGameState(
+              gameState ? { ...gameState, previousMove: null } : null,
+            )
+          }
         />
       </div>
     </PageWrapper>

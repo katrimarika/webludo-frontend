@@ -120,17 +120,19 @@ const toPiece = (data: any): Piece | false => {
     console.error('No game piece when expected');
     return false;
   }
+  const id = toInt(data.id);
   const area = toStr(data.area) as Piece['area'];
   const index = toInt(data.position_index);
   const color = toStr(data.player_color) as Color;
   if (
+    !id ||
     ['home', 'play', 'goal'].indexOf(area) === -1 ||
     index < 0 ||
     colors.indexOf(color) === -1
   ) {
     return false;
   }
-  return { area, index, color };
+  return { id, area, index, color };
 };
 
 export const toGameState = (data: any): GameState | false => {
@@ -155,6 +157,7 @@ export const toGameState = (data: any): GameState | false => {
         return list;
       }, [])
     : [];
+  const previousMove = null; // TODO
   if (invalidPieces.length) {
     console.error('Invalid pieces', invalidPieces);
     return false;
@@ -162,6 +165,7 @@ export const toGameState = (data: any): GameState | false => {
   return {
     currentColor: currentColor || null,
     pieces,
+    previousMove,
   };
 };
 
@@ -182,12 +186,12 @@ export const toActions = (data: any): Actions | false => {
             obj[color] = [...obj[color], { type }];
             break;
           case 'move':
-            const piece = toPiece(d.current);
+            const moveFrom = toPiece(d.current);
             const moveTo = toPiece(d.target);
-            if (!piece || !moveTo) {
+            if (!moveFrom || !moveTo) {
               invalidActions.push(d);
             } else {
-              obj[color] = [...obj[color], { type, piece, moveTo }];
+              obj[color] = [...obj[color], { type, moveFrom, moveTo }];
             }
             break;
           default:
@@ -203,6 +207,45 @@ export const toActions = (data: any): Actions | false => {
     return false;
   }
   return actions;
+};
 
-  return false;
+export const pieceSteps = (from: Piece, to: Piece): Piece[] => {
+  if (from.area === to.area && from.index <= to.index) {
+    return [...new Array(to.index - from.index)].map(i => ({
+      ...from,
+      index: from.index + i + 1,
+    }));
+  } else if (from.area === 'play') {
+    let lastPlayIndex: number | null = null;
+    if (to.area === 'play') {
+      lastPlayIndex = 23;
+    } else if (to.area === 'goal') {
+      switch (from.color) {
+        case 'red':
+          lastPlayIndex = 23;
+        case 'blue':
+          lastPlayIndex = 5;
+          break;
+        case 'yellow':
+          lastPlayIndex = 11;
+          break;
+        case 'green':
+          lastPlayIndex = 17;
+          break;
+        default:
+      }
+    }
+    if (lastPlayIndex !== null) {
+      const firstPart = [...new Array(lastPlayIndex - from.index)].map(i => ({
+        ...from,
+        index: from.index + i + 1,
+      }));
+      const secondPart = [...new Array(to.index)].map(i => ({
+        ...from,
+        index: i,
+      }));
+      return [...firstPart, ...secondPart];
+    }
+  }
+  return [to];
 };
