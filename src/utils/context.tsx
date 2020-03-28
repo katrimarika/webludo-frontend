@@ -44,8 +44,7 @@ export const useGameChannel = (
   code: string,
   onGameChange: (data: Game) => void,
   onStateChange: (state: GameState) => void,
-  onRoll: (roll: number, actions: Actions) => void,
-  onAction: (actions: Actions) => void,
+  onRoll: (roll: number, actions: MoveAction[]) => void,
 ) => {
   const socket = useSocket();
   const [channel, setChannel] = useState<Channel | null>(null);
@@ -61,7 +60,6 @@ export const useGameChannel = (
         onGameChange,
         onStateChange,
         onRoll,
-        onAction,
         setError,
       );
       setChannel(gameChannel);
@@ -111,7 +109,7 @@ export const useGameChannel = (
     }
   };
 
-  const takeAction = (action: Action) =>
+  const takeAction = (action: 'roll' | MoveAction) =>
     channel && player
       ? socket.takeAction(channel, player.token, action, () => null, setError)
       : setError(!channel ? 'No channel found' : 'No player found');

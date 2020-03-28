@@ -26,12 +26,10 @@ type GameState = {
 };
 
 type MoveAction = {
-  type: 'move';
-  moveFrom: Piece;
-  moveTo: Piece;
+  pieceId: number;
+  targetArea: Piece['area'];
+  targetIndex: number;
 };
-type Action = { type: 'roll' } | MoveAction;
-type Actions = { [color in Color]: Action[] };
 
 type DieState = { roll: number; position: number; orientation: number };
 

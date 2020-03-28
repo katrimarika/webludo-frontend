@@ -71,3 +71,47 @@ export const dieCoord = (type: 'x' | 'y', rand: number) => {
     return 47 - 5 * Math.sin(rad);
   }
 };
+
+export const pieceSteps = (from: MoveAction, to: Piece): Piece[] => {
+  if (from.targetArea === to.area && from.targetIndex <= to.index) {
+    return [...new Array(to.index - from.targetIndex)].map(i => ({
+      ...to,
+      index: from.targetIndex + i + 1,
+    }));
+  } else if (from.targetArea === 'play') {
+    let lastPlayIndex: number | null = null;
+    if (to.area === 'play') {
+      lastPlayIndex = 23;
+    } else if (to.area === 'goal') {
+      switch (to.color) {
+        case 'red':
+          lastPlayIndex = 23;
+        case 'blue':
+          lastPlayIndex = 5;
+          break;
+        case 'yellow':
+          lastPlayIndex = 11;
+          break;
+        case 'green':
+          lastPlayIndex = 17;
+          break;
+        default:
+      }
+    }
+    if (lastPlayIndex !== null) {
+      const firstPart = [...new Array(lastPlayIndex - from.targetIndex)].map(
+        i => ({
+          ...to,
+          area: from.targetArea,
+          index: from.targetIndex + i + 1,
+        }),
+      );
+      const secondPart = [...new Array(to.index)].map(i => ({
+        ...to,
+        index: i,
+      }));
+      return [...firstPart, ...secondPart];
+    }
+  }
+  return [to];
+};

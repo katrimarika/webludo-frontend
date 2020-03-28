@@ -4,14 +4,14 @@ import GamePiece from './GamePiece';
 
 const GamePieces: FunctionalComponent<GameState & {
   playerColor: Color | null;
-  pieceActions: MoveAction[];
-  takeAction: (action: Action) => void;
+  actions: MoveAction[];
+  takeAction: (action: MoveAction) => void;
   onMoveComplete: () => void;
 }> = ({
   pieces,
   currentColor,
   playerColor,
-  pieceActions,
+  actions,
   takeAction,
   previousMove,
   onMoveComplete,
@@ -21,7 +21,7 @@ const GamePieces: FunctionalComponent<GameState & {
       const availableAction =
         p.color === currentColor &&
         p.color === playerColor &&
-        pieceActions.find(a => a.moveFrom.id === p.id);
+        actions.find(a => a.pieceId === p.id);
       return (
         <GamePiece
           key={`piece-${p.id}`}
@@ -30,8 +30,8 @@ const GamePieces: FunctionalComponent<GameState & {
             availableAction ? () => takeAction(availableAction) : undefined
           }
           moveFrom={
-            previousMove && previousMove.moveFrom.id === p.id
-              ? previousMove.moveFrom
+            previousMove && previousMove.pieceId === p.id
+              ? previousMove
               : undefined
           }
           onMoveComplete={onMoveComplete}

@@ -67,14 +67,35 @@ const toMoveAction = (data: any): MoveAction | false => {
   if (!data) {
     return false;
   }
-  const type = data.type === 'move' ? 'move' : false;
-  const moveFrom = toPiece(data.current);
-  const moveTo = toPiece(data.target);
-  if (!type || !moveFrom || !moveTo) {
+  const pieceId = toInt(data.piece_id);
+  const targetIndex = toInt(data.target_index);
+  const targetArea = toStr(data.target_area) as Piece['area'];
+  if (!pieceId || ['home', 'play', 'goal'].indexOf(targetArea) === -1) {
     return false;
   } else {
-    return { type, moveFrom, moveTo };
+    return { pieceId, targetArea, targetIndex };
   }
+};
+export const toMoveActions = (data: any): MoveAction[] | false => {
+  if (!data || !Array.isArray(data)) {
+    console.error('No actions array when expected');
+    return false;
+  }
+  const invalidActions: any[] = [];
+  const actions = data.reduce<MoveAction[]>((list, a) => {
+    const action = toMoveAction(a);
+    if (!action) {
+      invalidActions.push(a);
+    } else {
+      list.push(action);
+    }
+    return list;
+  }, []);
+  if (invalidActions.length) {
+    console.error('Invalid actions', invalidActions);
+    return false;
+  }
+  return actions;
 };
 
 export const toGameState = (data: any): GameState | false => {
@@ -114,84 +135,4 @@ export const toGameState = (data: any): GameState | false => {
     pieces,
     previousMove,
   };
-};
-
-export const noActions = { red: [], blue: [], yellow: [], green: [] };
-export const toActions = (data: any): Actions | false => {
-  if (!data) {
-    console.error('No actions when expected');
-    return false;
-  }
-  const invalidActions: any[] = [];
-  const actions = colors.reduce<Actions>((obj, color) => {
-    const colorData = data[color];
-    if (Array.isArray(colorData)) {
-      colorData.forEach(d => {
-        const type = toStr(d.type) as Action['type'];
-        switch (type) {
-          case 'roll':
-            obj[color] = [...obj[color], { type }];
-            break;
-          case 'move':
-            const move = toMoveAction(d);
-            if (!move) {
-              invalidActions.push(d);
-            } else {
-              obj[color] = [...obj[color], move];
-            }
-            break;
-          default:
-            invalidActions.push(d);
-        }
-      });
-    }
-    return obj;
-  }, noActions);
-
-  if (invalidActions.length) {
-    console.error('Invalid actions', invalidActions);
-    return false;
-  }
-  return actions;
-};
-
-export const pieceSteps = (from: Piece, to: Piece): Piece[] => {
-  if (from.area === to.area && from.index <= to.index) {
-    return [...new Array(to.index - from.index)].map(i => ({
-      ...from,
-      index: from.index + i + 1,
-    }));
-  } else if (from.area === 'play') {
-    let lastPlayIndex: number | null = null;
-    if (to.area === 'play') {
-      lastPlayIndex = 23;
-    } else if (to.area === 'goal') {
-      switch (from.color) {
-        case 'red':
-          lastPlayIndex = 23;
-        case 'blue':
-          lastPlayIndex = 5;
-          break;
-        case 'yellow':
-          lastPlayIndex = 11;
-          break;
-        case 'green':
-          lastPlayIndex = 17;
-          break;
-        default:
-      }
-    }
-    if (lastPlayIndex !== null) {
-      const firstPart = [...new Array(lastPlayIndex - from.index)].map(i => ({
-        ...from,
-        index: from.index + i + 1,
-      }));
-      const secondPart = [...new Array(to.index)].map(i => ({
-        ...from,
-        index: i,
-      }));
-      return [...firstPart, ...secondPart];
-    }
-  }
-  return [to];
 };

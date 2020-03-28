@@ -11,8 +11,8 @@ const Game: FunctionalComponent<{
   die: DieState;
   disabled?: boolean;
   message?: string;
-  takeAction: (action: Action) => void;
-  availableActions: Action[];
+  takeAction: (action: 'roll' | MoveAction) => void;
+  actions: MoveAction[];
   onMoveComplete: () => void;
 }> = ({
   gameState,
@@ -21,7 +21,7 @@ const Game: FunctionalComponent<{
   takeAction,
   disabled,
   message,
-  availableActions,
+  actions,
   onMoveComplete,
 }) => (
   <svg
@@ -49,16 +49,14 @@ const Game: FunctionalComponent<{
         <GamePieces
           {...gameState}
           playerColor={playerColor}
-          pieceActions={
-            availableActions.filter(a => a.type === 'move') as MoveAction[]
-          }
+          actions={actions}
           takeAction={takeAction}
           onMoveComplete={onMoveComplete}
         />
       )}
       <DieSystem
         die={die}
-        rollDie={() => takeAction({ type: 'roll' })}
+        rollDie={() => takeAction('roll')}
         disabled={
           disabled ||
           !playerColor ||

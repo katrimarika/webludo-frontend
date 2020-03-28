@@ -1,10 +1,10 @@
 import { Channel as PhoenixChannel, Socket } from 'phoenix';
 import {
   colors,
-  toActions,
   toGame,
   toGameState,
   toInt,
+  toMoveActions,
   toStr,
 } from './validation';
 
@@ -59,8 +59,7 @@ const initSocketWithUrl = (url: string) => {
     code: string,
     onGameChange: (newData: Game) => void,
     onStateChange: (newData: GameState) => void,
-    onRoll: (roll: number, actions: Actions) => void,
-    onAction: (actions: Actions) => void,
+    onRoll: (roll: number, actions: MoveAction[]) => void,
     onError: OnError,
   ) => {
     const channel = socket.channel(`games:${code.toLowerCase()}`, {});
@@ -90,8 +89,8 @@ const initSocketWithUrl = (url: string) => {
         onError('Received invalid game data');
       }
     });
-    channel.on('gamestate_updated', resp => {
-      console.log('received gamestate_updated', resp);
+    channel.on('game_state_updated', resp => {
+      console.log('received game_state_updated', resp);
       const state = toGameState(resp && resp.game_state);
       if (state) {
         onStateChange(state);
@@ -102,20 +101,11 @@ const initSocketWithUrl = (url: string) => {
     channel.on('roll', resp => {
       console.log('received roll', resp);
       const val = toInt(resp.result);
-      const actions = toActions(resp.actions);
+      const actions = toMoveActions(resp.actions);
       if (val > 0 && val <= 6 && actions) {
         onRoll(val, actions);
       } else {
         onError('Received invalid roll result');
-      }
-    });
-    channel.on('action', resp => {
-      console.log('received action', resp);
-      const actions = toActions(resp.actions);
-      if (actions) {
-        onAction(actions);
-      } else {
-        onError('Received invalid actions');
       }
     });
     return channel;
@@ -144,12 +134,25 @@ const initSocketWithUrl = (url: string) => {
   const takeAction = (
     channel: Channel,
     token: string,
-    action: Action,
+    action: 'roll' | MoveAction,
     onSuccess: () => void,
     onError: OnError,
   ) => {
     channel
-      .push('action', { token, ...action })
+      .push(
+        'action',
+        action === 'roll'
+          ? { token, type: 'roll' }
+          : {
+              token,
+              type: 'move',
+              move: {
+                piece_id: action.pieceId,
+                target_area: action.targetArea,
+                target_index: action.targetIndex,
+              },
+            },
+      )
       .receive('ok', onSuccess)
       .receive('error', onErrorStr(onError));
   };

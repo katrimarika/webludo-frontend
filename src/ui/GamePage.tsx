@@ -3,7 +3,6 @@ import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { useGameChannel } from '../utils/context';
 import { theme } from '../utils/style';
-import { noActions } from '../utils/validation';
 import ErrorMessage from './ErrorMessage';
 import Game from './Game';
 import GameInfo from './GameInfo';
@@ -20,7 +19,7 @@ const GamePage: FunctionalComponent<{
     position: Math.random(),
     orientation: Math.random(),
   });
-  const [actions, setActions] = useState<Actions>(noActions);
+  const [actions, setActions] = useState<MoveAction[]>([]);
   const [playerColor, error, joinGame, takeAction] = useGameChannel(
     code,
     setGame,
@@ -29,7 +28,6 @@ const GamePage: FunctionalComponent<{
       setDie({ roll, position: Math.random(), orientation: Math.random() });
       setActions(actions);
     },
-    actions => setActions(actions),
   );
 
   const canJoin = !error && !playerColor && !!game && game.players.length < 4;
@@ -124,7 +122,7 @@ const GamePage: FunctionalComponent<{
           playerColor={playerColor}
           die={die}
           disabled={!game || !!error}
-          availableActions={playerColor ? actions[playerColor] : []}
+          actions={actions}
           takeAction={takeAction}
           onMoveComplete={() =>
             setGameState(
