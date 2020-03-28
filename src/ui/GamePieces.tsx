@@ -21,7 +21,7 @@ const GamePieces: FunctionalComponent<GameState & {
       const availableAction = pieceActions.find(a => a.moveFrom.id === p.id);
       return (
         <GamePiece
-          key={`piece-${p.color}-${p.area}-${p.index}`}
+          key={`piece-${p.id}`}
           piece={p}
           isCurrentAndOwnColor={
             p.color === currentColor && p.color === playerColor
