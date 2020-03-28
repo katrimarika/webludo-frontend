@@ -16,7 +16,7 @@ const App: FunctionalComponent = () => {
   }, []);
 
   if (selectedGame) {
-    return <GamePage code={selectedGame} />;
+    return <GamePage key={selectedGame} code={selectedGame} />;
   }
 
   return <LobbyPage />;
