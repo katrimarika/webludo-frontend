@@ -1,7 +1,7 @@
 import { createContext, FunctionComponent, h } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { Channel, initSocket, NO_SOCKET, SocketActions } from './socket';
-import { colors } from './helpers';
+import { colors } from './validation';
 
 const SocketContext = createContext<SocketActions>(NO_SOCKET);
 

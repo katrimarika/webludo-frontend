@@ -6,7 +6,7 @@ import {
   toGameState,
   toInt,
   toStr,
-} from './helpers';
+} from './validation';
 
 export type Channel = PhoenixChannel;
 

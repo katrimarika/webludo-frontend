@@ -1,14 +1,9 @@
 import { css } from 'emotion';
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { memo } from 'preact/compat';
-import {
-  arrowCoord,
-  colors,
-  goalCoord,
-  homeCoord,
-  playCoord,
-} from '../utils/helpers';
+import { arrowCoord, goalCoord, homeCoord, playCoord } from '../utils/helpers';
 import { theme } from '../utils/style';
+import { colors } from '../utils/validation';
 
 const spotCss = css`
   stroke: black;

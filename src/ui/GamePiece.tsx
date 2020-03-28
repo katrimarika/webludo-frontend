@@ -1,8 +1,9 @@
 import { css, keyframes } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { memo, useEffect, useState } from 'preact/compat';
-import { pieceCoord, pieceSteps } from '../utils/helpers';
+import { pieceCoord } from '../utils/helpers';
 import { theme } from '../utils/style';
+import { pieceSteps } from '../utils/validation';
 
 const pulseAnimation = (color: Color) => keyframes`
   from {
