@@ -57,8 +57,8 @@ const initSocketWithUrl = (url: string) => {
 
   const joinGameChannel = (
     code: string,
-    onGameChange: (data: Game) => void,
-    onStateChange: (state: GameState) => void,
+    onGameChange: (newData: Game) => void,
+    onStateChange: (newData: GameState) => void,
     onRoll: (roll: number, actions: Actions) => void,
     onAction: (actions: Actions) => void,
     onError: OnError,
@@ -82,6 +82,7 @@ const initSocketWithUrl = (url: string) => {
       .receive('error', onErrorStr(onError));
     // Listen to game change events
     channel.on('game_updated', resp => {
+      console.log('received game_updated', resp);
       const game = toGame(resp);
       if (game) {
         onGameChange(game);
@@ -90,6 +91,7 @@ const initSocketWithUrl = (url: string) => {
       }
     });
     channel.on('gamestate_updated', resp => {
+      console.log('received gamestate_updated', resp);
       const state = toGameState(resp && resp.game_state);
       if (state) {
         onStateChange(state);
@@ -98,6 +100,7 @@ const initSocketWithUrl = (url: string) => {
       }
     });
     channel.on('roll', resp => {
+      console.log('received roll', resp);
       const val = toInt(resp.result);
       const actions = toActions(resp.actions);
       if (val > 0 && val <= 6 && actions) {
@@ -107,6 +110,7 @@ const initSocketWithUrl = (url: string) => {
       }
     });
     channel.on('action', resp => {
+      console.log('received action', resp);
       const actions = toActions(resp.actions);
       if (actions) {
         onAction(actions);

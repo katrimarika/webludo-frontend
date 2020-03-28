@@ -18,12 +18,7 @@ const GamePieces: FunctionalComponent<GameState & {
 }) => (
   <g>
     {pieces.map(p => {
-      const availableAction = pieceActions.find(
-        a =>
-          a.moveFrom.area === p.area &&
-          a.moveFrom.color === p.color &&
-          a.moveFrom.index === p.index,
-      );
+      const availableAction = pieceActions.find(a => a.moveFrom.id === p.id);
       return (
         <GamePiece
           key={`piece-${p.color}-${p.area}-${p.index}`}

@@ -64,13 +64,33 @@ const toPiece = (data: any): Piece | false => {
   return { id, area, index, color };
 };
 
+const toMoveAction = (data: any): MoveAction | false => {
+  if (!data) {
+    return false;
+  }
+  const type = data.type === 'move' ? 'move' : false;
+  const moveFrom = toPiece(data.current);
+  const moveTo = toPiece(data.target);
+  if (!type || !moveFrom || !moveTo) {
+    return false;
+  } else {
+    return { type, moveFrom, moveTo };
+  }
+};
+
 export const toGameState = (data: any): GameState | false => {
   if (!data) {
     console.error('No game state when expected');
     return false;
   }
   const currentColor = toStr(data.current_player) as Color;
-  if (!!currentColor && colors.indexOf(currentColor) === -1) {
+  const previousMove = data.previous_move
+    ? toMoveAction(data.previous_move)
+    : null;
+  if (
+    (!!currentColor && colors.indexOf(currentColor) === -1) ||
+    previousMove === false
+  ) {
     console.error('Invalid game state', data);
     return false;
   }
@@ -86,7 +106,6 @@ export const toGameState = (data: any): GameState | false => {
         return list;
       }, [])
     : [];
-  const previousMove = null; // TODO
   if (invalidPieces.length) {
     console.error('Invalid pieces', invalidPieces);
     return false;
@@ -115,12 +134,11 @@ export const toActions = (data: any): Actions | false => {
             obj[color] = [...obj[color], { type }];
             break;
           case 'move':
-            const moveFrom = toPiece(d.current);
-            const moveTo = toPiece(d.target);
-            if (!moveFrom || !moveTo) {
+            const move = toMoveAction(d);
+            if (!move) {
               invalidActions.push(d);
             } else {
-              obj[color] = [...obj[color], { type, moveFrom, moveTo }];
+              obj[color] = [...obj[color], move];
             }
             break;
           default:

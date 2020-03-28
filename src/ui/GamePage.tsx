@@ -23,8 +23,8 @@ const GamePage: FunctionalComponent<{
   const [actions, setActions] = useState<Actions>(noActions);
   const [playerColor, error, joinGame, takeAction] = useGameChannel(
     code,
-    game => setGame(game),
-    state => setGameState(state),
+    setGame,
+    setGameState,
     (roll, actions) => {
       setDie({ roll, position: Math.random(), orientation: Math.random() });
       setActions(actions);
