@@ -16,11 +16,10 @@ const pulseAnimation = (color: Color) => keyframes`
 
 const GamePiece: FunctionalComponent<{
   piece: Piece;
-  isCurrentAndOwnColor: boolean;
   onClick?: () => void;
   moveFrom?: Piece;
   onMoveComplete: () => void;
-}> = ({ piece, isCurrentAndOwnColor, moveFrom, onMoveComplete, onClick }) => {
+}> = ({ piece, moveFrom, onMoveComplete, onClick }) => {
   const [moving, setMoving] = useState(false);
 
   let moveAnimation = '';
@@ -58,7 +57,10 @@ const GamePiece: FunctionalComponent<{
           }
         `;
       }
-      setTimeout(onMoveComplete, animationDuration);
+      setTimeout(() => {
+        onMoveComplete();
+        setMoving(false);
+      }, animationDuration);
     }
   });
 
@@ -70,8 +72,7 @@ const GamePiece: FunctionalComponent<{
       r="25"
       className={css`
         fill: ${theme.colors[piece.color].main};
-        ${isCurrentAndOwnColor &&
-          !!onClick &&
+        ${!!onClick &&
           css`
             animation: ${pulseAnimation(piece.color)} 1s alternate infinite;
             cursor: pointer;

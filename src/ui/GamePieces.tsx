@@ -18,14 +18,14 @@ const GamePieces: FunctionalComponent<GameState & {
 }) => (
   <g>
     {pieces.map(p => {
-      const availableAction = pieceActions.find(a => a.moveFrom.id === p.id);
+      const availableAction =
+        p.color === currentColor &&
+        p.color === playerColor &&
+        pieceActions.find(a => a.moveFrom.id === p.id);
       return (
         <GamePiece
           key={`piece-${p.id}`}
           piece={p}
-          isCurrentAndOwnColor={
-            p.color === currentColor && p.color === playerColor
-          }
           onClick={
             availableAction ? () => takeAction(availableAction) : undefined
           }

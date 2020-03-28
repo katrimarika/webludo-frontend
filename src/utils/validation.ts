@@ -56,7 +56,6 @@ const toPiece = (data: any): Piece | false => {
   if (
     !id ||
     ['home', 'play', 'goal'].indexOf(area) === -1 ||
-    index < 0 ||
     colors.indexOf(color) === -1
   ) {
     return false;
