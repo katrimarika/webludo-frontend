@@ -63,17 +63,19 @@ const toPiece = (data: any): Piece | false => {
   return { id, area, index, color };
 };
 
-const toMoveAction = (data: any): MoveAction | false => {
+const toMoveAction = (data: any, from = false): MoveAction | false => {
   if (!data) {
     return false;
   }
   const pieceId = toInt(data.piece_id);
-  const targetIndex = toInt(data.target_index);
-  const targetArea = toStr(data.target_area) as Piece['area'];
-  if (!pieceId || ['home', 'play', 'goal'].indexOf(targetArea) === -1) {
+  const index = toInt(from ? data.start_index : data.target_index);
+  const area = toStr(
+    from ? data.start_area : data.target_area,
+  ) as Piece['area'];
+  if (!pieceId || ['home', 'play', 'goal'].indexOf(area) === -1) {
     return false;
   } else {
-    return { pieceId, targetArea, targetIndex };
+    return { pieceId, area, index };
   }
 };
 export const toMoveActions = (data: any): MoveAction[] | false => {
@@ -98,14 +100,17 @@ export const toMoveActions = (data: any): MoveAction[] | false => {
   return actions;
 };
 
-export const toGameState = (data: any): GameState | false => {
+export const toGameState = (
+  data: any,
+  previousMoveData?: any,
+): GameState | false => {
   if (!data) {
     console.error('No game state when expected');
     return false;
   }
   const currentColor = toStr(data.current_player) as Color;
-  const previousMove = data.previous_move
-    ? toMoveAction(data.previous_move)
+  const previousMove = previousMoveData
+    ? toMoveAction(previousMoveData, true)
     : null;
   if (
     (!!currentColor && colors.indexOf(currentColor) === -1) ||

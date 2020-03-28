@@ -1,5 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { memo } from 'preact/compat';
+import { useEffect, useState } from 'preact/hooks';
 import GamePiece from './GamePiece';
 
 const GamePieces: FunctionalComponent<GameState & {
@@ -15,30 +16,44 @@ const GamePieces: FunctionalComponent<GameState & {
   takeAction,
   previousMove,
   onMoveComplete,
-}) => (
-  <g>
-    {pieces.map(p => {
-      const availableAction =
-        p.color === currentColor &&
-        p.color === playerColor &&
-        actions.find(a => a.pieceId === p.id);
-      return (
-        <GamePiece
-          key={`piece-${p.id}`}
-          piece={p}
-          onClick={
-            availableAction ? () => takeAction(availableAction) : undefined
-          }
-          moveFrom={
-            previousMove && previousMove.pieceId === p.id
-              ? previousMove
-              : undefined
-          }
-          onMoveComplete={onMoveComplete}
-        />
-      );
-    })}
-  </g>
-);
+}) => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [pieces]);
+
+  return (
+    <g>
+      {pieces.map(p => {
+        const availableAction =
+          !loading &&
+          p.color === currentColor &&
+          p.color === playerColor &&
+          actions.find(a => a.pieceId === p.id);
+        return (
+          <GamePiece
+            key={`piece-${p.id}`}
+            piece={p}
+            onClick={
+              availableAction
+                ? () => {
+                    setLoading(true);
+                    takeAction(availableAction);
+                  }
+                : undefined
+            }
+            moveFrom={
+              previousMove && previousMove.pieceId === p.id
+                ? previousMove
+                : undefined
+            }
+            onMoveComplete={onMoveComplete}
+          />
+        );
+      })}
+    </g>
+  );
+};
 
 export default memo(GamePieces);

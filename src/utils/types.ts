@@ -27,8 +27,8 @@ type GameState = {
 
 type MoveAction = {
   pieceId: number;
-  targetArea: Piece['area'];
-  targetIndex: number;
+  area: Piece['area'];
+  index: number;
 };
 
 type DieState = { roll: number; position: number; orientation: number };

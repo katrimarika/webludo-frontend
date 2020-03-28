@@ -73,12 +73,12 @@ export const dieCoord = (type: 'x' | 'y', rand: number) => {
 };
 
 export const pieceSteps = (from: MoveAction, to: Piece): Piece[] => {
-  if (from.targetArea === to.area && from.targetIndex <= to.index) {
-    return [...new Array(to.index - from.targetIndex)].map(i => ({
+  if (from.area === to.area && from.index <= to.index) {
+    return [...new Array(to.index - from.index)].map((_, i) => ({
       ...to,
-      index: from.targetIndex + i + 1,
+      index: from.index + i + 1,
     }));
-  } else if (from.targetArea === 'play') {
+  } else if (from.area === 'play') {
     let lastPlayIndex: number | null = null;
     if (to.area === 'play') {
       lastPlayIndex = 23;
@@ -86,6 +86,7 @@ export const pieceSteps = (from: MoveAction, to: Piece): Piece[] => {
       switch (to.color) {
         case 'red':
           lastPlayIndex = 23;
+          break;
         case 'blue':
           lastPlayIndex = 5;
           break;
@@ -99,14 +100,14 @@ export const pieceSteps = (from: MoveAction, to: Piece): Piece[] => {
       }
     }
     if (lastPlayIndex !== null) {
-      const firstPart = [...new Array(lastPlayIndex - from.targetIndex)].map(
-        i => ({
+      const firstPart = [...new Array(lastPlayIndex - from.index)].map(
+        (_, i) => ({
           ...to,
-          area: from.targetArea,
-          index: from.targetIndex + i + 1,
+          area: from.area,
+          index: from.index + i + 1,
         }),
       );
-      const secondPart = [...new Array(to.index)].map(i => ({
+      const secondPart = [...new Array(to.index)].map((_, i) => ({
         ...to,
         index: i,
       }));

@@ -91,7 +91,10 @@ const initSocketWithUrl = (url: string) => {
     });
     channel.on('game_state_updated', resp => {
       console.log('received game_state_updated', resp);
-      const state = toGameState(resp && resp.game_state);
+      const state = toGameState(
+        resp && resp.game_state,
+        resp && resp.previous_move,
+      );
       if (state) {
         onStateChange(state);
       } else {
@@ -148,8 +151,8 @@ const initSocketWithUrl = (url: string) => {
               type: 'move',
               move: {
                 piece_id: action.pieceId,
-                target_area: action.targetArea,
-                target_index: action.targetIndex,
+                target_area: action.area,
+                target_index: action.index,
               },
             },
       )
