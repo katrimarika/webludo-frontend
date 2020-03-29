@@ -28,15 +28,13 @@ const GamePage: FunctionalComponent<{
       setGameState(state);
       setActions(actions);
     },
-    (roll, actions) => {
+    roll =>
       setDie({
         roll,
         position: Math.random(),
         distance: Math.random(),
         orientation: Math.random(),
-      });
-      setActions(actions);
-    },
+      }),
   );
 
   const canJoin = !error && !playerColor && !!game && game.players.length < 4;

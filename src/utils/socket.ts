@@ -59,7 +59,7 @@ const initSocketWithUrl = (url: string) => {
     code: string,
     onGameChange: (newData: Game) => void,
     onStateChange: (newData: GameState, newActions: MoveAction[]) => void,
-    onRoll: (roll: number, actions: MoveAction[]) => void,
+    onRoll: (roll: number) => void,
     onError: OnError,
   ) => {
     const channel = socket.channel(`games:${code.toLowerCase()}`, {});
@@ -76,17 +76,17 @@ const initSocketWithUrl = (url: string) => {
             resp.game.game_state.roll,
         );
         const actions = toMoveActions(resp && resp.actions);
-        if (!game && !state) {
+        if (!game || !state || !actions) {
           onError('Invalid game data');
         }
         if (game) {
           onGameChange(game);
         }
-        if (state) {
-          onStateChange(state, actions || []);
+        if (state && actions) {
+          onStateChange(state, actions);
         }
-        if (roll > 0 && roll <= 6 && actions) {
-          onRoll(roll, actions);
+        if (roll > 0 && roll <= 6) {
+          onRoll(roll);
         }
       })
       .receive('error', onErrorStr(onError));
@@ -116,9 +116,8 @@ const initSocketWithUrl = (url: string) => {
     channel.on('roll', resp => {
       console.log('received roll', resp);
       const val = toInt(resp.result);
-      const actions = toMoveActions(resp.actions);
-      if (val > 0 && val <= 6 && actions) {
-        onRoll(val, actions);
+      if (val > 0 && val <= 6) {
+        onRoll(val);
       } else {
         onError('Received invalid roll result');
       }

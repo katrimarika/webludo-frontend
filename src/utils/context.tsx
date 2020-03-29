@@ -44,7 +44,7 @@ export const useGameChannel = (
   code: string,
   onGameChange: (data: Game) => void,
   onStateChange: (state: GameState, actions: MoveAction[]) => void,
-  onRoll: (roll: number, actions: MoveAction[]) => void,
+  onRoll: (roll: number) => void,
 ) => {
   const socket = useSocket();
   const [channel, setChannel] = useState<Channel | null>(null);
