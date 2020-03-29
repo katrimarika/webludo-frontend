@@ -16,11 +16,13 @@ export const toGame = (data: any): Game | false => {
     console.error('Invalid game details', data);
     return false;
   }
-  // Ensure the players are in join order
+  // Ensure the players are in play order
   const sortedPlayers = (Array.isArray(data.players)
     ? (data.players as any[])
     : []
-  ).sort((a, b) => (a.inserted_at > b.inserted_at ? 1 : -1));
+  ).sort((a, b) =>
+    colors.indexOf(a.color) > colors.indexOf(b.color) ? 1 : -1,
+  );
   const invalidPlayers: any[] = [];
   const players = sortedPlayers.reduce<Player[]>((list, p) => {
     const name = toStr(p.name);

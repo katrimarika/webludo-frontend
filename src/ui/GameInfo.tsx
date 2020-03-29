@@ -1,63 +1,60 @@
-import { css, keyframes } from 'emotion';
-import { FunctionalComponent, h } from 'preact';
-import { theme } from '../utils/style';
-
-const pulseAnimation = (color: Color) => keyframes`
-  from {
-    background-color: ${theme.colors[color].main};
-  }
-  to {
-    background-color: ${theme.colors[color].text};
-  }
-`;
+import { css } from 'emotion';
+import { Fragment, FunctionalComponent, h } from 'preact';
+import PlayerInfo from './PlayerInfo';
 
 const GameInfo: FunctionalComponent<{
   game: Game;
   playerColor: Color | null;
   currentColor: Color | null;
-}> = ({ game, playerColor, currentColor }) => (
-  <ul
-    className={css`
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-    `}
-  >
-    {game.players.map(p => (
-      <li
-        key={`player-${p.name}`}
-        className={css`
-          display: flex;
-          align-items: center;
-          line-height: 1.4;
-          padding: 0.1875rem 0.5rem;
-          border-radius: 0.1875rem;
-          background: ${p.color === currentColor
-            ? theme.colors.highlight
-            : 'transparent'};
-        `}
-      >
-        <div
-          className={css`
-            flex: 0 0 0.625rem;
-            background: ${theme.colors[p.color].main};
-            height: 0.625rem;
-            width: 0.625rem;
-            border-radius: 0.625rem;
-            margin-right: 0.5rem;
-            animation: ${p.color === currentColor
-              ? `${pulseAnimation(p.color)} 1s alternate infinite`
-              : 'none'};
-          `}
+}> = ({ game: { players }, playerColor, currentColor }) => {
+  const playerIndex = players.findIndex(p => p.color === playerColor);
+  const player = playerIndex !== -1 ? players[playerIndex] : null;
+  const otherPlayers = player
+    ? [...players.slice(playerIndex + 1), ...players.slice(0, playerIndex)]
+    : players;
+
+  return (
+    <ul
+      className={css`
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      `}
+    >
+      {!!player && (
+        <Fragment>
+          <h2
+            className={css`
+              font-size: 1rem;
+              margin: 0.5rem 0 0.25rem;
+            `}
+          >
+            You
+          </h2>
+          <PlayerInfo
+            key={`player-${player.color}`}
+            player={player}
+            isCurrent={player.color === currentColor}
+          />
+          <h2
+            className={css`
+              font-size: 1rem;
+              margin: 0.5rem 0 0.25rem;
+            `}
+          >
+            Competitors
+          </h2>
+        </Fragment>
+      )}
+      {otherPlayers.map(p => (
+        <PlayerInfo
+          key={`player-${p.color}`}
+          player={p}
+          isCurrent={p.color === currentColor}
         />
-        <div
-          className={css`
-            font-weight: ${p.color === playerColor ? '700' : '400'};
-          `}
-        >{`${p.name}${p.color === currentColor ? ' PLAY!' : ''}`}</div>
-      </li>
-    ))}
-  </ul>
-);
+      ))}
+    </ul>
+  );
+};
 
 export default GameInfo;
