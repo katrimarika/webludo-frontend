@@ -82,6 +82,10 @@ const GamePiece: FunctionalComponent<{
       r="25"
       className={css`
         fill: ${theme.colors[piece.color].main};
+        font-size: 1rem;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-tap-highlight-color: transparent;
+        transform: translate(0px, 0px);
         ${!!onClick &&
           css`
             cursor: pointer;

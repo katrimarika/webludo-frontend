@@ -35,9 +35,12 @@ const DieSystem: FunctionalComponent<{
         cy="500"
         r="90"
         className={css`
+          font-size: 1rem;
           stroke: black;
           stroke-width: 3;
           fill: transparent;
+          -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+          -webkit-tap-highlight-color: transparent;
           ${canRoll &&
             css`
               cursor: pointer;

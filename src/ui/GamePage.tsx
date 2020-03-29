@@ -17,15 +17,24 @@ const GamePage: FunctionalComponent<{
   const [die, setDie] = useState<DieState>({
     roll: Math.ceil(Math.random() * 6),
     position: Math.random(),
+    distance: Math.random(),
     orientation: Math.random(),
   });
   const [actions, setActions] = useState<MoveAction[]>([]);
   const [playerColor, error, joinGame, takeAction] = useGameChannel(
     code,
     setGame,
-    setGameState,
+    (state, actions) => {
+      setGameState(state);
+      setActions(actions);
+    },
     (roll, actions) => {
-      setDie({ roll, position: Math.random(), orientation: Math.random() });
+      setDie({
+        roll,
+        position: Math.random(),
+        distance: Math.random(),
+        orientation: Math.random(),
+      });
       setActions(actions);
     },
   );

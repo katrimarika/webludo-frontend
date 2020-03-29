@@ -31,6 +31,11 @@ type MoveAction = {
   index: number;
 };
 
-type DieState = { roll: number; position: number; orientation: number };
+type DieState = {
+  roll: number;
+  position: number;
+  distance: number;
+  orientation: number;
+};
 
 type OnError = (e: string) => void;

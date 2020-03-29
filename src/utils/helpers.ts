@@ -63,12 +63,16 @@ export const arrowCoord = (type: 'x' | 'y', i: number) => {
   }
 };
 
-export const dieCoord = (type: 'x' | 'y', rand: number) => {
-  const rad = toRad(Math.floor(rand * 360));
+export const dieCoord = (
+  type: 'x' | 'y',
+  positionRand: number,
+  distanceRand: number,
+) => {
+  const rad = toRad(Math.floor(positionRand * 360));
   if (type === 'x') {
-    return 47 + 5 * Math.cos(rad);
+    return 47 + 5 * distanceRand * Math.cos(rad);
   } else {
-    return 47 - 5 * Math.sin(rad);
+    return 47 - 5 * distanceRand * Math.sin(rad);
   }
 };
 
@@ -107,7 +111,7 @@ export const pieceSteps = (from: MoveAction, to: Piece): Piece[] => {
           index: from.index + i + 1,
         }),
       );
-      const secondPart = [...new Array(to.index)].map((_, i) => ({
+      const secondPart = [...new Array(to.index + 1)].map((_, i) => ({
         ...to,
         index: i,
       }));

@@ -43,7 +43,7 @@ export const useLobbyChannel = () => {
 export const useGameChannel = (
   code: string,
   onGameChange: (data: Game) => void,
-  onStateChange: (state: GameState) => void,
+  onStateChange: (state: GameState, actions: MoveAction[]) => void,
   onRoll: (roll: number, actions: MoveAction[]) => void,
 ) => {
   const socket = useSocket();

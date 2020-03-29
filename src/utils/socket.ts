@@ -58,7 +58,7 @@ const initSocketWithUrl = (url: string) => {
   const joinGameChannel = (
     code: string,
     onGameChange: (newData: Game) => void,
-    onStateChange: (newData: GameState) => void,
+    onStateChange: (newData: GameState, newActions: MoveAction[]) => void,
     onRoll: (roll: number, actions: MoveAction[]) => void,
     onError: OnError,
   ) => {
@@ -66,8 +66,16 @@ const initSocketWithUrl = (url: string) => {
     channel
       .join()
       .receive('ok', resp => {
-        const game = toGame(resp);
-        const state = toGameState(resp && resp.game_state);
+        console.log('joined game channel', resp);
+        const game = toGame(resp && resp.game);
+        const state = toGameState(resp && resp.game && resp.game.game_state);
+        const roll = toInt(
+          resp &&
+            resp.game &&
+            resp.game.game_state &&
+            resp.game.game_state.roll,
+        );
+        const actions = toMoveActions(resp && resp.actions);
         if (!game && !state) {
           onError('Invalid game data');
         }
@@ -75,7 +83,10 @@ const initSocketWithUrl = (url: string) => {
           onGameChange(game);
         }
         if (state) {
-          onStateChange(state);
+          onStateChange(state, actions || []);
+        }
+        if (roll > 0 && roll <= 6 && actions) {
+          onRoll(roll, actions);
         }
       })
       .receive('error', onErrorStr(onError));
@@ -95,8 +106,9 @@ const initSocketWithUrl = (url: string) => {
         resp && resp.game_state,
         resp && resp.previous_move,
       );
-      if (state) {
-        onStateChange(state);
+      const actions = toMoveActions(resp && resp.actions);
+      if (state && actions) {
+        onStateChange(state, actions);
       } else {
         onError('Received invalid game state');
       }

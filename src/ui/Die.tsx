@@ -13,12 +13,13 @@ const pipAttrs = {
 const Die: FunctionalComponent<DieState> = ({
   roll,
   position,
+  distance,
   orientation,
 }) => (
   <g transform={`rotate(${180 * orientation} 500 500)`}>
     <svg
-      x={`${dieCoord('x', position) * 10}`}
-      y={`${dieCoord('y', position) * 10}`}
+      x={`${dieCoord('x', position, distance) * 10}`}
+      y={`${dieCoord('y', position, distance) * 10}`}
       width="60"
       height="60"
       viewBox="0 0 100 100"
