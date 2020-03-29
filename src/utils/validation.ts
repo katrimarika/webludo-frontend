@@ -1,5 +1,6 @@
 // Data type helpers and validation
 export const colors = ['red', 'blue', 'yellow', 'green'] as const;
+const areas = ['home', 'play', 'goal', 'center'] as const;
 
 export const toStr = (val: any) => (typeof val === 'string' ? val : '');
 export const toInt = (val: any) => parseInt(val, 10) || 0;
@@ -55,15 +56,17 @@ const toPiece = (data: any): Piece | false => {
   const area = toStr(data.area) as Piece['area'];
   const index = toInt(data.position_index);
   const color = toStr(data.player_color) as Color;
+  const multiplier = toInt(data.multiplier);
   if (
     !id ||
-    ['home', 'play', 'goal'].indexOf(area) === -1 ||
-    colors.indexOf(color) === -1
+    areas.indexOf(area) === -1 ||
+    colors.indexOf(color) === -1 ||
+    !multiplier
   ) {
     console.error('Invalid game piece', data);
     return false;
   }
-  return { id, area, index, color };
+  return { id, area, index, color, multiplier };
 };
 
 const toMoveAction = (data: any): MoveAction | false => {
@@ -74,7 +77,7 @@ const toMoveAction = (data: any): MoveAction | false => {
   const pieceId = toInt(data.piece_id);
   const index = toInt(data.target_index);
   const area = toStr(data.target_area) as Piece['area'];
-  if (!pieceId || ['home', 'play', 'goal'].indexOf(area) === -1) {
+  if (!pieceId || areas.indexOf(area) === -1) {
     console.error('Invalid move action', data);
     return false;
   } else {
@@ -113,8 +116,8 @@ const toMoveAnimation = (data: any): MoveAnimation | false => {
   const targetArea = toStr(data.target_area) as Piece['area'];
   if (
     !pieceId ||
-    ['home', 'play', 'goal'].indexOf(startArea) === -1 ||
-    ['home', 'play', 'goal'].indexOf(targetArea) === -1
+    areas.indexOf(startArea) === -1 ||
+    areas.indexOf(targetArea) === -1
   ) {
     console.error(`Invalid move animation`, data);
     return false;

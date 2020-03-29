@@ -26,7 +26,7 @@ export const theme = {
     ivory: '#fffff0',
     highlight: '#d6e8f5',
     boardPath: '#1f1f56',
-    boardCenter: '#70b1de',
+    boardCenter: '#d6e8f5',
     boardCorner: '#272525',
   },
 };

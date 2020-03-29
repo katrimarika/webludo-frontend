@@ -4,6 +4,7 @@ import { memo } from 'preact/compat';
 import { useEffect, useState } from 'preact/hooks';
 import { pieceCoord, pieceSteps } from '../utils/helpers';
 import { theme } from '../utils/style';
+import { colors } from '../utils/validation';
 
 const pulseAnimation = (color: Color) => keyframes`
   from {
@@ -75,7 +76,37 @@ const GamePiece: FunctionalComponent<{
     }
   });
 
-  return (
+  return piece.area === 'center' && !move ? (
+    <g
+      key={`piece-${piece.id}`}
+      transform={`rotate(${90 * colors.indexOf(piece.color)} 500 500)`}
+    >
+      <rect
+        x={`${renderCoords[0] - 40}`}
+        y={`${renderCoords[1] - 25}`}
+        width="80"
+        height="50"
+        rx="1"
+        className={css`
+          fill: ${theme.colors[piece.color].main};
+          font-size: 1rem;
+          transform: translate(0px, 0px);
+        `}
+      />
+      <rect
+        x={`${renderCoords[0] - 2}`}
+        y={`${renderCoords[1] - 29}`}
+        width="4"
+        height="58"
+        rx="1"
+        className={css`
+          fill: ${theme.colors[piece.color].main};
+          font-size: 1rem;
+          transform: translate(0px, 0px);
+        `}
+      />
+    </g>
+  ) : (
     <circle
       key={`piece-${piece.id}`}
       cx={`${renderCoords[0]}`}
@@ -84,12 +115,12 @@ const GamePiece: FunctionalComponent<{
       className={css`
         fill: ${theme.colors[piece.color].main};
         font-size: 1rem;
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
-        -webkit-tap-highlight-color: transparent;
         transform: translate(0px, 0px);
         ${!!onClick &&
           css`
             cursor: pointer;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-tap-highlight-color: transparent;
             &:hover,
             &:focus,
             &:active {

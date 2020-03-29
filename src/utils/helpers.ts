@@ -40,6 +40,17 @@ export const goalCoord = (type: 'x' | 'y', i: number, j: number) => {
   }
 };
 
+export const centerCoord = (type: 'x' | 'y', i: number, j: number) => {
+  // 4 colors: i = 0..3, 3 possible places for each color: j = 0..2
+  const dist = 7.5;
+  const rad = toRad(playStart - 45);
+  if (type === 'x') {
+    return 50 + 20 * Math.cos(rad);
+  } else {
+    return 50 - 20 * Math.sin(rad) - j * dist;
+  }
+};
+
 export const pieceCoord = (type: 'x' | 'y', piece: Piece) => {
   const colorIndex = colors.indexOf(piece.color);
   switch (piece.area) {
@@ -49,6 +60,8 @@ export const pieceCoord = (type: 'x' | 'y', piece: Piece) => {
       return homeCoord(type, colorIndex, piece.index);
     case 'play':
       return playCoord(type, piece.index);
+    case 'center':
+      return centerCoord(type, colorIndex, piece.index);
     default:
       return 0;
   }

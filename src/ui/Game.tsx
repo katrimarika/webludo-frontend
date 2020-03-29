@@ -45,15 +45,6 @@ const Game: FunctionalComponent<{
   >
     <svg width="100%" height="100%" viewBox="0 0 1000 1000">
       <GameBoard />
-      {gameState && (
-        <GamePieces
-          {...gameState}
-          playerColor={playerColor}
-          actions={actions}
-          takeAction={takeAction}
-          onMoveComplete={onMoveComplete}
-        />
-      )}
       <DieSystem
         die={die}
         rollDie={() => takeAction('roll')}
@@ -66,6 +57,15 @@ const Game: FunctionalComponent<{
           gameState.currentColor !== playerColor
         }
       />
+      {gameState && (
+        <GamePieces
+          {...gameState}
+          playerColor={playerColor}
+          actions={actions}
+          takeAction={takeAction}
+          onMoveComplete={onMoveComplete}
+        />
+      )}
       {(message || disabled) && <GameOverlay text={message || ''} />}
     </svg>
   </svg>
