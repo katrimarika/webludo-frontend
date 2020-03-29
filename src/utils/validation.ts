@@ -66,18 +66,16 @@ const toPiece = (data: any): Piece | false => {
   return { id, area, index, color };
 };
 
-const toMoveAction = (data: any, from = false): MoveAction | false => {
+const toMoveAction = (data: any): MoveAction | false => {
   if (!data) {
     console.error('No move action when expected');
     return false;
   }
   const pieceId = toInt(data.piece_id);
-  const index = toInt(from ? data.start_index : data.target_index);
-  const area = toStr(
-    from ? data.start_area : data.target_area,
-  ) as Piece['area'];
+  const index = toInt(data.target_index);
+  const area = toStr(data.target_area) as Piece['area'];
   if (!pieceId || ['home', 'play', 'goal'].indexOf(area) === -1) {
-    console.error(`Invalid move (${from ? 'from' : 'to'}) action`, data);
+    console.error('Invalid move action', data);
     return false;
   } else {
     return { pieceId, area, index };
@@ -102,6 +100,27 @@ export const toMoveActions = (data: any): MoveAction[] | false => {
     return false;
   }
   return actions;
+};
+const toMoveAnimation = (data: any): MoveAnimation | false => {
+  if (!data) {
+    console.error('No move action when expected');
+    return false;
+  }
+  const pieceId = toInt(data.piece_id);
+  const startIndex = toInt(data.start_index);
+  const startArea = toStr(data.start_area) as Piece['area'];
+  const targetIndex = toInt(data.target_index);
+  const targetArea = toStr(data.target_area) as Piece['area'];
+  if (
+    !pieceId ||
+    ['home', 'play', 'goal'].indexOf(startArea) === -1 ||
+    ['home', 'play', 'goal'].indexOf(targetArea) === -1
+  ) {
+    console.error(`Invalid move animation`, data);
+    return false;
+  } else {
+    return { pieceId, startIndex, startArea, targetIndex, targetArea };
+  }
 };
 
 export const toGameState = (data: any, changesData: any): GameState | false => {
@@ -130,17 +149,15 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
     return false;
   }
   const previousMove =
-    changesData && changesData.move
-      ? toMoveAction(changesData.move, true)
-      : null;
+    changesData && changesData.move ? toMoveAnimation(changesData.move) : null;
   const invalidEaten: any[] = [];
   const eaten =
     changesData && changesData.eaten
       ? Array.isArray(changesData.eaten)
-        ? (changesData.eaten as any[]).reduce<MoveAction[]>((list, e) => {
-            const action = toMoveAction(e, true);
-            if (action) {
-              list.push(action);
+        ? (changesData.eaten as any[]).reduce<MoveAnimation[]>((list, e) => {
+            const eat = toMoveAnimation(e);
+            if (eat) {
+              list.push(eat);
             } else {
               invalidEaten.push(e);
             }

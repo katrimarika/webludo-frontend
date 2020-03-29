@@ -23,8 +23,8 @@ type GameState = {
   currentColor: Color | null;
   pieces: Piece[];
   changes: {
-    previousMove: MoveAction | null;
-    eaten: MoveAction[];
+    previousMove: MoveAnimation | null;
+    eaten: MoveAnimation[];
   };
 };
 
@@ -32,6 +32,14 @@ type MoveAction = {
   pieceId: number;
   area: Piece['area'];
   index: number;
+};
+
+type MoveAnimation = {
+  pieceId: number;
+  startArea: Piece['area'];
+  startIndex: number;
+  targetArea: Piece['area'];
+  targetIndex: number;
 };
 
 type DieState = {

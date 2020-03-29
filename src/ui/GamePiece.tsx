@@ -17,7 +17,7 @@ const pulseAnimation = (color: Color) => keyframes`
 const GamePiece: FunctionalComponent<{
   piece: Piece;
   onClick?: () => void;
-  moveFrom?: MoveAction;
+  moveFrom?: MoveAnimation;
   noAnimate?: boolean;
   onMoveComplete: () => void;
 }> = ({ piece, moveFrom, noAnimate, onMoveComplete, onClick }) => {
@@ -30,20 +30,20 @@ const GamePiece: FunctionalComponent<{
     ? [
         pieceCoord('x', {
           ...piece,
-          area: moveFrom.area,
-          index: moveFrom.index,
+          area: moveFrom.startArea,
+          index: moveFrom.startIndex,
         }) * 10,
         pieceCoord('y', {
           ...piece,
-          area: moveFrom.area,
-          index: moveFrom.index,
+          area: moveFrom.startArea,
+          index: moveFrom.startIndex,
         }) * 10,
       ]
     : [pieceCoord('x', piece) * 10, pieceCoord('y', piece) * 10];
 
   useEffect(() => {
     if (moveFrom && !move && !noAnimate) {
-      const animateSteps = pieceSteps(moveFrom, piece);
+      const animateSteps = pieceSteps(piece, moveFrom);
       if (animateSteps.length) {
         const percentage = 100 / animateSteps.length;
         const moveAnimation = keyframes`

@@ -76,18 +76,22 @@ export const dieCoord = (
   }
 };
 
-export const pieceSteps = (from: MoveAction, to: Piece): Piece[] => {
-  if (from.area === to.area && from.index <= to.index) {
-    return [...new Array(to.index - from.index)].map((_, i) => ({
-      ...to,
-      index: from.index + i + 1,
+export const pieceSteps = (piece: Piece, move: MoveAnimation): Piece[] => {
+  if (
+    move.startArea === move.targetArea &&
+    move.startIndex <= move.targetIndex
+  ) {
+    return [...new Array(move.targetIndex - move.startIndex)].map((_, i) => ({
+      ...piece,
+      area: move.startArea,
+      index: move.startIndex + i + 1,
     }));
-  } else if (from.area === 'play') {
+  } else if (move.startArea === 'play') {
     let lastPlayIndex: number | null = null;
-    if (to.area === 'play') {
+    if (move.targetArea === 'play') {
       lastPlayIndex = 27;
-    } else if (to.area === 'goal') {
-      switch (to.color) {
+    } else if (move.targetArea === 'goal') {
+      switch (piece.color) {
         case 'red':
           lastPlayIndex = 27;
           break;
@@ -104,19 +108,20 @@ export const pieceSteps = (from: MoveAction, to: Piece): Piece[] => {
       }
     }
     if (lastPlayIndex !== null) {
-      const firstPart = [...new Array(lastPlayIndex - from.index)].map(
+      const firstPart = [...new Array(lastPlayIndex - move.startIndex)].map(
         (_, i) => ({
-          ...to,
-          area: from.area,
-          index: from.index + i + 1,
+          ...piece,
+          area: move.startArea,
+          index: move.startIndex + i + 1,
         }),
       );
-      const secondPart = [...new Array(to.index + 1)].map((_, i) => ({
-        ...to,
+      const secondPart = [...new Array(move.targetIndex + 1)].map((_, i) => ({
+        ...piece,
+        area: move.targetArea,
         index: i,
       }));
       return [...firstPart, ...secondPart];
     }
   }
-  return [to];
+  return [{ ...piece, area: move.targetArea, index: move.targetIndex }];
 };
