@@ -11,6 +11,7 @@ render(
   document.body,
 );
 
+// TODO: prevent double tap zoom on ios
 injectGlobal`
   html {
     font-family: 'Segoe UI', Roboto, Oxygen, 'Open Sans', 'Helvetica Neue', sans-serif;

@@ -50,9 +50,11 @@ const GameInfo: FunctionalComponent<{
               : 'none'};
           `}
         />
-        <div>{`${p.name}${p.color === playerColor ? ' (you)' : ''}${
-          p.color === currentColor ? ' PLAY!' : ''
-        }`}</div>
+        <div
+          className={css`
+            font-weight: ${p.color === playerColor ? '700' : '400'};
+          `}
+        >{`${p.name}${p.color === currentColor ? ' PLAY!' : ''}`}</div>
       </li>
     ))}
   </ul>

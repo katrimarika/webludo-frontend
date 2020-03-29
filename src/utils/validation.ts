@@ -128,8 +128,8 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
     return false;
   }
   const previousMove =
-    changesData && changesData.previous_move
-      ? toMoveAction(changesData.previous_move, true)
+    changesData && changesData.move
+      ? toMoveAction(changesData.move, true)
       : null;
   const invalidEaten: any[] = [];
   const eaten =

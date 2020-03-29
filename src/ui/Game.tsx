@@ -13,7 +13,7 @@ const Game: FunctionalComponent<{
   message?: string;
   takeAction: (action: 'roll' | MoveAction) => void;
   actions: MoveAction[];
-  onMoveComplete: () => void;
+  onMoveComplete: (type: 'move' | 'eaten') => void;
 }> = ({
   gameState,
   playerColor,

@@ -131,12 +131,15 @@ const GamePage: FunctionalComponent<{
           disabled={!game || !!error}
           actions={actions}
           takeAction={takeAction}
-          onMoveComplete={() =>
+          onMoveComplete={type =>
             setGameState(
               gameState
                 ? {
                     ...gameState,
-                    changes: { ...gameState.changes, previousMove: null },
+                    changes:
+                      type === 'move'
+                        ? { ...gameState.changes, previousMove: null }
+                        : { ...gameState.changes, eaten: [] },
                   }
                 : null,
             )

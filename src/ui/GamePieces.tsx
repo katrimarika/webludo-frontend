@@ -6,7 +6,7 @@ const GamePieces: FunctionalComponent<GameState & {
   playerColor: Color | null;
   actions: MoveAction[];
   takeAction: (action: MoveAction) => void;
-  onMoveComplete: () => void;
+  onMoveComplete: (type: 'move' | 'eaten') => void;
 }> = ({
   pieces,
   currentColor,
@@ -16,13 +16,18 @@ const GamePieces: FunctionalComponent<GameState & {
   changes,
   onMoveComplete,
 }) => {
-  const { previousMove } = changes;
-  // Sort pieces so that the one(s) allowed to move are rendered last and therefore on top of others
+  const { previousMove, eaten } = changes;
+  // Sort pieces so that the one moved is rendered last and therefore on top of others
+  // And those eaten are under the moving pieces but on top of others
   const sortedPieces = !!previousMove
     ? pieces.sort((p1, p2) =>
         previousMove.pieceId === p1.id
           ? 1
           : previousMove.pieceId === p2.id
+          ? -1
+          : eaten.some(e => e.pieceId === p1.id)
+          ? 1
+          : eaten.some(e => e.pieceId === p2.id)
           ? -1
           : 0,
       )
@@ -30,8 +35,10 @@ const GamePieces: FunctionalComponent<GameState & {
   return (
     <g>
       {sortedPieces.map(p => {
+        const eatenMove = eaten.find(e => e.pieceId === p.id) || undefined;
         const availableAction =
           !previousMove &&
+          !eatenMove &&
           p.color === currentColor &&
           p.color === playerColor &&
           actions.find(a => a.pieceId === p.id);
@@ -45,9 +52,12 @@ const GamePieces: FunctionalComponent<GameState & {
             moveFrom={
               previousMove && previousMove.pieceId === p.id
                 ? previousMove
-                : undefined
+                : eatenMove || undefined
             }
-            onMoveComplete={onMoveComplete}
+            onMoveComplete={() =>
+              onMoveComplete(!previousMove ? 'eaten' : 'move')
+            }
+            noAnimate={!!previousMove && previousMove.pieceId !== p.id}
           />
         );
       })}

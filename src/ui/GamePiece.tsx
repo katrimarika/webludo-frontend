@@ -18,8 +18,9 @@ const GamePiece: FunctionalComponent<{
   piece: Piece;
   onClick?: () => void;
   moveFrom?: MoveAction;
+  noAnimate?: boolean;
   onMoveComplete: () => void;
-}> = ({ piece, moveFrom, onMoveComplete, onClick }) => {
+}> = ({ piece, moveFrom, noAnimate, onMoveComplete, onClick }) => {
   const [move, setMove] = useState<{
     animation: string;
     duration: number;
@@ -41,7 +42,7 @@ const GamePiece: FunctionalComponent<{
     : [pieceCoord('x', piece) * 10, pieceCoord('y', piece) * 10];
 
   useEffect(() => {
-    if (moveFrom && !move) {
+    if (moveFrom && !move && !noAnimate) {
       const animateSteps = pieceSteps(moveFrom, piece);
       if (animateSteps.length) {
         const percentage = 100 / animateSteps.length;

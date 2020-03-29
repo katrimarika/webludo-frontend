@@ -70,7 +70,7 @@ const initSocketWithUrl = (url: string) => {
         const game = toGame(resp && resp.game);
         const state = toGameState(
           resp && resp.game && resp.game.game_state,
-          resp && resp.actions,
+          resp && resp.changes,
         );
         const roll = toInt(
           resp &&
@@ -105,10 +105,7 @@ const initSocketWithUrl = (url: string) => {
     });
     channel.on('game_state_updated', resp => {
       console.log('received game_state_updated', resp);
-      const state = toGameState(
-        resp && resp.game_state,
-        resp && resp.previous_move,
-      );
+      const state = toGameState(resp && resp.game_state, resp && resp.changes);
       const actions = toMoveActions(resp && resp.actions);
       if (state && actions) {
         onStateChange(state, actions);
