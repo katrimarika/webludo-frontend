@@ -3,13 +3,13 @@ import { colors } from './validation';
 // Helper functions for game position calculations
 // Game starts from top left "corner" and proceeds clockwise
 
-const playDist = 15;
-const playStart = 90 + 45;
+const playDist = 360 / 28; // Distance between play squares
+const playStart = 90 + 45; // Starting position of the round
 
 export const toRad = (deg: number) => (deg / 360) * 2 * Math.PI;
 
 export const playCoord = (type: 'x' | 'y', i: number) => {
-  // 24 play "squares": i = 0..23
+  // 28 play "squares": i = 0..27
   const rad = toRad(playStart - playDist * (i + 0.5));
   if (type === 'x') {
     return 50 + 45 * Math.cos(rad);
@@ -34,9 +34,9 @@ export const goalCoord = (type: 'x' | 'y', i: number, j: number) => {
   const dist = 7.5;
   const rad = toRad(playStart - 90 * i);
   if (type === 'x') {
-    return 50 + (39.5 - j * dist) * Math.cos(rad);
+    return 50 + (39 - j * dist) * Math.cos(rad);
   } else {
-    return 50 - (39.5 - j * dist) * Math.sin(rad);
+    return 50 - (39 - j * dist) * Math.sin(rad);
   }
 };
 
@@ -81,20 +81,20 @@ export const pieceSteps = (from: MoveAction, to: Piece): Piece[] => {
   } else if (from.area === 'play') {
     let lastPlayIndex: number | null = null;
     if (to.area === 'play') {
-      lastPlayIndex = 23;
+      lastPlayIndex = 27;
     } else if (to.area === 'goal') {
       switch (to.color) {
         case 'red':
-          lastPlayIndex = 23;
+          lastPlayIndex = 27;
           break;
         case 'blue':
-          lastPlayIndex = 5;
+          lastPlayIndex = 6;
           break;
         case 'yellow':
-          lastPlayIndex = 11;
+          lastPlayIndex = 13;
           break;
         case 'green':
-          lastPlayIndex = 17;
+          lastPlayIndex = 20;
           break;
         default:
       }

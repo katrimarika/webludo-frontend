@@ -94,7 +94,7 @@ const GameBoard: FunctionalComponent = () => (
         fill: transparent;
       `}
     />
-    {[...new Array(24)].map((_, i) => (
+    {[...new Array(28)].map((_, i) => (
       <circle
         key={`play-${i}`}
         cx={`${playCoord('x', i) * 10}`}
@@ -159,14 +159,14 @@ const GameBoard: FunctionalComponent = () => (
           </Fragment>
         ))}
         <circle
-          cx={`${playCoord('x', i * 6) * 10}`}
-          cy={`${playCoord('y', i * 6) * 10}`}
+          cx={`${playCoord('x', i * 7) * 10}`}
+          cy={`${playCoord('y', i * 7) * 10}`}
           r="32.5"
           className={highlightCss(i)}
         />
         <text
-          x={`${playCoord('x', i * 6) * 10}`}
-          y={`${(playCoord('y', i * 6) + 0.65) * 10}`}
+          x={`${playCoord('x', i * 7) * 10}`}
+          y={`${(playCoord('y', i * 7) + 0.65) * 10}`}
           className={css`
             fill: ${theme.colors[colors[i]].text};
             font-size: 22.5px;

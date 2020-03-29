@@ -8,7 +8,7 @@ type Player = {
 type Piece = {
   id: number;
   area: 'home' | 'play' | 'goal';
-  index: number; // home/goal: 0-3, play: 0-23
+  index: number; // home/goal: 0-3, play: 0-27
   color: Color;
 };
 
