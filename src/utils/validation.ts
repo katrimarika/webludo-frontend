@@ -33,7 +33,7 @@ export const toGame = (data: any): Game | false => {
     return list;
   }, []);
   if (invalidPlayers.length) {
-    console.error('Invalid players', invalidPlayers);
+    console.error('Invalid game players', invalidPlayers);
     return false;
   }
   return {
@@ -58,6 +58,7 @@ const toPiece = (data: any): Piece | false => {
     ['home', 'play', 'goal'].indexOf(area) === -1 ||
     colors.indexOf(color) === -1
   ) {
+    console.error('Invalid game piece', data);
     return false;
   }
   return { id, area, index, color };
@@ -65,6 +66,7 @@ const toPiece = (data: any): Piece | false => {
 
 const toMoveAction = (data: any, from = false): MoveAction | false => {
   if (!data) {
+    console.error('No move action when expected');
     return false;
   }
   const pieceId = toInt(data.piece_id);
@@ -73,6 +75,7 @@ const toMoveAction = (data: any, from = false): MoveAction | false => {
     from ? data.start_area : data.target_area,
   ) as Piece['area'];
   if (!pieceId || ['home', 'play', 'goal'].indexOf(area) === -1) {
+    console.error(`Invalid move (${from ? 'from' : 'to'}) action`, data);
     return false;
   } else {
     return { pieceId, area, index };
@@ -80,7 +83,7 @@ const toMoveAction = (data: any, from = false): MoveAction | false => {
 };
 export const toMoveActions = (data: any): MoveAction[] | false => {
   if (!data || !Array.isArray(data)) {
-    console.error('No actions array when expected');
+    console.error('No move actions array when expected');
     return false;
   }
   const invalidActions: any[] = [];
@@ -94,29 +97,19 @@ export const toMoveActions = (data: any): MoveAction[] | false => {
     return list;
   }, []);
   if (invalidActions.length) {
-    console.error('Invalid actions', invalidActions);
     return false;
   }
   return actions;
 };
 
-export const toGameState = (
-  data: any,
-  previousMoveData?: any,
-): GameState | false => {
+export const toGameState = (data: any, changesData: any): GameState | false => {
   if (!data) {
     console.error('No game state when expected');
     return false;
   }
   const currentColor = toStr(data.current_player) as Color;
-  const previousMove = previousMoveData
-    ? toMoveAction(previousMoveData, true)
-    : null;
-  if (
-    (!!currentColor && colors.indexOf(currentColor) === -1) ||
-    previousMove === false
-  ) {
-    console.error('Invalid game state', data);
+  if (!!currentColor && colors.indexOf(currentColor) === -1) {
+    console.error('Invalid game state current color', data);
     return false;
   }
   const invalidPieces: any[] = [];
@@ -132,12 +125,37 @@ export const toGameState = (
       }, [])
     : [];
   if (invalidPieces.length) {
-    console.error('Invalid pieces', invalidPieces);
+    return false;
+  }
+  const previousMove =
+    changesData && changesData.previous_move
+      ? toMoveAction(changesData.previous_move, true)
+      : null;
+  const invalidEaten: any[] = [];
+  const eaten =
+    changesData && changesData.eaten
+      ? Array.isArray(changesData.eaten)
+        ? (changesData.eaten as any[]).reduce<MoveAction[]>((list, e) => {
+            const action = toMoveAction(e, true);
+            if (action) {
+              list.push(action);
+            } else {
+              invalidEaten.push(e);
+            }
+            return list;
+          }, [])
+        : false
+      : [];
+  if (previousMove === false || eaten === false || invalidEaten.length) {
+    console.error('Invalid game state changes', data);
     return false;
   }
   return {
     currentColor: currentColor || null,
     pieces,
-    previousMove,
+    changes: {
+      previousMove,
+      eaten,
+    },
   };
 };

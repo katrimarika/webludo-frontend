@@ -13,9 +13,10 @@ const GamePieces: FunctionalComponent<GameState & {
   playerColor,
   actions,
   takeAction,
-  previousMove,
+  changes,
   onMoveComplete,
 }) => {
+  const { previousMove } = changes;
   // Sort pieces so that the one(s) allowed to move are rendered last and therefore on top of others
   const sortedPieces = !!previousMove
     ? pieces.sort((p1, p2) =>

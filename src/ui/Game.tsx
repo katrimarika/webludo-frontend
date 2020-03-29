@@ -60,7 +60,7 @@ const Game: FunctionalComponent<{
         disabled={
           disabled ||
           !!actions.length ||
-          (!!gameState && !!gameState.previousMove) ||
+          (!!gameState && !!gameState.changes.previousMove) ||
           !playerColor ||
           !gameState ||
           gameState.currentColor !== playerColor

@@ -22,7 +22,10 @@ type Game = {
 type GameState = {
   currentColor: Color | null;
   pieces: Piece[];
-  previousMove: MoveAction | null;
+  changes: {
+    previousMove: MoveAction | null;
+    eaten: MoveAction[];
+  };
 };
 
 type MoveAction = {

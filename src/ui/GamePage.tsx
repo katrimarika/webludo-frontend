@@ -133,7 +133,12 @@ const GamePage: FunctionalComponent<{
           takeAction={takeAction}
           onMoveComplete={() =>
             setGameState(
-              gameState ? { ...gameState, previousMove: null } : null,
+              gameState
+                ? {
+                    ...gameState,
+                    changes: { ...gameState.changes, previousMove: null },
+                  }
+                : null,
             )
           }
         />

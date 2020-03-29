@@ -68,7 +68,10 @@ const initSocketWithUrl = (url: string) => {
       .receive('ok', resp => {
         console.log('joined game channel', resp);
         const game = toGame(resp && resp.game);
-        const state = toGameState(resp && resp.game && resp.game.game_state);
+        const state = toGameState(
+          resp && resp.game && resp.game.game_state,
+          resp && resp.actions,
+        );
         const roll = toInt(
           resp &&
             resp.game &&
