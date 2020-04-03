@@ -10,6 +10,7 @@ const Game: FunctionalComponent<{
   playerColor: Color | null;
   die: DieState;
   disabled?: boolean;
+  animationOngoing?: boolean;
   message?: string;
   takeAction: (action: 'roll' | MoveAction) => void;
   actions: MoveAction[];
@@ -20,6 +21,7 @@ const Game: FunctionalComponent<{
   die,
   takeAction,
   disabled,
+  animationOngoing,
   message,
   actions,
   onMoveComplete,
@@ -51,7 +53,7 @@ const Game: FunctionalComponent<{
         disabled={
           disabled ||
           !!actions.length ||
-          (!!gameState && !!gameState.changes.previousMove) ||
+          animationOngoing ||
           !playerColor ||
           !gameState ||
           gameState.currentColor !== playerColor

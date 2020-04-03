@@ -6,14 +6,13 @@ const GameInfo: FunctionalComponent<{
   game: Game;
   playerColor: Color | null;
   currentColor: Color | null;
-}> = ({ game: { players }, playerColor, currentColor }) => {
+  nextAction: 'roll' | 'move' | null;
+}> = ({ game: { players }, playerColor, currentColor, nextAction }) => {
   const playerIndex = players.findIndex(p => p.color === playerColor);
   const player = playerIndex !== -1 ? players[playerIndex] : null;
   const otherPlayers = player
     ? [...players.slice(playerIndex + 1), ...players.slice(0, playerIndex)]
     : players;
-
-  // TODO: show text roll/move instead of play
 
   return (
     <ul
@@ -37,6 +36,7 @@ const GameInfo: FunctionalComponent<{
             key={`player-${player.color}`}
             player={player}
             isCurrent={player.color === currentColor}
+            nextAction={nextAction}
           />
           <h2
             className={css`
@@ -53,6 +53,7 @@ const GameInfo: FunctionalComponent<{
           key={`player-${p.color}`}
           player={p}
           isCurrent={p.color === currentColor}
+          nextAction={nextAction}
         />
       ))}
     </ul>

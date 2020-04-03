@@ -1,20 +1,12 @@
-import { css, keyframes } from 'emotion';
+import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { theme } from '../utils/style';
-
-const pulseAnimation = (color: Color) => keyframes`
-  from {
-    background-color: ${theme.colors[color].main};
-  }
-  to {
-    background-color: ${theme.colors[color].text};
-  }
-`;
 
 const PlayerInfo: FunctionalComponent<{
   player: Player;
   isCurrent: boolean;
-}> = ({ player, isCurrent }) => (
+  nextAction: 'roll' | 'move' | null;
+}> = ({ player, isCurrent, nextAction }) => (
   <li
     className={css`
       display: flex;
@@ -33,12 +25,19 @@ const PlayerInfo: FunctionalComponent<{
         width: 0.625rem;
         border-radius: 0.625rem;
         margin-right: 0.5rem;
-        animation: ${isCurrent
-          ? `${pulseAnimation(player.color)} 1s alternate infinite`
-          : 'none'};
       `}
     />
-    <div>{`${player.name}${isCurrent ? ' PLAY!' : ''}`}</div>
+    <div>
+      <span>{player.name}</span>
+      {isCurrent && nextAction ? (
+        <span
+          className={css`
+            font-size: 0.875rem;
+            color: ${theme.colors.gray};
+          `}
+        >{` – ${nextAction.toUpperCase()}!`}</span>
+      ) : null}
+    </div>
   </li>
 );
 

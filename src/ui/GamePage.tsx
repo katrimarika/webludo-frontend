@@ -41,6 +41,11 @@ const GamePage: FunctionalComponent<{
 
   const canJoin = !error && !playerColor && !!game && game.players.length < 4;
 
+  const disabled = !game || !gameState || !!error;
+  const animationOngoing =
+    !!gameState &&
+    (!!gameState.changes.previousMove || !!gameState.changes.eaten.length);
+
   return (
     <PageWrapper
       styles={css`
@@ -104,7 +109,18 @@ const GamePage: FunctionalComponent<{
           <GameInfo
             game={game}
             playerColor={playerColor}
-            currentColor={(gameState && gameState.currentColor) || null}
+            currentColor={
+              disabled || animationOngoing
+                ? null
+                : (gameState && gameState.currentColor) || null
+            }
+            nextAction={
+              disabled || animationOngoing
+                ? null
+                : !!actions.length
+                ? 'move'
+                : 'roll'
+            }
           />
         )}
         {canJoin && (
@@ -130,7 +146,8 @@ const GamePage: FunctionalComponent<{
           gameState={gameState}
           playerColor={playerColor}
           die={die}
-          disabled={!game || !!error}
+          disabled={disabled}
+          animationOngoing={animationOngoing}
           actions={actions}
           takeAction={takeAction}
           onMoveComplete={type =>
