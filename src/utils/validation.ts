@@ -168,6 +168,7 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
           }, [])
         : false
       : [];
+  // TODO: handle "promoted" and "doubled" changes
   if (previousMove === false || eaten === false || invalidEaten.length) {
     console.error('Invalid game state changes', data);
     return false;

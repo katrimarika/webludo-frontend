@@ -37,6 +37,8 @@ const GamePage: FunctionalComponent<{
       }),
   );
 
+  // TODO: change current player only after animation
+
   const canJoin = !error && !playerColor && !!game && game.players.length < 4;
 
   return (

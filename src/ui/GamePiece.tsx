@@ -76,6 +76,10 @@ const GamePiece: FunctionalComponent<{
     }
   });
 
+  // TODO: fix center piece rotation to be in coords (to fix animation)
+  // TODO: show multiplied piece differently
+  // TODO: handle multiple pieces in home index 0
+
   return piece.area === 'center' && !move ? (
     <g
       key={`piece-${piece.id}`}

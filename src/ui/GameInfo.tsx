@@ -13,6 +13,8 @@ const GameInfo: FunctionalComponent<{
     ? [...players.slice(playerIndex + 1), ...players.slice(0, playerIndex)]
     : players;
 
+  // TODO: show text roll/move instead of play
+
   return (
     <ul
       className={css`

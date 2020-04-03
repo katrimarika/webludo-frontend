@@ -16,6 +16,7 @@ const DieSystem: FunctionalComponent<{
   }, [die]);
 
   const canRoll = !disabled && !loading;
+  // TODO: Animate die roll
 
   return (
     <g>
