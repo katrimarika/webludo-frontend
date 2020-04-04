@@ -42,12 +42,12 @@ export const goalCoord = (type: 'x' | 'y', i: number, j: number) => {
 
 export const centerCoord = (type: 'x' | 'y', i: number, j: number) => {
   // 4 colors: i = 0..3, 3 possible places for each color: j = 0..2
-  const dist = 7.5;
-  const rad = toRad(playStart - 45);
+  // (max 3 pieces per color can be in center)
+  const rad = toRad(playStart - 45 - 90 * i);
   if (type === 'x') {
-    return 50 + 20 * Math.cos(rad);
+    return 50 + 28 * Math.cos(rad) + (j === 0 ? -4 : j === 1 ? 1.5 : 2.3);
   } else {
-    return 50 - 20 * Math.sin(rad) - j * dist;
+    return 50 - 28 * Math.sin(rad) + (j === 0 ? 0.5 : j === 1 ? -3.7 : 3.2);
   }
 };
 

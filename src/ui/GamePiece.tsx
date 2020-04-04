@@ -14,6 +14,8 @@ const pulseAnimation = (color: Color) => keyframes`
     fill: ${theme.colors[color].text};
   }
 `;
+const directionNumber = (color: Color, val1: number, val2: number) =>
+  colors.indexOf(color) % 2 ? val1 : val2;
 
 const GamePiece: FunctionalComponent<{
   piece: Piece;
@@ -76,48 +78,71 @@ const GamePiece: FunctionalComponent<{
     }
   });
 
-  // TODO: fix center piece rotation to be in coords (to fix animation)
+  const { id, color, area, index } = piece;
   // TODO: show multiplied piece differently
   // TODO: handle multiple pieces in home index 0
 
-  return piece.area === 'center' && !move ? (
+  return area === 'center' && !move ? (
     <g
-      key={`piece-${piece.id}`}
-      transform={`rotate(${90 * colors.indexOf(piece.color)} 500 500)`}
+      key={`piece-${id}`}
+      transform={`translate(-${directionNumber(
+        color,
+        27,
+        38,
+      )}, -${directionNumber(color, 38, 27)}), rotate(${
+        index === 0
+          ? directionNumber(color, 15, 60)
+          : index === 1
+          ? -5
+          : directionNumber(color, 75, 87)
+      } ${directionNumber(color, 27, 38)} ${directionNumber(color, 38, 27)})`}
+      className={css`
+        transform-origin: ${renderCoords[0]}px ${renderCoords[1]}px;
+      `}
     >
-      <rect
-        x={`${renderCoords[0] - 40}`}
-        y={`${renderCoords[1] - 25}`}
-        width="80"
-        height="50"
-        rx="1"
-        className={css`
-          fill: ${theme.colors[piece.color].main};
-          font-size: 1rem;
-          transform: translate(0px, 0px);
-        `}
-      />
-      <rect
-        x={`${renderCoords[0] - 2}`}
-        y={`${renderCoords[1] - 29}`}
-        width="4"
-        height="58"
-        rx="1"
-        className={css`
-          fill: ${theme.colors[piece.color].main};
-          font-size: 1rem;
-          transform: translate(0px, 0px);
-        `}
-      />
+      <svg
+        x={renderCoords[0]}
+        y={renderCoords[1]}
+        width={directionNumber(color, 54, 76)}
+        height={directionNumber(color, 76, 54)}
+        viewBox={`0 0 ${directionNumber(color, 54, 76)} ${directionNumber(
+          color,
+          76,
+          54,
+        )}`}
+      >
+        <rect
+          x={directionNumber(color, 4, 0)}
+          y={directionNumber(color, 0, 4)}
+          width={directionNumber(color, 46, 76)}
+          height={directionNumber(color, 76, 46)}
+          rx="1"
+          className={css`
+            fill: ${theme.colors[color].main};
+            font-size: 1rem;
+          `}
+        />
+        <rect
+          x={directionNumber(color, 0, 36)}
+          y={directionNumber(color, 36, 0)}
+          width={directionNumber(color, 54, 4)}
+          height={directionNumber(color, 4, 54)}
+          rx="1"
+          className={css`
+            fill: ${theme.colors[color].main};
+            font-size: 1rem;
+          `}
+        />
+      </svg>
     </g>
   ) : (
     <circle
-      key={`piece-${piece.id}`}
-      cx={`${renderCoords[0]}`}
-      cy={`${renderCoords[1]}`}
+      key={`piece-${id}`}
+      cx={renderCoords[0]}
+      cy={renderCoords[1]}
       r="25"
       className={css`
-        fill: ${theme.colors[piece.color].main};
+        fill: ${theme.colors[color].main};
         font-size: 1rem;
         transform: translate(0px, 0px);
         ${!!onClick &&
@@ -136,7 +161,7 @@ const GamePiece: FunctionalComponent<{
           !!move
             ? `${move.animation} ${move.duration}ms forwards ease-in-out`
             : !!onClick
-            ? `${pulseAnimation(piece.color)} 1s alternate infinite`
+            ? `${pulseAnimation(color)} 1s alternate infinite`
             : 'none'
         };
       `}
