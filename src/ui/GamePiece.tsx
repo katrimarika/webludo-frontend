@@ -175,6 +175,12 @@ const GamePiece: FunctionalComponent<{
             fill: ${theme.colors[color].text};
             font-size: 1rem;
             pointer-events: none;
+            transform: translate(0px, 0px);
+            animation: ${!!move
+              ? `${move.animation} ${move.duration}ms forwards ease-in-out`
+              : !!onClick
+              ? `${pulseAnimation(color)} 1s alternate infinite`
+              : 'none'};
           `}
         />
       )}
