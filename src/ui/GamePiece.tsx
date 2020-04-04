@@ -78,8 +78,7 @@ const GamePiece: FunctionalComponent<{
     }
   });
 
-  const { id, color, area, index } = piece;
-  // TODO: show multiplied piece differently
+  const { id, color, area, index, multiplier } = piece;
   // TODO: handle multiple pieces in home index 0
 
   return area === 'center' && !move ? (
@@ -136,37 +135,50 @@ const GamePiece: FunctionalComponent<{
       </svg>
     </g>
   ) : (
-    <circle
-      key={`piece-${id}`}
-      cx={renderCoords[0]}
-      cy={renderCoords[1]}
-      r="25"
-      className={css`
-        fill: ${theme.colors[color].main};
-        font-size: 1rem;
-        transform: translate(0px, 0px);
-        ${!!onClick &&
-          css`
-            cursor: pointer;
-            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-            -webkit-tap-highlight-color: transparent;
-            &:hover,
-            &:focus,
-            &:active {
-              stroke-width: 5;
-              stroke: ${theme.colors.white};
-            }
+    <g key={`piece-${id}`}>
+      <circle
+        cx={renderCoords[0]}
+        cy={renderCoords[1]}
+        r="25"
+        className={css`
+          fill: ${theme.colors[color].main};
+          font-size: 1rem;
+          transform: translate(0px, 0px);
+          ${!!onClick &&
+            css`
+              cursor: pointer;
+              -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+              -webkit-tap-highlight-color: transparent;
+              &:hover,
+              &:focus,
+              &:active {
+                stroke-width: 5;
+                stroke: ${theme.colors.white};
+              }
+            `}
+          animation: ${
+            !!move
+              ? `${move.animation} ${move.duration}ms forwards ease-in-out`
+              : !!onClick
+              ? `${pulseAnimation(color)} 1s alternate infinite`
+              : 'none'
+          };
+        `}
+        onClick={onClick}
+      />
+      {multiplier > 1 && (
+        <circle
+          cx={renderCoords[0]}
+          cy={renderCoords[1]}
+          r="19"
+          className={css`
+            fill: ${theme.colors[color].text};
+            font-size: 1rem;
+            pointer-events: none;
           `}
-        animation: ${
-          !!move
-            ? `${move.animation} ${move.duration}ms forwards ease-in-out`
-            : !!onClick
-            ? `${pulseAnimation(color)} 1s alternate infinite`
-            : 'none'
-        };
-      `}
-      onClick={onClick}
-    />
+        />
+      )}
+    </g>
   );
 };
 

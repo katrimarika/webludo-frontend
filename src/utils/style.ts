@@ -4,19 +4,19 @@ export const theme = {
   colors: {
     red: {
       main: '#ee0000',
-      text: '#b60000',
+      text: '#a00000',
     },
     blue: {
       main: '#0046ff',
-      text: '#0000b7',
+      text: '#0000a7',
     },
     yellow: {
       main: '#ffd400',
-      text: '#e6c002',
+      text: '#dab600',
     },
     green: {
       main: '#008a00',
-      text: '#006800',
+      text: '#005800',
     },
     black: '#000',
     gray: '#757575',
