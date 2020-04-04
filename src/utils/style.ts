@@ -11,8 +11,8 @@ export const theme = {
       text: '#0000b7',
     },
     yellow: {
-      main: '#ffdd00',
-      text: '#887600',
+      main: '#ffd400',
+      text: '#e6c002',
     },
     green: {
       main: '#008a00',
