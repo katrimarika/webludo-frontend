@@ -22,9 +22,9 @@ const Die: FunctionalComponent<DieState> = ({
   ];
   return (
     <g
-      transform={`translate(-30, -30), rotate(${360 * orientation} 30 30)`}
       className={css`
-        transform-origin: ${renderCoords[0]}px ${renderCoords[1]}px;
+        transform: translate(-30px, -30px) rotate(${360 * orientation}deg);
+        transform-origin: ${renderCoords[0] + 30}px ${renderCoords[1] + 30}px;
       `}
     >
       <svg

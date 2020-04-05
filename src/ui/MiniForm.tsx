@@ -74,7 +74,7 @@ const MiniForm: FunctionalComponent<{
             value={inputText}
             className={css`
               width: 100%;
-              font-size: 0.9375rem;
+              font-size: 1rem;
               border: 2px solid ${theme.colors.black};
               border-radius: 3px;
               padding: 0.375rem 0.5rem 0.4375rem;

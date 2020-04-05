@@ -33,6 +33,7 @@ const DieSystem: FunctionalComponent<{
   useEffect(() => {
     if (die.animate && !animation) {
       const duration = 250;
+      // TODO: animate also die roll number
       const animation = keyframes`
           ${[...new Array(3)].map((_, i) => {
             const nextPosition = Math.random();

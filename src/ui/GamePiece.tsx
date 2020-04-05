@@ -83,19 +83,20 @@ const GamePiece: FunctionalComponent<{
   return area === 'center' && !move ? (
     <g
       key={`piece-${id}`}
-      transform={`translate(-${directionNumber(
-        color,
-        27,
-        38,
-      )}, -${directionNumber(color, 38, 27)}), rotate(${
-        index === 0
-          ? directionNumber(color, 15, 60)
-          : index === 1
-          ? -5
-          : directionNumber(color, 75, 87)
-      } ${directionNumber(color, 27, 38)} ${directionNumber(color, 38, 27)})`}
       className={css`
-        transform-origin: ${renderCoords[0]}px ${renderCoords[1]}px;
+        transform: translate(
+            -${directionNumber(color, 27, 38)}px,
+            -${directionNumber(color, 38, 27)}px
+          )
+          rotate(
+            ${index === 0
+              ? directionNumber(color, 15, 60)
+              : index === 1
+              ? -5
+              : directionNumber(color, 75, 87)}deg
+          );
+        transform-origin: ${renderCoords[0] + directionNumber(color, 27, 38)}px
+          ${renderCoords[1] + directionNumber(color, 38, 27)}px;
       `}
     >
       <svg
