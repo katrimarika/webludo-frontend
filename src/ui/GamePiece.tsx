@@ -181,8 +181,6 @@ const GamePiece: FunctionalComponent<{
             transform: translate(0px, 0px);
             animation: ${!!move
               ? `${move.animation} ${move.duration}ms forwards ease-in-out`
-              : !!onClick
-              ? `${pulseAnimation(color)} 1s alternate infinite`
               : 'none'};
           `}
         />
