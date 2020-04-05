@@ -11,6 +11,7 @@ type Piece = {
   index: number; // home/goal: 0-3, play: 0-27, center: 0-2
   color: Color;
   multiplier: number; // 1-4
+  goal0?: number; // extra index for additional pieces in goal index 0
 };
 
 type Game = {

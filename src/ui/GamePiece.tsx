@@ -79,7 +79,6 @@ const GamePiece: FunctionalComponent<{
   });
 
   const { id, color, area, index, multiplier } = piece;
-  // TODO: handle multiple pieces in home index 0
 
   return area === 'center' && !move ? (
     <g
@@ -115,7 +114,7 @@ const GamePiece: FunctionalComponent<{
           y={directionNumber(color, 0, 4)}
           width={directionNumber(color, 46, 76)}
           height={directionNumber(color, 76, 46)}
-          rx="1"
+          rx="2"
           className={css`
             fill: ${theme.colors[color].main};
             font-size: 1rem;
@@ -130,6 +129,8 @@ const GamePiece: FunctionalComponent<{
           className={css`
             fill: ${theme.colors[color].main};
             font-size: 1rem;
+            stroke-width: 1;
+            stroke: ${theme.colors[color].text};
           `}
         />
       </svg>
@@ -144,6 +145,8 @@ const GamePiece: FunctionalComponent<{
           fill: ${theme.colors[color].main};
           font-size: 1rem;
           transform: translate(0px, 0px);
+          stroke-width: 1;
+          stroke: ${theme.colors.white};
           ${!!onClick &&
             css`
               cursor: pointer;
@@ -153,7 +156,6 @@ const GamePiece: FunctionalComponent<{
               &:focus,
               &:active {
                 stroke-width: 5;
-                stroke: ${theme.colors.white};
               }
             `}
           animation: ${

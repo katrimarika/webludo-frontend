@@ -29,10 +29,10 @@ export const homeCoord = (type: 'x' | 'y', i: number, j: number) => {
   }
 };
 
-export const goalCoord = (type: 'x' | 'y', i: number, j: number) => {
+export const goalCoord = (type: 'x' | 'y', i: number, j: number, extra = 0) => {
   // 4 colors: i = 0..3, 4 "squares" each: j = 0..3
   const dist = 7.5;
-  const rad = toRad(playStart - 90 * i);
+  const rad = toRad(playStart - 90 * i + extra * 8);
   if (type === 'x') {
     return 50 + (39 - j * dist) * Math.cos(rad);
   } else {
@@ -55,7 +55,7 @@ export const pieceCoord = (type: 'x' | 'y', piece: Piece) => {
   const colorIndex = colors.indexOf(piece.color);
   switch (piece.area) {
     case 'goal':
-      return goalCoord(type, colorIndex, piece.index);
+      return goalCoord(type, colorIndex, piece.index, piece.goal0);
     case 'home':
       return homeCoord(type, colorIndex, piece.index);
     case 'play':

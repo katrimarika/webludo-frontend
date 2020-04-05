@@ -137,12 +137,17 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
     return false;
   }
   const invalidPieces: any[] = [];
+  const piecesInGoal0 = { red: 0, green: 0, blue: 0, yellow: 0 };
   const pieces = Array.isArray(data.pieces)
     ? (data.pieces as any[]).reduce<Piece[]>((list, p) => {
         const piece = toPiece(p);
         if (!piece) {
           invalidPieces.push(p);
         } else {
+          if (piece.area === 'goal' && piece.index === 0) {
+            piece.goal0 = piecesInGoal0[piece.color];
+            piecesInGoal0[piece.color] += 1;
+          }
           list.push(piece);
         }
         return list;
