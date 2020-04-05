@@ -1,14 +1,8 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h, Fragment } from 'preact';
-import { theme } from '../utils/style';
 import { dieCoord } from '../utils/helpers';
-
-const pipAttrs = {
-  r: 10,
-  className: css`
-    fill: ${theme.colors.black};
-  `,
-};
+import { theme } from '../utils/style';
+import Pip from './Pip';
 
 const Die: FunctionalComponent<DieState> = ({
   roll,
@@ -46,39 +40,39 @@ const Die: FunctionalComponent<DieState> = ({
             fill: ${theme.colors.ivory};
           `}
         />
-        {roll % 2 === 1 && <circle cx="50" cy="50" {...pipAttrs} />}
+        {roll % 2 === 1 && <Pip x={50} y={50} />}
         {(roll === 3 || roll === 5) && (
           <Fragment>
-            <circle cx="72" cy="28" {...pipAttrs} />
-            <circle cx="28" cy="72" {...pipAttrs} />
-            {roll === 5 && (
-              <Fragment>
-                <circle cx="28" cy="28" {...pipAttrs} />
-                <circle cx="72" cy="72" {...pipAttrs} />
-              </Fragment>
-            )}
+            <Pip x={72} y={28} />
+            <Pip x={28} y={72} />
+          </Fragment>
+        )}
+        {roll === 5 && (
+          <Fragment>
+            <Pip x={28} y={28} />
+            <Pip x={72} y={72} />
           </Fragment>
         )}
         {(roll === 2 || roll === 4) && (
           <Fragment>
-            <circle cx="69" cy="31" {...pipAttrs} />
-            <circle cx="31" cy="69" {...pipAttrs} />
-            {roll === 4 && (
-              <Fragment>
-                <circle cx="31" cy="31" {...pipAttrs} />
-                <circle cx="69" cy="69" {...pipAttrs} />
-              </Fragment>
-            )}
+            <Pip x={69} y={31} />
+            <Pip x={31} y={69} />
+          </Fragment>
+        )}
+        {roll === 4 && (
+          <Fragment>
+            <Pip x={31} y={31} />
+            <Pip x={69} y={69} />
           </Fragment>
         )}
         {roll === 6 && (
           <Fragment>
-            <circle cx="50" cy="33" {...pipAttrs} />
-            <circle cx="50" cy="67" {...pipAttrs} />
-            <circle cx="25" cy="33" {...pipAttrs} />
-            <circle cx="25" cy="67" {...pipAttrs} />
-            <circle cx="75" cy="33" {...pipAttrs} />
-            <circle cx="75" cy="66" {...pipAttrs} />
+            <Pip x={50} y={33} />
+            <Pip x={50} y={67} />
+            <Pip x={25} y={33} />
+            <Pip x={25} y={67} />
+            <Pip x={75} y={33} />
+            <Pip x={75} y={66} />
           </Fragment>
         )}
       </svg>

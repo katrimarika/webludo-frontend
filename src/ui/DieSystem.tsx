@@ -5,6 +5,30 @@ import { dieCoord } from '../utils/helpers';
 import { theme } from '../utils/style';
 import Die from './Die';
 
+const pipAnimation = (i: number) => keyframes`
+  ${i * 33}% {
+    opacity: 0;
+  }
+  ${(1 - i) * 33}% {
+    opacity: 1;
+  }
+  66% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+`;
+const randomRolls = (current: number) => {
+  const pool = [...new Array(6)]
+    .map((_, i) => i + 1)
+    .filter(i => i !== current);
+  const first = pool[Math.floor(Math.random() * pool.length)];
+  const newPool = pool.filter(i => i !== first);
+  const second = newPool[Math.floor(Math.random() * newPool.length)];
+  return [first, second];
+};
+
 const DieSystem: FunctionalComponent<{
   die: DieState;
   rollDie: () => void;
@@ -21,9 +45,8 @@ const DieSystem: FunctionalComponent<{
     setLoading(false);
   }, [die]);
 
-  const canRoll = !disabled && !loading && !die.animate;
-
-  const { position, distance, orientation } = die;
+  const { roll, position, distance, orientation, animate } = die;
+  const canRoll = !disabled && !loading && !animate;
   const from = [
     dieCoord('x', position, distance) * 10,
     dieCoord('y', position, distance) * 10,
@@ -31,9 +54,8 @@ const DieSystem: FunctionalComponent<{
   ];
 
   useEffect(() => {
-    if (die.animate && !animation) {
-      const duration = 250;
-      // TODO: animate also die roll number
+    if (animate && !animation) {
+      const duration = 600;
       const animation = keyframes`
           ${[...new Array(3)].map((_, i) => {
             const nextPosition = Math.random();
@@ -83,11 +105,25 @@ const DieSystem: FunctionalComponent<{
           transform: rotate(0deg) translate(0px, 0px);
           transform-origin: ${from[0]}px ${from[1]}px;
           animation: ${animation
-            ? `${animation.animation} ${animation.duration}ms ease-out`
+            ? `${animation.animation} ${animation.duration}ms ease-out `
             : 'none'};
         `}
       >
         <Die {...die} />
+        {(animate || !!animation) &&
+          randomRolls(roll).map((r, i) => (
+            <g
+              key={`animate-die-${i}`}
+              className={css`
+                opacity: ${!animation ? 1 : 0};
+                animation: ${animation
+                  ? `${pipAnimation(i)} ${animation.duration}ms step-end `
+                  : 'none'};
+              `}
+            >
+              <Die {...die} roll={r} />
+            </g>
+          ))}
       </g>
       <circle
         cx="500"
