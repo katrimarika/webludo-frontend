@@ -83,9 +83,9 @@ export const dieCoord = (
 ) => {
   const rad = toRad(Math.floor(positionRand * 360));
   if (type === 'x') {
-    return 47 + 5 * distanceRand * Math.cos(rad);
+    return 50 + 5 * distanceRand * Math.cos(rad);
   } else {
-    return 47 - 5 * distanceRand * Math.sin(rad);
+    return 50 - 5 * distanceRand * Math.sin(rad);
   }
 };
 

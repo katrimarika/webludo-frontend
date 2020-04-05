@@ -15,6 +15,7 @@ const Game: FunctionalComponent<{
   takeAction: (action: 'roll' | MoveAction) => void;
   actions: MoveAction[];
   onMoveComplete: (type: 'move' | 'eaten') => void;
+  onDieAnimationComplete: () => void;
 }> = ({
   gameState,
   playerColor,
@@ -25,6 +26,7 @@ const Game: FunctionalComponent<{
   message,
   actions,
   onMoveComplete,
+  onDieAnimationComplete,
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -58,6 +60,7 @@ const Game: FunctionalComponent<{
           !gameState ||
           gameState.currentColor !== playerColor
         }
+        onAnimationComplete={onDieAnimationComplete}
       />
       {gameState && (
         <GamePieces

@@ -49,6 +49,7 @@ type DieState = {
   position: number;
   distance: number;
   orientation: number;
+  animate?: boolean;
 };
 
 type OnError = (e: string) => void;

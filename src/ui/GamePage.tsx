@@ -19,6 +19,7 @@ const GamePage: FunctionalComponent<{
     position: Math.random(),
     distance: Math.random(),
     orientation: Math.random(),
+    animate: false,
   });
   const [actions, setActions] = useState<MoveAction[]>([]);
   const [playerColor, error, joinGame, takeAction] = useGameChannel(
@@ -34,6 +35,7 @@ const GamePage: FunctionalComponent<{
         position: Math.random(),
         distance: Math.random(),
         orientation: Math.random(),
+        animate: true,
       }),
   );
 
@@ -160,6 +162,9 @@ const GamePage: FunctionalComponent<{
                   }
                 : null,
             )
+          }
+          onDieAnimationComplete={() =>
+            setDie(prevState => ({ ...prevState, animate: false }))
           }
         />
       </div>
