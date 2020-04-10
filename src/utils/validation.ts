@@ -162,7 +162,7 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
   if (invalidPieces.length) {
     return false;
   }
-  const previousMove =
+  const move =
     changesData && changesData.move ? toMoveAnimation(changesData.move) : null;
   const invalidEffects: any[] = [];
   const effects =
@@ -182,7 +182,7 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
           )
         : false
       : [];
-  if (previousMove === false || effects === false || invalidEffects.length) {
+  if (move === false || effects === false || invalidEffects.length) {
     console.error('Invalid game state changes', data);
     return false;
   }
@@ -190,7 +190,7 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
     currentColor: currentColor || null,
     pieces,
     changes: {
-      previousMove,
+      move,
       effects,
     },
   };

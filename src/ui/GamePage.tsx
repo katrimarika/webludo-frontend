@@ -1,7 +1,6 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
-import { useGameChannel } from '../utils/context';
+import { useGameContext } from '../utils/gameContext';
 import { setHash } from '../utils/hash';
 import { theme } from '../utils/style';
 import Button from './Button';
@@ -14,21 +13,17 @@ import PageWrapper from './PageWrapper';
 import Settings from './Settings';
 
 const GamePage: FunctionalComponent<{
-  code: string;
   openSharePopup: () => void;
-}> = ({ code, openSharePopup }) => {
-  const [game, setGame] = useState<Game | null>(null);
-  const [gameState, setGameState] = useState<GameState | null>(null);
-  const [die, setDie] = useState<DieState>({
-    roll: Math.ceil(Math.random() * 6),
-    position: Math.random(),
-    distance: Math.random(),
-    orientation: Math.random(),
-    animate: false,
-  });
-  const [actions, setActions] = useState<MoveAction[]>([]);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [
+}> = ({ openSharePopup }) => {
+  const {
+    code,
+    game,
+    gameState,
+    die,
+    actions,
+    messages,
+    moveAnimationComplete,
+    dieAnimationComplete,
     playerColor,
     error,
     joinGame,
@@ -36,30 +31,14 @@ const GamePage: FunctionalComponent<{
     penaltyDone,
     fixPenalty,
     postMessage,
-  ] = useGameChannel(
-    code,
-    setGame,
-    (state, actions) => {
-      setGameState(state);
-      setActions(actions);
-    },
-    roll =>
-      setDie({
-        roll,
-        position: Math.random(),
-        distance: Math.random(),
-        orientation: Math.random(),
-        animate: true,
-      }),
-    m => setMessages(ms => [...ms, m]),
-  );
+  } = useGameContext();
 
   const canJoin = !error && !playerColor && !!game && game.players.length < 4;
 
   const disabled = !game || !gameState || !!error;
   const animationOngoing =
     !!gameState &&
-    (!!gameState.changes.previousMove || !!gameState.changes.effects.length);
+    (!!gameState.changes.move || !!gameState.changes.effects.length);
 
   const currentColor =
     disabled || animationOngoing
@@ -190,22 +169,8 @@ const GamePage: FunctionalComponent<{
             animationOngoing={animationOngoing}
             actions={actions}
             takeAction={takeAction}
-            onMoveComplete={type =>
-              setGameState(
-                gameState
-                  ? {
-                      ...gameState,
-                      changes:
-                        type === 'move'
-                          ? { ...gameState.changes, previousMove: null }
-                          : { ...gameState.changes, effects: [] },
-                    }
-                  : null,
-              )
-            }
-            onDieAnimationComplete={() =>
-              setDie(prevState => ({ ...prevState, animate: false }))
-            }
+            onMoveComplete={moveAnimationComplete}
+            onDieAnimationComplete={dieAnimationComplete}
           />
         </div>
       </div>

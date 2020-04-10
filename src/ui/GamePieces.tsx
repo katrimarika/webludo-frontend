@@ -6,7 +6,7 @@ const GamePieces: FunctionalComponent<GameState & {
   playerColor: Color | null;
   actions: MoveAction[];
   takeAction: (action: MoveAction) => void;
-  onMoveComplete: (type: 'move' | 'effect') => void;
+  onMoveComplete: (type: keyof GameState['changes']) => void;
 }> = ({
   pieces,
   currentColor,
@@ -16,14 +16,14 @@ const GamePieces: FunctionalComponent<GameState & {
   changes,
   onMoveComplete,
 }) => {
-  const { previousMove, effects } = changes;
+  const { move, effects } = changes;
   // Sort pieces so that the one moved is rendered last and therefore on top of others
   // And other animated pieces are under the moving pieces but on top of others
-  const sortedPieces = !!previousMove
+  const sortedPieces = !!move
     ? pieces.sort((p1, p2) =>
-        previousMove.pieceId === p1.id
+        move.pieceId === p1.id
           ? 1
-          : previousMove.pieceId === p2.id
+          : move.pieceId === p2.id
           ? -1
           : effects.some(e => e.pieceId === p1.id)
           ? 1
@@ -37,7 +37,7 @@ const GamePieces: FunctionalComponent<GameState & {
       {sortedPieces.map(p => {
         const effectsMove = effects.find(e => e.pieceId === p.id) || undefined;
         const availableAction =
-          !previousMove &&
+          !move &&
           !effectsMove &&
           p.color === currentColor &&
           p.color === playerColor &&
@@ -50,14 +50,10 @@ const GamePieces: FunctionalComponent<GameState & {
               availableAction ? () => takeAction(availableAction) : undefined
             }
             moveFrom={
-              previousMove && previousMove.pieceId === p.id
-                ? previousMove
-                : effectsMove || undefined
+              move && move.pieceId === p.id ? move : effectsMove || undefined
             }
-            onMoveComplete={() =>
-              onMoveComplete(!previousMove ? 'effect' : 'move')
-            }
-            noAnimate={!!previousMove && previousMove.pieceId !== p.id}
+            onMoveComplete={() => onMoveComplete(!move ? 'effects' : 'move')}
+            noAnimate={!!move && move.pieceId !== p.id}
           />
         );
       })}

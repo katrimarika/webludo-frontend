@@ -26,7 +26,7 @@ type GameState = {
   currentColor: Color | null;
   pieces: Piece[];
   changes: {
-    previousMove: MoveAnimation | null;
+    move: MoveAnimation | null;
     effects: MoveAnimation[];
   };
 };

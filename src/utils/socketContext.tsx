@@ -148,7 +148,7 @@ export const useGameChannel = (
         )
       : setError(!channel ? 'No channel found' : 'No player found');
 
-  return [
+  return {
     playerColor,
     error,
     joinGame,
@@ -156,5 +156,5 @@ export const useGameChannel = (
     penaltyDone,
     fixPenalty,
     postMessage,
-  ] as const;
+  };
 };

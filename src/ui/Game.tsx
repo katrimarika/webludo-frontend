@@ -14,7 +14,7 @@ const Game: FunctionalComponent<{
   message?: string;
   takeAction: (action: 'roll' | MoveAction) => void;
   actions: MoveAction[];
-  onMoveComplete: (type: 'move' | 'effect') => void;
+  onMoveComplete: (type: keyof GameState['changes']) => void;
   onDieAnimationComplete: () => void;
 }> = ({
   gameState,

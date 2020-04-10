@@ -1,7 +1,7 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
-import { useLobbyChannel } from '../utils/context';
+import { useLobbyChannel } from '../utils/socketContext';
 import { setHash } from '../utils/hash';
 import ErrorMessage from './ErrorMessage';
 import MiniForm from './MiniForm';

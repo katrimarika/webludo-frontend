@@ -1,5 +1,6 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { GameProvider } from '../utils/gameContext';
 import { parseHash } from '../utils/hash';
 import GamePage from './GamePage';
 import LobbyPage from './LobbyPage';
@@ -19,12 +20,10 @@ const App: FunctionalComponent = () => {
 
   if (selectedGame) {
     return (
-      <Fragment>
-        <GamePage
-          key={selectedGame}
-          code={selectedGame}
-          openSharePopup={() => setShowSharePopup(true)}
-        />
+      <Fragment key={selectedGame}>
+        <GameProvider code={selectedGame}>
+          <GamePage openSharePopup={() => setShowSharePopup(true)} />
+        </GameProvider>
         {showSharePopup && (
           <SharePopup close={() => setShowSharePopup(false)} />
         )}
