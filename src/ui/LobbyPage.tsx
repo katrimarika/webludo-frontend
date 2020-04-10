@@ -7,7 +7,9 @@ import ErrorMessage from './ErrorMessage';
 import MiniForm from './MiniForm';
 import PageWrapper from './PageWrapper';
 
-const LobbyPage: FunctionalComponent = () => {
+const LobbyPage: FunctionalComponent<{ onCreateGame: () => void }> = ({
+  onCreateGame,
+}) => {
   const [channelError, createGame] = useLobbyChannel();
   const [createError, setCreateError] = useState('');
 
@@ -35,7 +37,16 @@ const LobbyPage: FunctionalComponent = () => {
         label="Game name"
         buttonText="Create"
         buttonColor="green"
-        onSubmit={v => createGame(v, setHash, e => setCreateError(e))}
+        onSubmit={v =>
+          createGame(
+            v,
+            code => {
+              setHash(code);
+              onCreateGame();
+            },
+            e => setCreateError(e),
+          )
+        }
       >
         <ErrorMessage
           prefix="Create game failed: "

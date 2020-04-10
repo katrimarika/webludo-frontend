@@ -11,7 +11,8 @@ import PageWrapper from './PageWrapper';
 
 const GamePage: FunctionalComponent<{
   code: string;
-}> = ({ code }) => {
+  openSharePopup: () => void;
+}> = ({ code, openSharePopup }) => {
   const [game, setGame] = useState<Game | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [die, setDie] = useState<DieState>({
@@ -106,12 +107,26 @@ const GamePage: FunctionalComponent<{
               {'<No name>'}
             </span>
           )}
-          <span
+          <button
             className={css`
               font-size: 1rem;
               color: ${theme.colors.gray};
+              font-weight: bold;
+              border: none;
+              background: none;
+              padding: 0;
+              margin-left: 0.25rem;
+              cursor: pointer;
+              &:hover,
+              &:focus,
+              &:active {
+                text-decoration: underline;
+              }
             `}
-          >{` ${code}`}</span>
+            onClick={openSharePopup}
+          >
+            {code}
+          </button>
         </h1>
         <ErrorMessage
           prefix="Error: "

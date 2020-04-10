@@ -17,7 +17,6 @@ Point PRs to `master`. Release by merging `master` to `production`.
 ## TODO
 
 - handle "promoted" and "doubled" animations, order: move - doubled - promoted
-- popup with copyable link to share game
 - penalties: penalty count next to name, penalty done button and a way to fix mistakes in penalties
 - leave game page
 - less than 4 players

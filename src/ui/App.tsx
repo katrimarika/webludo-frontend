@@ -1,11 +1,13 @@
-import { FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { parseHash } from '../utils/hash';
 import GamePage from './GamePage';
 import LobbyPage from './LobbyPage';
+import SharePopup from './SharePopup';
 
 const App: FunctionalComponent = () => {
   const [selectedGame, setSelectedGame] = useState(parseHash());
+  const [showSharePopup, setShowSharePopup] = useState(false);
 
   useEffect(() => {
     const listener = () => {
@@ -16,10 +18,21 @@ const App: FunctionalComponent = () => {
   }, []);
 
   if (selectedGame) {
-    return <GamePage key={selectedGame} code={selectedGame} />;
+    return (
+      <Fragment>
+        <GamePage
+          key={selectedGame}
+          code={selectedGame}
+          openSharePopup={() => setShowSharePopup(true)}
+        />
+        {showSharePopup && (
+          <SharePopup close={() => setShowSharePopup(false)} />
+        )}
+      </Fragment>
+    );
   }
 
-  return <LobbyPage />;
+  return <LobbyPage onCreateGame={() => setShowSharePopup(true)} />;
 };
 
 export default App;
