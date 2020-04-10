@@ -15,13 +15,16 @@ const onErrorStr = (onError: OnError) => (e: any) => {
   return onError(errorStr);
 };
 
+const log =
+  window.location.hostname === 'localhost'
+    ? (...args: any[]) => {
+        console.log('[SOCKET]', ...args);
+      }
+    : () => null;
+
 const initSocketWithUrl = (url: string) => {
   const socket = new Socket(url);
   socket.connect();
-
-  // For testing
-  // channel.push('throw', payload) returns an error with given payload
-  // channel.push('noreply', {}) returns no response, i.e. no receive is triggered
 
   const joinLobbyChannel = (onSuccess: () => void, onError: OnError) => {
     const channel = socket.channel('lobby', {});
@@ -66,7 +69,7 @@ const initSocketWithUrl = (url: string) => {
     channel
       .join()
       .receive('ok', resp => {
-        console.log('joined game channel', resp);
+        log('joined game channel', resp);
         const game = toGame(resp && resp.game);
         const state = toGameState(
           resp && resp.game && resp.game.game_state,
@@ -95,7 +98,7 @@ const initSocketWithUrl = (url: string) => {
       .receive('error', onErrorStr(onError));
     // Listen to game change events
     channel.on('game_updated', resp => {
-      console.log('received game_updated', resp);
+      log('received game_updated', resp);
       const game = toGame(resp);
       if (game) {
         onGameChange(game);
@@ -104,7 +107,7 @@ const initSocketWithUrl = (url: string) => {
       }
     });
     channel.on('game_state_updated', resp => {
-      console.log('received game_state_updated', resp);
+      log('received game_state_updated', resp);
       const state = toGameState(resp && resp.game_state, resp && resp.changes);
       const actions = toMoveActions(resp && resp.actions);
       if (state && actions) {
@@ -114,7 +117,7 @@ const initSocketWithUrl = (url: string) => {
       }
     });
     channel.on('roll', resp => {
-      console.log('received roll', resp);
+      log('received roll', resp);
       const val = toInt(resp.result);
       if (val > 0 && val <= 6) {
         onRoll(val);
