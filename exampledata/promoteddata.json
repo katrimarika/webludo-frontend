@@ -9,7 +9,7 @@
       "target_area": "goal",
       "target_index": 2
     },
-    "promoted": [
+    "animated_effects": [
       {
         "piece_id": 64,
         "start_area": "center",

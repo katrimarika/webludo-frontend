@@ -46,7 +46,7 @@ const GamePage: FunctionalComponent<{
   const disabled = !game || !gameState || !!error;
   const animationOngoing =
     !!gameState &&
-    (!!gameState.changes.previousMove || !!gameState.changes.eaten.length);
+    (!!gameState.changes.previousMove || !!gameState.changes.effects.length);
 
   const currentColor =
     disabled || animationOngoing
@@ -180,7 +180,7 @@ const GamePage: FunctionalComponent<{
                       changes:
                         type === 'move'
                           ? { ...gameState.changes, previousMove: null }
-                          : { ...gameState.changes, eaten: [] },
+                          : { ...gameState.changes, effects: [] },
                     }
                   : null,
               )

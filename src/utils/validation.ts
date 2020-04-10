@@ -163,22 +163,25 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
   }
   const previousMove =
     changesData && changesData.move ? toMoveAnimation(changesData.move) : null;
-  const invalidEaten: any[] = [];
-  const eaten =
-    changesData && changesData.eaten
-      ? Array.isArray(changesData.eaten)
-        ? (changesData.eaten as any[]).reduce<MoveAnimation[]>((list, e) => {
-            const eat = toMoveAnimation(e);
-            if (eat) {
-              list.push(eat);
-            } else {
-              invalidEaten.push(e);
-            }
-            return list;
-          }, [])
+  const invalidEffects: any[] = [];
+  const effects =
+    changesData && changesData.animated_effects
+      ? Array.isArray(changesData.animated_effects)
+        ? (changesData.animated_effects as any[]).reduce<MoveAnimation[]>(
+            (list, e) => {
+              const eat = toMoveAnimation(e);
+              if (eat) {
+                list.push(eat);
+              } else {
+                invalidEffects.push(e);
+              }
+              return list;
+            },
+            [],
+          )
         : false
       : [];
-  if (previousMove === false || eaten === false || invalidEaten.length) {
+  if (previousMove === false || effects === false || invalidEffects.length) {
     console.error('Invalid game state changes', data);
     return false;
   }
@@ -187,7 +190,7 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
     pieces,
     changes: {
       previousMove,
-      eaten,
+      effects,
     },
   };
 };

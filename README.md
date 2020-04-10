@@ -16,6 +16,6 @@ Point PRs to `master`. Release by merging `master` to `production`.
 
 ## TODO
 
-- handle "promoted" and "doubled" animations, order: move - doubled - promoted
+- handle "doubled" animations, order: move - doubled - effects
 - penalties: penalty count next to name, penalty done button and a way to fix mistakes in penalties
 - less than 4 players

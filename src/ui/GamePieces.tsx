@@ -6,7 +6,7 @@ const GamePieces: FunctionalComponent<GameState & {
   playerColor: Color | null;
   actions: MoveAction[];
   takeAction: (action: MoveAction) => void;
-  onMoveComplete: (type: 'move' | 'eaten') => void;
+  onMoveComplete: (type: 'move' | 'effect') => void;
 }> = ({
   pieces,
   currentColor,
@@ -16,18 +16,18 @@ const GamePieces: FunctionalComponent<GameState & {
   changes,
   onMoveComplete,
 }) => {
-  const { previousMove, eaten } = changes;
+  const { previousMove, effects } = changes;
   // Sort pieces so that the one moved is rendered last and therefore on top of others
-  // And those eaten are under the moving pieces but on top of others
+  // And other animated pieces are under the moving pieces but on top of others
   const sortedPieces = !!previousMove
     ? pieces.sort((p1, p2) =>
         previousMove.pieceId === p1.id
           ? 1
           : previousMove.pieceId === p2.id
           ? -1
-          : eaten.some(e => e.pieceId === p1.id)
+          : effects.some(e => e.pieceId === p1.id)
           ? 1
-          : eaten.some(e => e.pieceId === p2.id)
+          : effects.some(e => e.pieceId === p2.id)
           ? -1
           : 0,
       )
@@ -35,10 +35,10 @@ const GamePieces: FunctionalComponent<GameState & {
   return (
     <g>
       {sortedPieces.map(p => {
-        const eatenMove = eaten.find(e => e.pieceId === p.id) || undefined;
+        const effectsMove = effects.find(e => e.pieceId === p.id) || undefined;
         const availableAction =
           !previousMove &&
-          !eatenMove &&
+          !effectsMove &&
           p.color === currentColor &&
           p.color === playerColor &&
           actions.find(a => a.pieceId === p.id);
@@ -52,10 +52,10 @@ const GamePieces: FunctionalComponent<GameState & {
             moveFrom={
               previousMove && previousMove.pieceId === p.id
                 ? previousMove
-                : eatenMove || undefined
+                : effectsMove || undefined
             }
             onMoveComplete={() =>
-              onMoveComplete(!previousMove ? 'eaten' : 'move')
+              onMoveComplete(!previousMove ? 'effect' : 'move')
             }
             noAnimate={!!previousMove && previousMove.pieceId !== p.id}
           />

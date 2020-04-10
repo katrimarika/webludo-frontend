@@ -26,7 +26,7 @@ type GameState = {
   pieces: Piece[];
   changes: {
     previousMove: MoveAnimation | null;
-    eaten: MoveAnimation[];
+    effects: MoveAnimation[];
   };
 };
 
