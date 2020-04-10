@@ -168,7 +168,10 @@ const GamePage: FunctionalComponent<{
               onSubmit={name => joinGame(name)}
             />
           )}
-          <Chat messages={messages} postMessage={postMessage} />
+          <Chat
+            messages={messages}
+            postMessage={playerColor ? postMessage : undefined}
+          />
         </div>
         <div
           className={css`
