@@ -174,6 +174,18 @@ const initSocketWithUrl = (url: string) => {
       .receive('error', onErrorStr(onError));
   };
 
+  const decrementPenalty = (
+    channel: Channel,
+    token: string,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('decrement_penalty', { token })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
   return {
     joinLobbyChannel,
     leaveChannel,
@@ -181,6 +193,7 @@ const initSocketWithUrl = (url: string) => {
     joinGameChannel,
     joinGame,
     takeAction,
+    decrementPenalty,
   };
 };
 
@@ -196,6 +209,7 @@ export const NO_SOCKET: SocketActions = {
   createGame: noop,
   joinGame: noop,
   takeAction: noop,
+  decrementPenalty: noop,
 };
 
 export const initSocket = (): SocketActions => {

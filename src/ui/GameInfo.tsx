@@ -7,7 +7,14 @@ const GameInfo: FunctionalComponent<{
   playerColor: Color | null;
   currentColor: Color | null;
   nextAction: NextAction;
-}> = ({ game: { players }, playerColor, currentColor, nextAction }) => {
+  onPenaltyDone: () => void;
+}> = ({
+  game: { players },
+  playerColor,
+  currentColor,
+  nextAction,
+  onPenaltyDone,
+}) => {
   const playerIndex = players.findIndex(p => p.color === playerColor);
   const player = playerIndex !== -1 ? players[playerIndex] : null;
   const otherPlayers = player
@@ -37,6 +44,7 @@ const GameInfo: FunctionalComponent<{
             player={player}
             isCurrent={player.color === currentColor}
             nextAction={nextAction}
+            onPenaltyDone={player.penalties ? onPenaltyDone : undefined}
           />
           <h2
             className={css`

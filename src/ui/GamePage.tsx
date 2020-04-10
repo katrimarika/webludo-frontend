@@ -24,7 +24,13 @@ const GamePage: FunctionalComponent<{
     animate: false,
   });
   const [actions, setActions] = useState<MoveAction[]>([]);
-  const [playerColor, error, joinGame, takeAction] = useGameChannel(
+  const [
+    playerColor,
+    error,
+    joinGame,
+    takeAction,
+    penaltyDone,
+  ] = useGameChannel(
     code,
     setGame,
     (state, actions) => {
@@ -143,6 +149,7 @@ const GamePage: FunctionalComponent<{
               playerColor={playerColor}
               currentColor={currentColor}
               nextAction={nextAction}
+              onPenaltyDone={penaltyDone}
             />
           )}
           {canJoin && (

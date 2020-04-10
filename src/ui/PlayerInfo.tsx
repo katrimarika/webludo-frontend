@@ -1,6 +1,6 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
-import { theme } from '../utils/style';
+import { buttonCss, theme } from '../utils/style';
 
 export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
 
@@ -8,7 +8,8 @@ const PlayerInfo: FunctionalComponent<{
   player: Player;
   isCurrent: boolean;
   nextAction: NextAction;
-}> = ({ player, isCurrent, nextAction }) => (
+  onPenaltyDone?: () => void;
+}> = ({ player, isCurrent, nextAction, onPenaltyDone }) => (
   <li
     className={css`
       display: flex;
@@ -36,6 +37,7 @@ const PlayerInfo: FunctionalComponent<{
           className={css`
             font-size: 0.875rem;
             color: ${theme.colors.gray};
+            white-space: nowrap;
           `}
         >{` – ${nextAction.toUpperCase()}!`}</span>
       ) : null}
@@ -44,7 +46,25 @@ const PlayerInfo: FunctionalComponent<{
       className={css`
         margin-left: auto;
       `}
-    >{`🍺${player.penalties}`}</div>
+    >
+      <span
+        className={css`
+          white-space: nowrap;
+        `}
+      >{`🍺${player.penalties}`}</span>
+      {!!onPenaltyDone && (
+        <button
+          className={css`
+            ${buttonCss('yellow')}
+            margin-left: 0.5rem;
+            padding: 0.125rem 0.5rem 0.1875rem 0.6875rem;
+          `}
+          onClick={onPenaltyDone}
+        >
+          –🍺
+        </button>
+      )}
+    </div>
   </li>
 );
 
