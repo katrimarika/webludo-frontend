@@ -16,6 +16,7 @@ Point PRs to `master`. Release by merging `master` to `production`.
 
 ## TODO
 
+- create script for releases
 - handle "doubled" animations, order: move - doubled - effects
 - better current player flash animation for multiplied pieces
 - better chat styles
