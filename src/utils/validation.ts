@@ -77,11 +77,16 @@ const toMoveAction = (data: any): MoveAction | false => {
   const pieceId = toInt(data.piece_id);
   const index = toInt(data.target_index);
   const area = toStr(data.target_area) as Piece['area'];
-  if (!pieceId || areas.indexOf(area) === -1) {
+  const type = toStr(data.type) as MoveAction['type'];
+  if (
+    !pieceId ||
+    areas.indexOf(area) === -1 ||
+    ['move', 'raise'].indexOf(type) === -1
+  ) {
     console.error('Invalid move action', data);
     return false;
   } else {
-    return { pieceId, area, index };
+    return { pieceId, area, index, type };
   }
 };
 export const toMoveActions = (data: any): MoveAction[] | false => {
@@ -173,7 +178,6 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
           }, [])
         : false
       : [];
-  // TODO: handle "promoted" and "doubled" changes
   if (previousMove === false || eaten === false || invalidEaten.length) {
     console.error('Invalid game state changes', data);
     return false;

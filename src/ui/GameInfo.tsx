@@ -1,12 +1,12 @@
 import { css } from 'emotion';
 import { Fragment, FunctionalComponent, h } from 'preact';
-import PlayerInfo from './PlayerInfo';
+import PlayerInfo, { NextAction } from './PlayerInfo';
 
 const GameInfo: FunctionalComponent<{
   game: Game;
   playerColor: Color | null;
   currentColor: Color | null;
-  nextAction: 'roll' | 'move' | null;
+  nextAction: NextAction;
 }> = ({ game: { players }, playerColor, currentColor, nextAction }) => {
   const playerIndex = players.findIndex(p => p.color === playerColor);
   const player = playerIndex !== -1 ? players[playerIndex] : null;

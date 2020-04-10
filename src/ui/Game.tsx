@@ -54,7 +54,7 @@ const Game: FunctionalComponent<{
         rollDie={() => takeAction('roll')}
         disabled={
           disabled ||
-          !!actions.length ||
+          !!actions.filter(a => a.type === 'move').length ||
           animationOngoing ||
           !playerColor ||
           !gameState ||

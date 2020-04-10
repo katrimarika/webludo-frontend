@@ -2,10 +2,12 @@ import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { theme } from '../utils/style';
 
+export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
+
 const PlayerInfo: FunctionalComponent<{
   player: Player;
   isCurrent: boolean;
-  nextAction: 'roll' | 'move' | null;
+  nextAction: NextAction;
 }> = ({ player, isCurrent, nextAction }) => (
   <li
     className={css`

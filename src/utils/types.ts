@@ -34,6 +34,7 @@ type MoveAction = {
   pieceId: number;
   area: Piece['area'];
   index: number;
+  type: 'move' | 'raise';
 };
 
 type MoveAnimation = {

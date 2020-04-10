@@ -1,0 +1,149 @@
+{
+  "actions": [
+    {
+      "piece_id": 54,
+      "target_area": "play",
+      "target_index": 15,
+      "type": "move"
+    },
+    {
+      "piece_id": 55,
+      "target_area": "play",
+      "target_index": 7,
+      "type": "raise"
+    }
+  ],
+  "game": {
+    "code": "8ogqxe7y",
+    "name": "Testipeli",
+    "players": [
+      { "color": "red", "name": "Fire", "inserted_at": "2020-04-05T12:09:45" },
+      { "color": "blue", "name": "Col", "inserted_at": "2020-04-05T12:18:02" },
+      {
+        "color": "yellow",
+        "name": "Main",
+        "inserted_at": "2020-04-05T12:08:48"
+      },
+      { "color": "green", "name": "Lion", "inserted_at": "2020-04-05T12:10:47" }
+    ],
+    "game_state": {
+      "current_player": "blue",
+      "pieces": [
+        {
+          "position_index": 0,
+          "area": "play",
+          "player_color": "red",
+          "id": 49,
+          "multiplier": 2
+        },
+        {
+          "position_index": 0,
+          "area": "center",
+          "player_color": "red",
+          "id": 51,
+          "multiplier": 1
+        },
+        {
+          "position_index": 0,
+          "area": "center",
+          "player_color": "blue",
+          "id": 56,
+          "multiplier": 1
+        },
+        {
+          "position_index": 1,
+          "area": "center",
+          "player_color": "blue",
+          "id": 53,
+          "multiplier": 1
+        },
+        {
+          "position_index": 9,
+          "area": "play",
+          "player_color": "blue",
+          "id": 54,
+          "multiplier": 3
+        },
+        {
+          "position_index": 27,
+          "area": "play",
+          "player_color": "yellow",
+          "id": 59,
+          "multiplier": 2
+        },
+        {
+          "position_index": 3,
+          "area": "goal",
+          "player_color": "blue",
+          "id": 55,
+          "multiplier": 1
+        },
+        {
+          "position_index": 2,
+          "area": "goal",
+          "player_color": "yellow",
+          "id": 60,
+          "multiplier": 1
+        },
+        {
+          "position_index": 6,
+          "area": "play",
+          "player_color": "green",
+          "id": 62,
+          "multiplier": 1
+        },
+        {
+          "position_index": 19,
+          "area": "play",
+          "player_color": "red",
+          "id": 50,
+          "multiplier": 1
+        },
+        {
+          "position_index": 3,
+          "area": "goal",
+          "player_color": "red",
+          "id": 52,
+          "multiplier": 1
+        },
+        {
+          "position_index": 0,
+          "area": "center",
+          "player_color": "yellow",
+          "id": 58,
+          "multiplier": 1
+        },
+        {
+          "position_index": 0,
+          "area": "home",
+          "player_color": "yellow",
+          "id": 57,
+          "multiplier": 1
+        },
+        {
+          "position_index": 0,
+          "area": "home",
+          "player_color": "green",
+          "id": 61,
+          "multiplier": 1
+        },
+        {
+          "position_index": 2,
+          "area": "goal",
+          "player_color": "green",
+          "id": 63,
+          "multiplier": 1
+        },
+        {
+          "position_index": 3,
+          "area": "goal",
+          "player_color": "green",
+          "id": 64,
+          "multiplier": 1
+        }
+      ],
+      "roll": 6,
+      "roll_count": 1
+    }
+  }
+}

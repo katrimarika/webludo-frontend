@@ -46,6 +46,21 @@ const GamePage: FunctionalComponent<{
     !!gameState &&
     (!!gameState.changes.previousMove || !!gameState.changes.eaten.length);
 
+  const currentColor =
+    disabled || animationOngoing
+      ? null
+      : (gameState && gameState.currentColor) || null;
+  const nextAction =
+    disabled || animationOngoing
+      ? null
+      : actions.some(a => a.type === 'raise')
+      ? actions.length > 1
+        ? ('raise/move' as const)
+        : ('raise/roll' as const)
+      : !!actions.length
+      ? ('move' as const)
+      : ('roll' as const);
+
   return (
     <PageWrapper
       styles={css`
@@ -109,18 +124,8 @@ const GamePage: FunctionalComponent<{
           <GameInfo
             game={game}
             playerColor={playerColor}
-            currentColor={
-              disabled || animationOngoing
-                ? null
-                : (gameState && gameState.currentColor) || null
-            }
-            nextAction={
-              disabled || animationOngoing
-                ? null
-                : !!actions.length
-                ? 'move'
-                : 'roll'
-            }
+            currentColor={currentColor}
+            nextAction={nextAction}
           />
         )}
         {canJoin && (
