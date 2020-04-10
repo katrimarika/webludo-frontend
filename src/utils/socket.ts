@@ -216,7 +216,7 @@ const initSocketWithUrl = (url: string) => {
     onError: OnError,
   ) => {
     channel
-      .push('chat_message', { token, message })
+      .push('chat', { token, message })
       .receive('ok', onSuccess)
       .receive('error', onErrorStr(onError));
   };
