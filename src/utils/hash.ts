@@ -1,5 +1,5 @@
 export const setHash = (str: string) => {
-  location.hash = `#${encodeURIComponent(str)}`;
+  location.hash = !str ? '' : `#${encodeURIComponent(str)}`;
 };
 
 export const parseHash = () =>

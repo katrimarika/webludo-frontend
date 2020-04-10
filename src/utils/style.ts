@@ -33,7 +33,7 @@ export const theme = {
 
 export const buttonCss = (color: Color = 'blue') => css`
   font-size: 1rem;
-  border: 2px solid ${theme.colors[color].main};
+  border: 2px solid ${theme.colors[color].text};
   border-radius: 4px;
   padding: 0.375rem 0.5rem 0.4375rem;
   color: ${theme.colors[color].text};
@@ -45,7 +45,7 @@ export const buttonCss = (color: Color = 'blue') => css`
     &:hover,
     &:focus,
     &:active {
-      box-shadow: inset 0 0 0.1rem 0.01rem ${theme.colors[color].main},
+      box-shadow: inset 0 0 0.1rem 0.01rem ${theme.colors[color].text},
         0.15rem 0.15rem 0.4rem 0 rgba(0, 0, 0, 0.2);
     }
   }
