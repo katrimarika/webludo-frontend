@@ -3,6 +3,7 @@ type Color = 'red' | 'yellow' | 'blue' | 'green';
 type Player = {
   name: string;
   color: Color;
+  penalties: number;
 };
 
 type Piece = {

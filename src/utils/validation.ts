@@ -28,8 +28,9 @@ export const toGame = (data: any): Game | false => {
   const players = sortedPlayers.reduce<Player[]>((list, p) => {
     const name = toStr(p.name);
     const color = toStr(p.color) as Color;
+    const penalties = toInt(p.penalties);
     if (name && color && colors.indexOf(color) !== -1) {
-      list.push({ name, color });
+      list.push({ name, color, penalties });
     } else {
       invalidPlayers.push(p);
     }

@@ -40,6 +40,11 @@ const PlayerInfo: FunctionalComponent<{
         >{` – ${nextAction.toUpperCase()}!`}</span>
       ) : null}
     </div>
+    <div
+      className={css`
+        margin-left: auto;
+      `}
+    >{`🍺${player.penalties}`}</div>
   </li>
 );
 
