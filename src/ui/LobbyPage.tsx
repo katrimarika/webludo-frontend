@@ -12,6 +12,7 @@ const LobbyPage: FunctionalComponent<{ onCreateGame: () => void }> = ({
 }) => {
   const [channelError, createGame] = useLobbyChannel();
   const [createError, setCreateError] = useState('');
+  const [openError, setOpenError] = useState('');
 
   return (
     <PageWrapper>
@@ -29,8 +30,26 @@ const LobbyPage: FunctionalComponent<{ onCreateGame: () => void }> = ({
         title="Open an existing game"
         label="Game code"
         buttonText="Open"
-        onSubmit={v => setHash(v.toLowerCase())}
-      />
+        onSubmit={v => {
+          const codeMatch = v
+            .trim()
+            .toLowerCase()
+            .match(/[0-9a-z]+$/);
+          if (codeMatch) {
+            setHash(codeMatch[0]);
+          } else {
+            setOpenError('invalid game code');
+          }
+        }}
+      >
+        <ErrorMessage
+          prefix="Open game failed: "
+          text={openError}
+          styles={css`
+            margin-top: 0.5rem;
+          `}
+        />
+      </MiniForm>
       <MiniForm
         inputName="game-name"
         title="Create a game"
