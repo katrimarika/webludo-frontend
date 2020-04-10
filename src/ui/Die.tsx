@@ -4,11 +4,12 @@ import { dieCoord } from '../utils/helpers';
 import { theme } from '../utils/style';
 import Pip from './Pip';
 
-const Die: FunctionalComponent<DieState> = ({
+const Die: FunctionalComponent<DieState & { filter?: string }> = ({
   roll,
   position,
   distance,
   orientation,
+  filter,
 }) => {
   const renderCoords = [
     dieCoord('x', position, distance) * 10,
@@ -39,40 +40,41 @@ const Die: FunctionalComponent<DieState> = ({
             stroke-width: 5;
             fill: ${theme.colors.ivory};
           `}
+          filter={filter}
         />
         {roll % 2 === 1 && <Pip x={50} y={50} />}
         {(roll === 3 || roll === 5) && (
           <Fragment>
-            <Pip x={72} y={28} />
-            <Pip x={28} y={72} />
+            <Pip x={72} y={28} filter={filter} />
+            <Pip x={28} y={72} filter={filter} />
           </Fragment>
         )}
         {roll === 5 && (
           <Fragment>
-            <Pip x={28} y={28} />
-            <Pip x={72} y={72} />
+            <Pip x={28} y={28} filter={filter} />
+            <Pip x={72} y={72} filter={filter} />
           </Fragment>
         )}
         {(roll === 2 || roll === 4) && (
           <Fragment>
-            <Pip x={69} y={31} />
-            <Pip x={31} y={69} />
+            <Pip x={69} y={31} filter={filter} />
+            <Pip x={31} y={69} filter={filter} />
           </Fragment>
         )}
         {roll === 4 && (
           <Fragment>
-            <Pip x={31} y={31} />
-            <Pip x={69} y={69} />
+            <Pip x={31} y={31} filter={filter} />
+            <Pip x={69} y={69} filter={filter} />
           </Fragment>
         )}
         {roll === 6 && (
           <Fragment>
-            <Pip x={50} y={33} />
-            <Pip x={50} y={67} />
-            <Pip x={25} y={33} />
-            <Pip x={25} y={67} />
-            <Pip x={75} y={33} />
-            <Pip x={75} y={66} />
+            <Pip x={50} y={33} filter={filter} />
+            <Pip x={50} y={67} filter={filter} />
+            <Pip x={25} y={33} filter={filter} />
+            <Pip x={25} y={67} filter={filter} />
+            <Pip x={75} y={33} filter={filter} />
+            <Pip x={75} y={66} filter={filter} />
           </Fragment>
         )}
       </svg>

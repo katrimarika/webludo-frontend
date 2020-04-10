@@ -90,6 +90,11 @@ const DieSystem: FunctionalComponent<{
 
   return (
     <g>
+      <defs>
+        <filter id="dieBlur">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+        </filter>
+      </defs>
       <circle
         cx="500"
         cy="500"
@@ -121,7 +126,7 @@ const DieSystem: FunctionalComponent<{
                   : 'none'};
               `}
             >
-              <Die {...die} roll={r} />
+              <Die {...die} roll={r} filter="url(#dieBlur)" />
             </g>
           ))}
       </g>
