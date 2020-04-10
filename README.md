@@ -16,7 +16,6 @@ Point PRs to `master`. Release by merging `master` to `production`.
 
 ## TODO
 
-- add roll to initial game data to prevent roll animation on refresh
 - handle "doubled" animations, order: move - doubled - effects
 - better current player flash animation for multiplied pieces
 - better chat styles

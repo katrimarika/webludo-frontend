@@ -42,7 +42,7 @@ export const useLobbyChannel = () => {
 
 export const useGameChannel = (
   code: string,
-  setInitialData: (game: Game, actions: MoveAction[]) => void,
+  setInitialData: (game: Game, actions: MoveAction[], roll?: number) => void,
   onGameChange: (game: Game, actions: MoveAction[], changes: Changes) => void,
   onRoll: (roll: number) => void,
   onMessage: (message: ChatMessage) => void,

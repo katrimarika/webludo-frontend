@@ -61,7 +61,7 @@ const initSocketWithUrl = (url: string) => {
 
   const joinGameChannel = (
     code: string,
-    setInitialData: (game: Game, actions: MoveAction[]) => void,
+    setInitialData: (game: Game, actions: MoveAction[], roll?: number) => void,
     onGameChange: (game: Game, actions: MoveAction[], changes: Changes) => void,
     onRoll: (roll: number) => void,
     onChatMessage: (newData: ChatMessage) => void,
@@ -73,21 +73,17 @@ const initSocketWithUrl = (url: string) => {
       .receive('ok', resp => {
         log('joined game channel', resp);
         const game = toGame(resp && resp.game);
-        const roll = toInt(
-          resp &&
-            resp.game &&
-            resp.game.game_state &&
-            resp.game.game_state.roll,
-        );
+        const roll = toInt(resp && resp.game && resp.game.roll);
         const actions = toMoveActions(resp && resp.actions);
         if (!game || !actions) {
           onError('Invalid game data');
         }
         if (game && actions) {
-          setInitialData(game, actions);
-        }
-        if (roll > 0 && roll <= 6) {
-          onRoll(roll);
+          setInitialData(
+            game,
+            actions,
+            roll > 0 && roll <= 6 ? roll : undefined,
+          );
         }
       })
       .receive('error', onErrorStr(onError));

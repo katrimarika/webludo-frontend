@@ -40,9 +40,12 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
   const [messages, setMessages] = useState<GameContext['messages']>([]);
   const { playerColor, error, ...restChannelData } = useGameChannel(
     code,
-    (newGame, newActions) => {
+    (newGame, newActions, newRoll) => {
       setGame(newGame);
       setActions(newActions);
+      if (newRoll) {
+        setDie(oldDie => ({ ...oldDie, roll: newRoll, animate: false }));
+      }
     },
     (newGame, newActions, newChanges) => {
       setGame(newGame);
