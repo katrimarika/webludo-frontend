@@ -124,5 +124,23 @@ export const useGameChannel = (
         )
       : setError(!channel ? 'No channel found' : 'No player found');
 
-  return [playerColor, error, joinGame, takeAction, penaltyDone] as const;
+  const fixPenalty = (amount: number) =>
+    channel && player
+      ? socket.fixPenalty(
+          channel,
+          player.token,
+          amount,
+          () => null,
+          () => null,
+        )
+      : setError(!channel ? 'No channel found' : 'No player found');
+
+  return [
+    playerColor,
+    error,
+    joinGame,
+    takeAction,
+    penaltyDone,
+    fixPenalty,
+  ] as const;
 };

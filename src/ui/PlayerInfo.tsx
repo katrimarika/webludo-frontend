@@ -1,6 +1,7 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
-import { buttonCss, theme } from '../utils/style';
+import { theme } from '../utils/style';
+import Button from './Button';
 
 export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
 
@@ -53,16 +54,17 @@ const PlayerInfo: FunctionalComponent<{
         `}
       >{`🍺${player.penalties}`}</span>
       {!!onPenaltyDone && (
-        <button
-          className={css`
-            ${buttonCss('yellow')}
+        <Button
+          color="yellow"
+          extraCss={css`
             margin-left: 0.5rem;
             padding: 0.125rem 0.5rem 0.1875rem 0.6875rem;
           `}
           onClick={onPenaltyDone}
+          title="Penalty done"
         >
           –🍺
-        </button>
+        </Button>
       )}
     </div>
   </li>

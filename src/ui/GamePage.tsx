@@ -2,13 +2,15 @@ import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { useGameChannel } from '../utils/context';
-import { buttonCss, theme } from '../utils/style';
+import { setHash } from '../utils/hash';
+import { theme } from '../utils/style';
+import Button from './Button';
 import ErrorMessage from './ErrorMessage';
 import Game from './Game';
 import GameInfo from './GameInfo';
 import MiniForm from './MiniForm';
 import PageWrapper from './PageWrapper';
-import { setHash } from '../utils/hash';
+import Settings from './Settings';
 
 const GamePage: FunctionalComponent<{
   code: string;
@@ -30,6 +32,7 @@ const GamePage: FunctionalComponent<{
     joinGame,
     takeAction,
     penaltyDone,
+    fixPenalty,
   ] = useGameChannel(
     code,
     setGame,
@@ -198,15 +201,26 @@ const GamePage: FunctionalComponent<{
           />
         </div>
       </div>
-      <button
+      <div
         className={css`
-          ${buttonCss('red')}
           margin-top: 2rem;
         `}
-        onClick={() => setHash('')}
       >
-        Exit
-      </button>
+        <Button color="red" onClick={() => setHash('')}>
+          Exit
+        </Button>
+        <Settings
+          extraCss={css`
+            margin-left: 0.75rem;
+          `}
+          penalties={
+            playerColor && game
+              ? game.players.find(p => p.color === playerColor)?.penalties
+              : undefined
+          }
+          fixPenalty={playerColor ? fixPenalty : undefined}
+        />
+      </div>
     </PageWrapper>
   );
 };

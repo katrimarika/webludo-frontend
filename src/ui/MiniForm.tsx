@@ -1,25 +1,28 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
-import { buttonCss, theme } from '../utils/style';
+import { theme } from '../utils/style';
+import Button from './Button';
 
 const MiniForm: FunctionalComponent<{
   inputName: string;
   title?: string;
   label: string;
   buttonText: string;
+  initialValue?: string;
   buttonColor?: Color;
   onSubmit: (v: string) => void;
 }> = ({
   inputName,
   title,
   label,
+  initialValue,
   buttonText,
   buttonColor,
   onSubmit,
   children,
 }) => {
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState(initialValue || '');
   const id = `${inputName}-id`;
 
   return (
@@ -82,13 +85,9 @@ const MiniForm: FunctionalComponent<{
             onInput={e => setInputText(e.currentTarget.value)}
           />
         </div>
-        <button
-          type="submit"
-          disabled={!inputText}
-          className={buttonCss(buttonColor)}
-        >
+        <Button type="submit" disabled={!inputText} color={buttonColor}>
           {buttonText}
-        </button>
+        </Button>
       </div>
       {children}
     </form>
