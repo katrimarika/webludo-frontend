@@ -19,3 +19,9 @@ Point PRs to `master`. Release by merging `master` to `production`.
 - handle "doubled" animations, order: move - doubled - effects
 - penalties: penalty count next to name, penalty done button and a way to fix mistakes in penalties
 - less than 4 players
+- sounds:
+  1. die roll
+  1. move
+  1. and so on...
+  1. adjusting sound settings
+  1. background music
