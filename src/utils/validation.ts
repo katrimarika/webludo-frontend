@@ -5,49 +5,6 @@ const areas = ['home', 'play', 'goal', 'center'] as const;
 export const toStr = (val: any) => (typeof val === 'string' ? val : '');
 export const toInt = (val: any) => parseInt(val, 10) || 0;
 
-export const toGame = (data: any): Game | false => {
-  if (!data) {
-    console.error('No game details when expected');
-    return false;
-  }
-  const code = toStr(data.code);
-  const status = toStr(data.status) || 'not_started';
-  const name = toStr(data.name);
-  if (!code || !name) {
-    console.error('Invalid game details', data);
-    return false;
-  }
-  // Ensure the players are in play order
-  const sortedPlayers = (Array.isArray(data.players)
-    ? (data.players as any[])
-    : []
-  ).sort((a, b) =>
-    colors.indexOf(a.color) > colors.indexOf(b.color) ? 1 : -1,
-  );
-  const invalidPlayers: any[] = [];
-  const players = sortedPlayers.reduce<Player[]>((list, p) => {
-    const name = toStr(p.name);
-    const color = toStr(p.color) as Color;
-    const penalties = toInt(p.penalties);
-    if (name && color && colors.indexOf(color) !== -1) {
-      list.push({ name, color, penalties });
-    } else {
-      invalidPlayers.push(p);
-    }
-    return list;
-  }, []);
-  if (invalidPlayers.length) {
-    console.error('Invalid game players', invalidPlayers);
-    return false;
-  }
-  return {
-    code,
-    name,
-    status,
-    players,
-  };
-};
-
 const toPiece = (data: any): Piece | false => {
   if (!data) {
     console.error('No game piece when expected');
@@ -132,14 +89,44 @@ const toMoveAnimation = (data: any): MoveAnimation | false => {
   }
 };
 
-export const toGameState = (data: any, changesData: any): GameState | false => {
+export const toGame = (data: any): Game | false => {
   if (!data) {
-    console.error('No game state when expected');
+    console.error('No game details when expected');
+    return false;
+  }
+  const code = toStr(data.code);
+  const status = toStr(data.status) || 'not_started';
+  const name = toStr(data.name);
+  if (!code || !name) {
+    console.error('Invalid game details', data);
+    return false;
+  }
+  // Ensure the players are in play order
+  const sortedPlayers = (Array.isArray(data.players)
+    ? (data.players as any[])
+    : []
+  ).sort((a, b) =>
+    colors.indexOf(a.color) > colors.indexOf(b.color) ? 1 : -1,
+  );
+  const invalidPlayers: any[] = [];
+  const players = sortedPlayers.reduce<Player[]>((list, p) => {
+    const name = toStr(p.name);
+    const color = toStr(p.color) as Color;
+    const penalties = toInt(p.penalties);
+    if (name && color && colors.indexOf(color) !== -1) {
+      list.push({ name, color, penalties });
+    } else {
+      invalidPlayers.push(p);
+    }
+    return list;
+  }, []);
+  if (invalidPlayers.length) {
+    console.error('Invalid game players', invalidPlayers);
     return false;
   }
   const currentColor = toStr(data.current_player) as Color;
   if (!!currentColor && colors.indexOf(currentColor) === -1) {
-    console.error('Invalid game state current color', data);
+    console.error('Invalid game current color', data);
     return false;
   }
   const invalidPieces: any[] = [];
@@ -162,13 +149,29 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
   if (invalidPieces.length) {
     return false;
   }
-  const move =
-    changesData && changesData.move ? toMoveAnimation(changesData.move) : null;
+  return {
+    code,
+    name,
+    status,
+    players,
+    currentColor,
+    pieces,
+  };
+};
+
+export const toChanges = (data: any): Changes | false => {
+  if (!data) {
+    return {
+      move: null,
+      effects: [],
+    };
+  }
+  const move = data && data.move ? toMoveAnimation(data.move) : null;
   const invalidEffects: any[] = [];
   const effects =
-    changesData && changesData.animated_effects
-      ? Array.isArray(changesData.animated_effects)
-        ? (changesData.animated_effects as any[]).reduce<MoveAnimation[]>(
+    data && data.animated_effects
+      ? Array.isArray(data.animated_effects)
+        ? (data.animated_effects as any[]).reduce<MoveAnimation[]>(
             (list, e) => {
               const eat = toMoveAnimation(e);
               if (eat) {
@@ -183,17 +186,10 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
         : false
       : [];
   if (move === false || effects === false || invalidEffects.length) {
-    console.error('Invalid game state changes', data);
+    console.error('Invalid game changes', data);
     return false;
   }
-  return {
-    currentColor: currentColor || null,
-    pieces,
-    changes: {
-      move,
-      effects,
-    },
-  };
+  return { move, effects };
 };
 
 export const toChatMessage = (data: any): ChatMessage | false => {

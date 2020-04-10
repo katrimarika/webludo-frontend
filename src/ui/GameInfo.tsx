@@ -9,7 +9,6 @@ const GameInfo: FunctionalComponent = () => {
     playerColor,
     disabled,
     animationOngoing,
-    gameState,
     actions,
     penaltyDone,
   } = useGameContext();
@@ -26,9 +25,7 @@ const GameInfo: FunctionalComponent = () => {
     : players;
 
   const currentColor =
-    disabled || animationOngoing
-      ? null
-      : (gameState && gameState.currentColor) || null;
+    disabled || animationOngoing ? null : (game && game.currentColor) || null;
   const nextAction =
     disabled || animationOngoing
       ? null

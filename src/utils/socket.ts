@@ -1,9 +1,9 @@
 import { Channel as PhoenixChannel, Socket } from 'phoenix';
 import {
   colors,
+  toChanges,
   toChatMessage,
   toGame,
-  toGameState,
   toInt,
   toMoveActions,
   toStr,
@@ -61,8 +61,8 @@ const initSocketWithUrl = (url: string) => {
 
   const joinGameChannel = (
     code: string,
-    onGameChange: (newData: Game) => void,
-    onStateChange: (newData: GameState, newActions: MoveAction[]) => void,
+    initialData: (game: Game, actions: MoveAction[]) => void, // TODO: add roll here to prevent roll animation on refresh
+    onGameChange: (game: Game, actions: MoveAction[], changes: Changes) => void,
     onRoll: (roll: number) => void,
     onChatMessage: (newData: ChatMessage) => void,
     onError: OnError,
@@ -73,10 +73,6 @@ const initSocketWithUrl = (url: string) => {
       .receive('ok', resp => {
         log('joined game channel', resp);
         const game = toGame(resp && resp.game);
-        const state = toGameState(
-          resp && resp.game && resp.game.game_state,
-          resp && resp.changes,
-        );
         const roll = toInt(
           resp &&
             resp.game &&
@@ -84,14 +80,11 @@ const initSocketWithUrl = (url: string) => {
             resp.game.game_state.roll,
         );
         const actions = toMoveActions(resp && resp.actions);
-        if (!game || !state || !actions) {
+        if (!game || !actions) {
           onError('Invalid game data');
         }
-        if (game) {
-          onGameChange(game);
-        }
-        if (state && actions) {
-          onStateChange(state, actions);
+        if (game && actions) {
+          initialData(game, actions);
         }
         if (roll > 0 && roll <= 6) {
           onRoll(roll);
@@ -101,21 +94,13 @@ const initSocketWithUrl = (url: string) => {
     // Listen to game change events
     channel.on('game_updated', resp => {
       log('received game_updated', resp);
-      const game = toGame(resp);
-      if (game) {
-        onGameChange(game);
+      const game = toGame(resp && resp.game);
+      const changes = toChanges(resp && resp.changes);
+      const actions = toMoveActions(resp && resp.actions);
+      if (game && actions && changes) {
+        onGameChange(game, actions, changes);
       } else {
         onError('Received invalid game data');
-      }
-    });
-    channel.on('game_state_updated', resp => {
-      log('received game_state_updated', resp);
-      const state = toGameState(resp && resp.game_state, resp && resp.changes);
-      const actions = toMoveActions(resp && resp.actions);
-      if (state && actions) {
-        onStateChange(state, actions);
-      } else {
-        onError('Received invalid game state');
       }
     });
     channel.on('roll', resp => {

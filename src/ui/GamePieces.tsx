@@ -1,20 +1,21 @@
 import { FunctionalComponent, h } from 'preact';
-import GamePiece from './GamePiece';
 import { useGameContext } from '../utils/gameContext';
+import GamePiece from './GamePiece';
 
 const GamePieces: FunctionalComponent = () => {
   const {
+    game,
     playerColor,
-    gameState,
     actions,
+    changes,
     takeAction,
     moveAnimationComplete,
   } = useGameContext();
 
-  if (!gameState) {
+  if (!game) {
     return null;
   }
-  const { pieces, currentColor, changes } = gameState;
+  const { pieces, currentColor } = game;
 
   const { move, effects } = changes;
   // Sort pieces so that the one moved is rendered last and therefore on top of others

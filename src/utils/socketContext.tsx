@@ -42,8 +42,8 @@ export const useLobbyChannel = () => {
 
 export const useGameChannel = (
   code: string,
-  onGameChange: (data: Game) => void,
-  onStateChange: (state: GameState, actions: MoveAction[]) => void,
+  setInitialData: (game: Game, actions: MoveAction[]) => void,
+  onGameChange: (game: Game, actions: MoveAction[], changes: Changes) => void,
   onRoll: (roll: number) => void,
   onMessage: (message: ChatMessage) => void,
 ) => {
@@ -58,8 +58,8 @@ export const useGameChannel = (
     if (!channel) {
       const gameChannel = socket.joinGameChannel(
         code,
+        setInitialData,
         onGameChange,
-        onStateChange,
         onRoll,
         onMessage,
         setError,

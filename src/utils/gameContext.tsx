@@ -7,14 +7,14 @@ type GameChannelData = ReturnType<typeof useGameChannel>;
 type GameContext = {
   code: string;
   game: Game | null;
-  gameState: GameState | null;
+  changes: Changes;
   die: DieState;
   actions: MoveAction[];
   messages: ChatMessage[];
   disabled: boolean;
   animationOngoing: boolean;
   ownTurn: boolean;
-  moveAnimationComplete: (type: keyof GameState['changes']) => void;
+  moveAnimationComplete: (type: keyof Changes) => void;
   dieAnimationComplete: () => void;
 } & GameChannelData;
 
@@ -25,7 +25,10 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
   children,
 }) => {
   const [game, setGame] = useState<GameContext['game']>(null);
-  const [gameState, setGameState] = useState<GameContext['gameState']>(null);
+  const [changes, setChanges] = useState<GameContext['changes']>({
+    move: null,
+    effects: [],
+  });
   const [die, setDie] = useState<GameContext['die']>({
     roll: Math.ceil(Math.random() * 6),
     position: Math.random(),
@@ -37,10 +40,14 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
   const [messages, setMessages] = useState<GameContext['messages']>([]);
   const { playerColor, error, ...restChannelData } = useGameChannel(
     code,
-    setGame,
-    (state, actions) => {
-      setGameState(state);
-      setActions(actions);
+    (newGame, newActions) => {
+      setGame(newGame);
+      setActions(newActions);
+    },
+    (newGame, newActions, newChanges) => {
+      setGame(newGame);
+      setActions(newActions);
+      setChanges(newChanges);
     },
     roll =>
       setDie({
@@ -54,34 +61,26 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
   );
 
   const moveAnimationComplete: GameContext['moveAnimationComplete'] = type =>
-    setGameState(
-      gameState
-        ? {
-            ...gameState,
-            changes:
-              type === 'move'
-                ? { ...gameState.changes, move: null }
-                : { ...gameState.changes, effects: [] },
-          }
-        : null,
+    setChanges(oldChanges =>
+      type === 'move'
+        ? { ...oldChanges, move: null }
+        : { ...oldChanges, effects: [] },
     );
 
   const dieAnimationComplete: GameContext['dieAnimationComplete'] = () =>
     setDie(prevState => ({ ...prevState, animate: false }));
 
-  const disabled = !game || !gameState || !!error;
+  const disabled = !game || !!error;
   const animationOngoing =
-    !!gameState &&
-    (!!gameState.changes.move || !!gameState.changes.effects.length);
-  const ownTurn =
-    !!playerColor && !!gameState && gameState.currentColor === playerColor;
+    !!game && (!!changes.move || !!changes.effects.length);
+  const ownTurn = !!playerColor && !!game && game.currentColor === playerColor;
 
   return (
     <GameContext.Provider
       value={{
         code,
         game,
-        gameState,
+        changes,
         die,
         actions,
         messages,

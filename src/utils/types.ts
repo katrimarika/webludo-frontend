@@ -20,15 +20,13 @@ type Game = {
   name: string;
   players: Player[];
   status: 'not_started' | 'ongoing' | 'ended' | 'interrupted' | string;
-};
-
-type GameState = {
   currentColor: Color | null;
   pieces: Piece[];
-  changes: {
-    move: MoveAnimation | null;
-    effects: MoveAnimation[];
-  };
+};
+
+type Changes = {
+  move: MoveAnimation | null;
+  effects: MoveAnimation[];
 };
 
 type MoveAction = {
