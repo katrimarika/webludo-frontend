@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Read the previous version from package.json
+oldVersion=`node -p "require('./package.json').version"`
+
+# Prompt version bump level
+echo "Give new version (previous $oldVersion):"
+read newVersion
+
+# Change version in package.json and commit the change
+node -p "var pkg = require('./package.json'); pkg.version='$newVersion'; JSON.stringify(pkg, null, 2)" > tmp.json
+mv tmp.json package.json
+
+# Commit the version change and tag it
+git add package.json
+git commit -m "Version $newVersion"
+git tag v$newVersion
+
+# Push master and tags
+git push origin master
+git push origin --tags
+
+# Checkout production, pull and merge master to it
+git checkout production
+git pull
+git merge master
+
+# Push production
+git push origin production

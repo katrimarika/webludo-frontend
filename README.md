@@ -10,13 +10,14 @@ A static web application for a virtual Kalja-Kimble boardgame. Built using Preac
 1. `npm install`
 1. `npm start`
 
+To check code style: `npm run lint`
+
 Create a production build: `npm run build`
 
-Point PRs to `master`. Release by merging `master` to `production`.
+Point PRs to `master` branch. Production is deployed automatically from `production` branch. Do a release with the provided script in `master` branch `npm run release`.
 
 ## TODO
 
-- create script for releases
 - handle "doubled" animations, order: move - doubled - effects
 - better current player flash animation for multiplied pieces
 - better chat styles

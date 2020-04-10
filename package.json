@@ -25,6 +25,7 @@
     "start": "parcel src/index.html",
     "build": "rm -rf dist/ && parcel build src/index.html --no-source-maps",
     "test": "echo \"No tests :(\"",
-    "lint": "eslint --ext .ts,.tsx src/ && prettier -c \"{src/**/*.{ts,tsx},*.md}\""
+    "lint": "eslint --ext .ts,.tsx src/ && prettier -c \"{src/**/*.{ts,tsx},*.md}\"",
+    "release": "./scripts/release"
   }
 }
