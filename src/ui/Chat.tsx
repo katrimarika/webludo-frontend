@@ -1,13 +1,12 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
+import { useEffect, useRef } from 'preact/hooks';
+import { useGameContext } from '../utils/gameContext';
 import { theme } from '../utils/style';
 import MiniForm from './MiniForm';
-import { useRef, useEffect } from 'preact/hooks';
 
-const Chat: FunctionalComponent<{
-  messages: ChatMessage[];
-  postMessage?: (m: string) => void;
-}> = ({ messages, postMessage }) => {
+const Chat: FunctionalComponent = () => {
+  const { messages, postMessage, playerColor } = useGameContext();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -60,7 +59,7 @@ const Chat: FunctionalComponent<{
           </p>
         ))}
       </div>
-      {!!postMessage && (
+      {!!playerColor && (
         <MiniForm
           inputName="chat-message"
           label=""

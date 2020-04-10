@@ -11,6 +11,9 @@ type GameContext = {
   die: DieState;
   actions: MoveAction[];
   messages: ChatMessage[];
+  disabled: boolean;
+  animationOngoing: boolean;
+  ownTurn: boolean;
   moveAnimationComplete: (type: keyof GameState['changes']) => void;
   dieAnimationComplete: () => void;
 } & GameChannelData;
@@ -32,7 +35,7 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
   });
   const [actions, setActions] = useState<GameContext['actions']>([]);
   const [messages, setMessages] = useState<GameContext['messages']>([]);
-  const gameChannelData = useGameChannel(
+  const { playerColor, error, ...restChannelData } = useGameChannel(
     code,
     setGame,
     (state, actions) => {
@@ -66,6 +69,13 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
   const dieAnimationComplete: GameContext['dieAnimationComplete'] = () =>
     setDie(prevState => ({ ...prevState, animate: false }));
 
+  const disabled = !game || !gameState || !!error;
+  const animationOngoing =
+    !!gameState &&
+    (!!gameState.changes.move || !!gameState.changes.effects.length);
+  const ownTurn =
+    !!playerColor && !!gameState && gameState.currentColor === playerColor;
+
   return (
     <GameContext.Provider
       value={{
@@ -75,9 +85,14 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
         die,
         actions,
         messages,
+        disabled,
+        ownTurn,
+        animationOngoing,
         moveAnimationComplete,
         dieAnimationComplete,
-        ...gameChannelData,
+        playerColor,
+        error,
+        ...restChannelData,
       }}
     >
       {children}

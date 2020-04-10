@@ -15,45 +15,9 @@ import Settings from './Settings';
 const GamePage: FunctionalComponent<{
   openSharePopup: () => void;
 }> = ({ openSharePopup }) => {
-  const {
-    code,
-    game,
-    gameState,
-    die,
-    actions,
-    messages,
-    moveAnimationComplete,
-    dieAnimationComplete,
-    playerColor,
-    error,
-    joinGame,
-    takeAction,
-    penaltyDone,
-    fixPenalty,
-    postMessage,
-  } = useGameContext();
+  const { code, game, playerColor, error, joinGame } = useGameContext();
 
   const canJoin = !error && !playerColor && !!game && game.players.length < 4;
-
-  const disabled = !game || !gameState || !!error;
-  const animationOngoing =
-    !!gameState &&
-    (!!gameState.changes.move || !!gameState.changes.effects.length);
-
-  const currentColor =
-    disabled || animationOngoing
-      ? null
-      : (gameState && gameState.currentColor) || null;
-  const nextAction =
-    disabled || animationOngoing
-      ? null
-      : actions.some(a => a.type === 'raise')
-      ? actions.length > 1
-        ? ('raise/move' as const)
-        : ('raise/roll' as const)
-      : !!actions.length
-      ? ('move' as const)
-      : ('roll' as const);
 
   return (
     <PageWrapper>
@@ -129,15 +93,7 @@ const GamePage: FunctionalComponent<{
               margin-bottom: 0.5rem;
             `}
           />
-          {game && (
-            <GameInfo
-              game={game}
-              playerColor={playerColor}
-              currentColor={currentColor}
-              nextAction={nextAction}
-              onPenaltyDone={penaltyDone}
-            />
-          )}
+          <GameInfo />
           {canJoin && (
             <MiniForm
               inputName="player-name"
@@ -147,10 +103,7 @@ const GamePage: FunctionalComponent<{
               onSubmit={name => joinGame(name)}
             />
           )}
-          <Chat
-            messages={messages}
-            postMessage={playerColor ? postMessage : undefined}
-          />
+          <Chat />
         </div>
         <div
           className={css`
@@ -161,17 +114,7 @@ const GamePage: FunctionalComponent<{
             }
           `}
         >
-          <Game
-            gameState={gameState}
-            playerColor={playerColor}
-            die={die}
-            disabled={disabled}
-            animationOngoing={animationOngoing}
-            actions={actions}
-            takeAction={takeAction}
-            onMoveComplete={moveAnimationComplete}
-            onDieAnimationComplete={dieAnimationComplete}
-          />
+          <Game />
         </div>
       </div>
       <div
@@ -186,12 +129,6 @@ const GamePage: FunctionalComponent<{
           extraCss={css`
             margin-left: 0.75rem;
           `}
-          penalties={
-            playerColor && game
-              ? game.players.find(p => p.color === playerColor)?.penalties
-              : undefined
-          }
-          fixPenalty={playerColor ? fixPenalty : undefined}
         />
       </div>
     </PageWrapper>

@@ -3,18 +3,20 @@ import { useState } from 'preact/hooks';
 import Button from './Button';
 import MiniForm from './MiniForm';
 import Popup from './Popup';
+import { useGameContext } from '../utils/gameContext';
 
 const Settings: FunctionalComponent<{
-  penalties?: number;
-  fixPenalty?: (amount: number) => void;
   extraCss?: string;
-}> = ({ penalties, fixPenalty, extraCss }) => {
+}> = ({ extraCss }) => {
+  const { game, playerColor, fixPenalty } = useGameContext();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  if (!fixPenalty || penalties === undefined) {
+  if (!playerColor || !game) {
     // If nothing can be done, do not show settings at all
     return null;
   }
+
+  const player = game.players.find(p => p.color === playerColor);
 
   return (
     <Fragment>
@@ -30,7 +32,7 @@ const Settings: FunctionalComponent<{
           <MiniForm
             inputName="penalty-amount"
             label="Fix penalty amount"
-            initialValue={`${penalties}`}
+            initialValue={player ? `${player.penalties}` : ''}
             buttonText="Fix"
             onSubmit={v => {
               const newVal = parseInt(v, 10);

@@ -1,21 +1,21 @@
 import { FunctionalComponent, h } from 'preact';
-import { memo } from 'preact/compat';
 import GamePiece from './GamePiece';
+import { useGameContext } from '../utils/gameContext';
 
-const GamePieces: FunctionalComponent<GameState & {
-  playerColor: Color | null;
-  actions: MoveAction[];
-  takeAction: (action: MoveAction) => void;
-  onMoveComplete: (type: keyof GameState['changes']) => void;
-}> = ({
-  pieces,
-  currentColor,
-  playerColor,
-  actions,
-  takeAction,
-  changes,
-  onMoveComplete,
-}) => {
+const GamePieces: FunctionalComponent = () => {
+  const {
+    playerColor,
+    gameState,
+    actions,
+    takeAction,
+    moveAnimationComplete,
+  } = useGameContext();
+
+  if (!gameState) {
+    return null;
+  }
+  const { pieces, currentColor, changes } = gameState;
+
   const { move, effects } = changes;
   // Sort pieces so that the one moved is rendered last and therefore on top of others
   // And other animated pieces are under the moving pieces but on top of others
@@ -52,7 +52,9 @@ const GamePieces: FunctionalComponent<GameState & {
             moveFrom={
               move && move.pieceId === p.id ? move : effectsMove || undefined
             }
-            onMoveComplete={() => onMoveComplete(!move ? 'effects' : 'move')}
+            onMoveComplete={() =>
+              moveAnimationComplete(!move ? 'effects' : 'move')
+            }
             noAnimate={!!move && move.pieceId !== p.id}
           />
         );
@@ -61,4 +63,4 @@ const GamePieces: FunctionalComponent<GameState & {
   );
 };
 
-export default memo(GamePieces);
+export default GamePieces;

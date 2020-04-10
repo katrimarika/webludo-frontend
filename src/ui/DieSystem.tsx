@@ -1,6 +1,7 @@
 import { css, keyframes } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { useGameContext } from '../utils/gameContext';
 import { dieCoord } from '../utils/helpers';
 import { theme } from '../utils/style';
 import Die from './Die';
@@ -29,12 +30,17 @@ const randomRolls = (current: number) => {
   return [first, second];
 };
 
-const DieSystem: FunctionalComponent<{
-  die: DieState;
-  rollDie: () => void;
-  disabled?: boolean;
-  onAnimationComplete: () => void;
-}> = ({ die, rollDie, disabled, onAnimationComplete }) => {
+const DieSystem: FunctionalComponent = () => {
+  const {
+    die,
+    takeAction,
+    disabled: gameDisabled,
+    actions,
+    animationOngoing,
+    ownTurn,
+    dieAnimationComplete,
+  } = useGameContext();
+
   const [loading, setLoading] = useState(false);
   const [animation, setAnimation] = useState<{
     animation: string;
@@ -45,6 +51,11 @@ const DieSystem: FunctionalComponent<{
     setLoading(false);
   }, [die]);
 
+  const disabled =
+    gameDisabled ||
+    !ownTurn ||
+    animationOngoing ||
+    !!actions.filter(a => a.type === 'move').length;
   const { roll, position, distance, orientation, animate } = die;
   const canRoll = !disabled && !loading && !animate;
   const from = [
@@ -82,7 +93,7 @@ const DieSystem: FunctionalComponent<{
         duration,
       });
       setTimeout(() => {
-        onAnimationComplete();
+        dieAnimationComplete();
         setAnimation(null);
       }, duration + 100);
     }
@@ -157,7 +168,7 @@ const DieSystem: FunctionalComponent<{
             ? undefined
             : () => {
                 setLoading(true);
-                rollDie();
+                takeAction('roll');
               }
         }
       />
