@@ -19,7 +19,6 @@ type Game = {
   code: string;
   name: string;
   players: Player[];
-  status: 'not_started' | 'ongoing' | 'ended' | 'interrupted' | string;
   currentColor: Color | null;
   pieces: Piece[];
 };

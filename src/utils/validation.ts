@@ -95,7 +95,6 @@ export const toGame = (data: any): Game | false => {
     return false;
   }
   const code = toStr(data.code);
-  const status = toStr(data.status) || 'not_started';
   const name = toStr(data.name);
   if (!code || !name) {
     console.error('Invalid game details', data);
@@ -152,7 +151,6 @@ export const toGame = (data: any): Game | false => {
   return {
     code,
     name,
-    status,
     players,
     currentColor,
     pieces,
