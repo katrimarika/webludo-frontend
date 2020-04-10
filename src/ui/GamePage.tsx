@@ -5,6 +5,7 @@ import { useGameChannel } from '../utils/context';
 import { setHash } from '../utils/hash';
 import { theme } from '../utils/style';
 import Button from './Button';
+import Chat from './Chat';
 import ErrorMessage from './ErrorMessage';
 import Game from './Game';
 import GameInfo from './GameInfo';
@@ -26,6 +27,7 @@ const GamePage: FunctionalComponent<{
     animate: false,
   });
   const [actions, setActions] = useState<MoveAction[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [
     playerColor,
     error,
@@ -33,6 +35,7 @@ const GamePage: FunctionalComponent<{
     takeAction,
     penaltyDone,
     fixPenalty,
+    postMessage,
   ] = useGameChannel(
     code,
     setGame,
@@ -48,6 +51,7 @@ const GamePage: FunctionalComponent<{
         orientation: Math.random(),
         animate: true,
       }),
+    m => setMessages(ms => [...ms, m]),
   );
 
   const canJoin = !error && !playerColor && !!game && game.players.length < 4;
@@ -164,6 +168,7 @@ const GamePage: FunctionalComponent<{
               onSubmit={name => joinGame(name)}
             />
           )}
+          <Chat messages={messages} postMessage={postMessage} />
         </div>
         <div
           className={css`

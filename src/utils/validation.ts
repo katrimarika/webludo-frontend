@@ -195,3 +195,17 @@ export const toGameState = (data: any, changesData: any): GameState | false => {
     },
   };
 };
+
+export const toChatMessage = (data: any): ChatMessage | false => {
+  if (!data) {
+    console.error('No chat message when expected');
+    return false;
+  }
+  const player = toStr(data.player);
+  const message = toStr(data.message);
+  if (!player || !message) {
+    console.error('Invalid chat message data', data);
+    return false;
+  }
+  return { player, message };
+};

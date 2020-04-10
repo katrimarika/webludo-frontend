@@ -1,6 +1,7 @@
 import { Channel as PhoenixChannel, Socket } from 'phoenix';
 import {
   colors,
+  toChatMessage,
   toGame,
   toGameState,
   toInt,
@@ -63,6 +64,7 @@ const initSocketWithUrl = (url: string) => {
     onGameChange: (newData: Game) => void,
     onStateChange: (newData: GameState, newActions: MoveAction[]) => void,
     onRoll: (roll: number) => void,
+    onChatMessage: (newData: ChatMessage) => void,
     onError: OnError,
   ) => {
     const channel = socket.channel(`games:${code.toLowerCase()}`, {});
@@ -123,6 +125,13 @@ const initSocketWithUrl = (url: string) => {
         onRoll(val);
       } else {
         onError('Received invalid roll result');
+      }
+    });
+    channel.on('chat', resp => {
+      log('received chat message', resp);
+      const message = toChatMessage(resp);
+      if (message) {
+        onChatMessage(message);
       }
     });
     return channel;
@@ -199,6 +208,19 @@ const initSocketWithUrl = (url: string) => {
       .receive('error', onErrorStr(onError));
   };
 
+  const postChatMessage = (
+    channel: Channel,
+    token: string,
+    message: string,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('chat_message', { token, message })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
   return {
     joinLobbyChannel,
     leaveChannel,
@@ -208,6 +230,7 @@ const initSocketWithUrl = (url: string) => {
     takeAction,
     decrementPenalty,
     fixPenalty,
+    postChatMessage,
   };
 };
 
@@ -225,6 +248,7 @@ export const NO_SOCKET: SocketActions = {
   takeAction: noop,
   decrementPenalty: noop,
   fixPenalty: noop,
+  postChatMessage: noop,
 };
 
 export const initSocket = (): SocketActions => {

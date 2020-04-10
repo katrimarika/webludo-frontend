@@ -11,6 +11,7 @@ const MiniForm: FunctionalComponent<{
   buttonText: string;
   initialValue?: string;
   buttonColor?: Color;
+  extraCss?: string;
   onSubmit: (v: string) => void;
 }> = ({
   inputName,
@@ -20,6 +21,7 @@ const MiniForm: FunctionalComponent<{
   buttonText,
   buttonColor,
   onSubmit,
+  extraCss,
   children,
 }) => {
   const [inputText, setInputText] = useState(initialValue || '');
@@ -29,6 +31,7 @@ const MiniForm: FunctionalComponent<{
     <form
       className={css`
         margin: 0.5rem 0 1.5rem;
+        ${extraCss}
       `}
       onSubmit={e => {
         e.preventDefault();

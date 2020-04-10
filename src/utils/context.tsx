@@ -45,6 +45,7 @@ export const useGameChannel = (
   onGameChange: (data: Game) => void,
   onStateChange: (state: GameState, actions: MoveAction[]) => void,
   onRoll: (roll: number) => void,
+  onMessage: (message: ChatMessage) => void,
 ) => {
   const socket = useSocket();
   const [channel, setChannel] = useState<Channel | null>(null);
@@ -60,6 +61,7 @@ export const useGameChannel = (
         onGameChange,
         onStateChange,
         onRoll,
+        onMessage,
         setError,
       );
       setChannel(gameChannel);
@@ -135,6 +137,17 @@ export const useGameChannel = (
         )
       : setError(!channel ? 'No channel found' : 'No player found');
 
+  const postMessage = (message: string) =>
+    channel && player
+      ? socket.postChatMessage(
+          channel,
+          player.token,
+          message,
+          () => null,
+          () => null,
+        )
+      : setError(!channel ? 'No channel found' : 'No player found');
+
   return [
     playerColor,
     error,
@@ -142,5 +155,6 @@ export const useGameChannel = (
     takeAction,
     penaltyDone,
     fixPenalty,
+    postMessage,
   ] as const;
 };
