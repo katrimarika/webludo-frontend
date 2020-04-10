@@ -61,7 +61,7 @@ const initSocketWithUrl = (url: string) => {
 
   const joinGameChannel = (
     code: string,
-    initialData: (game: Game, actions: MoveAction[]) => void, // TODO: add roll here to prevent roll animation on refresh
+    setInitialData: (game: Game, actions: MoveAction[]) => void,
     onGameChange: (game: Game, actions: MoveAction[], changes: Changes) => void,
     onRoll: (roll: number) => void,
     onChatMessage: (newData: ChatMessage) => void,
@@ -84,7 +84,7 @@ const initSocketWithUrl = (url: string) => {
           onError('Invalid game data');
         }
         if (game && actions) {
-          initialData(game, actions);
+          setInitialData(game, actions);
         }
         if (roll > 0 && roll <= 6) {
           onRoll(roll);
