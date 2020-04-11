@@ -136,7 +136,10 @@ export const toGame = (data: any): Game | false => {
     console.error('Invalid game players', invalidPlayers);
     return false;
   }
-  const currentColor = toStr(data.current_player) as Color;
+  const currentColor =
+    data.current_player === 'none'
+      ? null
+      : (toStr(data.current_player) as Color);
   if (!!currentColor && colors.indexOf(currentColor) === -1) {
     console.error('Invalid game current color', data);
     return false;
