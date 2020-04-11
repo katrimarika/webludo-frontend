@@ -49,14 +49,21 @@ const GamePieces: FunctionalComponent = () => {
         return (
           <GamePiece
             key={`piece-${p.id}`}
-            piece={p}
+            piece={
+              doubledAnimation
+                ? {
+                    ...p,
+                    multiplier: doubledAnimation.multiplier === 1 ? 2 : 1,
+                  }
+                : p
+            }
             onClick={
               availableAction ? () => takeAction(availableAction) : undefined
             }
             animateMove={
-              moveAnimation || doubledAnimation ? undefined : effectsAnimation
+              moveAnimation || (doubledAnimation ? undefined : effectsAnimation)
             }
-            animateDoubled={!moveAnimation ? doubledAnimation : undefined}
+            animateDoubled={!move ? doubledAnimation : undefined}
             animationComplete={() =>
               changeAnimationComplete(
                 moveAnimation

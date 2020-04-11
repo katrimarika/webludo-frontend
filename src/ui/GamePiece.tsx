@@ -197,7 +197,7 @@ const GamePiece: FunctionalComponent<{
         `}
         onClick={onClick}
       />
-      {multiplier > 1 && (!animateDoubled || animateDoubled.multiplier === 1) && (
+      {multiplier > 1 && (
         <circle
           cx={renderCoords[0]}
           cy={renderCoords[1]}

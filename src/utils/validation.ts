@@ -98,9 +98,8 @@ const toDoubledAnimation = (data: any): DoubledAnimation | false => {
   if (!pieceId || !multiplier) {
     console.error(`Invalid doubled animation`, data);
     return false;
-  } else {
-    return { pieceId, multiplier };
   }
+  return { pieceId, multiplier };
 };
 
 export const toGame = (data: any): Game | false => {
@@ -204,7 +203,9 @@ export const toChanges = (data: any): Changes | false => {
     console.error('Invalid game changes', data);
     return false;
   }
-  return { move, doubled, effects };
+  // Do not animate doubled changes above multiplier 2
+  const animatedDoubled = doubled && doubled.multiplier > 2 ? null : doubled;
+  return { move, doubled: animatedDoubled, effects };
 };
 
 export const toChatMessage = (data: any): ChatMessage | false => {
