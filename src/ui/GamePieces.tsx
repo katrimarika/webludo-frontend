@@ -46,17 +46,22 @@ const GamePieces: FunctionalComponent = () => {
           p.color === currentColor &&
           p.color === playerColor &&
           actions.find(a => a.pieceId === p.id);
+        const drawPiece = moveAnimation
+          ? p
+          : {
+              ...p,
+              area: effectsAnimation ? effectsAnimation.startArea : p.area,
+              index: effectsAnimation ? effectsAnimation.startIndex : p.index,
+              multiplier: doubledAnimation
+                ? doubledAnimation.multiplier === 1
+                  ? 2
+                  : 1
+                : p.multiplier,
+            };
         return (
           <GamePiece
             key={`piece-${p.id}`}
-            piece={
-              doubledAnimation
-                ? {
-                    ...p,
-                    multiplier: doubledAnimation.multiplier === 1 ? 2 : 1,
-                  }
-                : p
-            }
+            piece={drawPiece}
             onClick={
               availableAction ? () => takeAction(availableAction) : undefined
             }
