@@ -61,7 +61,8 @@ const GamePieces: FunctionalComponent = () => {
               availableAction ? () => takeAction(availableAction) : undefined
             }
             animateMove={
-              moveAnimation || (doubledAnimation ? undefined : effectsAnimation)
+              moveAnimation ||
+              (!!doubled || !!move ? undefined : effectsAnimation)
             }
             animateDoubled={!move ? doubledAnimation : undefined}
             animationComplete={() =>
