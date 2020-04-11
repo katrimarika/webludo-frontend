@@ -25,6 +25,7 @@ type Game = {
 
 type Changes = {
   move: MoveAnimation | null;
+  doubled: DoubledAnimation | null;
   effects: MoveAnimation[];
 };
 
@@ -41,6 +42,11 @@ type MoveAnimation = {
   startIndex: number;
   targetArea: Piece['area'];
   targetIndex: number;
+};
+
+type DoubledAnimation = {
+  pieceId: number;
+  multiplier: number;
 };
 
 type DieState = {

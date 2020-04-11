@@ -14,7 +14,7 @@ type GameContext = {
   disabled: boolean;
   animationOngoing: boolean;
   ownTurn: boolean;
-  moveAnimationComplete: (type: keyof Changes) => void;
+  changeAnimationComplete: (type: keyof Changes) => void;
   dieAnimationComplete: () => void;
 } & GameChannelData;
 
@@ -27,6 +27,7 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
   const [game, setGame] = useState<GameContext['game']>(null);
   const [changes, setChanges] = useState<GameContext['changes']>({
     move: null,
+    doubled: null,
     effects: [],
   });
   const [die, setDie] = useState<GameContext['die']>({
@@ -63,19 +64,32 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
     m => setMessages(ms => [...ms, m]),
   );
 
-  const moveAnimationComplete: GameContext['moveAnimationComplete'] = type =>
-    setChanges(oldChanges =>
-      type === 'move'
-        ? { ...oldChanges, move: null }
-        : { ...oldChanges, effects: [] },
-    );
+  const changeAnimationComplete: GameContext['changeAnimationComplete'] = type =>
+    setChanges(oldChanges => {
+      switch (type) {
+        case 'move':
+          return { ...oldChanges, move: null };
+        case 'doubled':
+          return { ...oldChanges, doubled: null };
+        case 'effects':
+          return { ...oldChanges, effects: [] };
+        default:
+          return oldChanges;
+      }
+    });
 
   const dieAnimationComplete: GameContext['dieAnimationComplete'] = () =>
     setDie(prevState => ({ ...prevState, animate: false }));
 
   const disabled = !game || !!error;
   const animationOngoing =
-    !!game && (!!changes.move || !!changes.effects.length);
+    !!game &&
+    !!(
+      changes.move ||
+      changes.doubled ||
+      changes.effects.length ||
+      die.animate
+    );
   const ownTurn = !!playerColor && !!game && game.currentColor === playerColor;
 
   return (
@@ -90,7 +104,7 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
         disabled,
         ownTurn,
         animationOngoing,
-        moveAnimationComplete,
+        changeAnimationComplete,
         dieAnimationComplete,
         playerColor,
         error,

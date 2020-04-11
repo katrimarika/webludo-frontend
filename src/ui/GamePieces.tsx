@@ -8,8 +8,9 @@ const GamePieces: FunctionalComponent = () => {
     playerColor,
     actions,
     changes,
+    animationOngoing,
     takeAction,
-    moveAnimationComplete,
+    changeAnimationComplete,
   } = useGameContext();
 
   if (!game) {
@@ -17,7 +18,7 @@ const GamePieces: FunctionalComponent = () => {
   }
   const { pieces, currentColor } = game;
 
-  const { move, effects } = changes;
+  const { move, doubled, effects } = changes;
   // Sort pieces so that the one moved is rendered last and therefore on top of others
   // And other animated pieces are under the moving pieces but on top of others
   const sortedPieces = !!move
@@ -36,10 +37,12 @@ const GamePieces: FunctionalComponent = () => {
   return (
     <g>
       {sortedPieces.map(p => {
-        const effectsMove = effects.find(e => e.pieceId === p.id) || undefined;
+        const moveAnimation = move && move.pieceId === p.id ? move : undefined;
+        const doubledAnimation =
+          doubled && doubled.pieceId === p.id ? doubled : undefined;
+        const effectsAnimation = effects.find(e => e.pieceId === p.id);
         const availableAction =
-          !move &&
-          !effectsMove &&
+          !animationOngoing &&
           p.color === currentColor &&
           p.color === playerColor &&
           actions.find(a => a.pieceId === p.id);
@@ -50,13 +53,19 @@ const GamePieces: FunctionalComponent = () => {
             onClick={
               availableAction ? () => takeAction(availableAction) : undefined
             }
-            moveFrom={
-              move && move.pieceId === p.id ? move : effectsMove || undefined
+            animateMove={
+              moveAnimation || doubledAnimation ? undefined : effectsAnimation
             }
-            onMoveComplete={() =>
-              moveAnimationComplete(!move ? 'effects' : 'move')
+            animateDoubled={!moveAnimation ? doubledAnimation : undefined}
+            animationComplete={() =>
+              changeAnimationComplete(
+                moveAnimation
+                  ? 'move'
+                  : doubledAnimation
+                  ? 'doubled'
+                  : 'effects',
+              )
             }
-            noAnimate={!!move && move.pieceId !== p.id}
           />
         );
       })}

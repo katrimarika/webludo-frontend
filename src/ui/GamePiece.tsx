@@ -20,67 +20,95 @@ const directionNumber = (color: Color, val1: number, val2: number) =>
 const GamePiece: FunctionalComponent<{
   piece: Piece;
   onClick?: () => void;
-  moveFrom?: MoveAnimation;
-  noAnimate?: boolean;
-  onMoveComplete: () => void;
-}> = ({ piece, moveFrom, noAnimate, onMoveComplete, onClick }) => {
-  const [move, setMove] = useState<{
+  animateMove?: MoveAnimation;
+  animateDoubled?: DoubledAnimation;
+  animationComplete: () => void;
+}> = ({ piece, animateMove, animateDoubled, animationComplete, onClick }) => {
+  const [animation, setAnimation] = useState<{
     animation: string;
     duration: number;
   } | null>(null);
 
-  const renderCoords = moveFrom
+  const renderCoords = animateMove
     ? [
         pieceCoord('x', {
           ...piece,
-          area: moveFrom.startArea,
-          index: moveFrom.startIndex,
+          area: animateMove.startArea,
+          index: animateMove.startIndex,
         }) * 10,
         pieceCoord('y', {
           ...piece,
-          area: moveFrom.startArea,
-          index: moveFrom.startIndex,
+          area: animateMove.startArea,
+          index: animateMove.startIndex,
         }) * 10,
       ]
     : [pieceCoord('x', piece) * 10, pieceCoord('y', piece) * 10];
 
   useEffect(() => {
-    if (moveFrom && !move && !noAnimate) {
-      const animateSteps = pieceSteps(piece, moveFrom);
-      if (animateSteps.length) {
-        const percentage = 100 / animateSteps.length;
-        const moveAnimation = keyframes`
-          0% {
-            transform: translate(0px, 0px);
-          }
-          ${animateSteps.map((s, i) => {
-            const change = [
-              pieceCoord('x', s) * 10 - renderCoords[0],
-              pieceCoord('y', s) * 10 - renderCoords[1],
-            ];
-            return css`
-              ${(i + 1) * percentage}% {
-                transform: translate(${change[0]}px, ${change[1]}px);
-              }
-            `;
-          })}
-        `;
-        const animationDuration = animateSteps.length * 500;
-        setMove({
-          animation: moveAnimation,
+    if (!animation) {
+      let animationDuration = 0;
+      if (animateMove) {
+        const animateSteps = pieceSteps(piece, animateMove);
+        if (animateSteps.length) {
+          const percentage = 100 / animateSteps.length;
+          const moveAnimation = keyframes`
+            0% {
+              transform: translate(0px, 0px);
+            }
+            ${animateSteps.map((s, i) => {
+              const change = [
+                pieceCoord('x', s) * 10 - renderCoords[0],
+                pieceCoord('y', s) * 10 - renderCoords[1],
+              ];
+              return css`
+                ${(i + 1) * percentage}% {
+                  transform: translate(${change[0]}px, ${change[1]}px);
+                }
+              `;
+            })}
+          `;
+          animationDuration = animateSteps.length * 500;
+          setAnimation({
+            animation: moveAnimation,
+            duration: animationDuration,
+          });
+        }
+      } else if (animateDoubled) {
+        const turnAnimation = keyframes`
+            0% {
+              transform: translate(0px, 0px);
+            }
+            25% {
+              transform: translate(10px, 10px);
+            }
+            50% {
+              transform: translate(-10px, 10px);
+            }
+            75% {
+              transform: translate(0px, -15px);
+            }
+            100% {
+              transform: translate(0px, 0px);
+            }
+          `;
+        animationDuration = 250;
+        setAnimation({
+          animation: turnAnimation,
           duration: animationDuration,
         });
+      }
+      if (animationDuration) {
         setTimeout(() => {
-          onMoveComplete();
-          setMove(null);
-        }, animationDuration + 100);
+          animationComplete();
+          setAnimation(null);
+        }, animationDuration);
       }
     }
   });
 
   const { id, color, area, index, multiplier } = piece;
 
-  return area === 'center' && !move ? (
+  return area === 'center' && !animation ? (
     <g
       key={`piece-${id}`}
       className={css`
@@ -160,8 +188,8 @@ const GamePiece: FunctionalComponent<{
               }
             `}
           animation: ${
-            !!move
-              ? `${move.animation} ${move.duration}ms forwards ease-in-out`
+            !!animation
+              ? `${animation.animation} ${animation.duration}ms forwards ease-in-out`
               : !!onClick
               ? `${pulseAnimation(color)} 1s alternate infinite`
               : 'none'
@@ -169,7 +197,7 @@ const GamePiece: FunctionalComponent<{
         `}
         onClick={onClick}
       />
-      {multiplier > 1 && (
+      {multiplier > 1 && (!animateDoubled || animateDoubled.multiplier === 1) && (
         <circle
           cx={renderCoords[0]}
           cy={renderCoords[1]}
@@ -179,8 +207,8 @@ const GamePiece: FunctionalComponent<{
             font-size: 1rem;
             pointer-events: none;
             transform: translate(0px, 0px);
-            animation: ${!!move
-              ? `${move.animation} ${move.duration}ms forwards ease-in-out`
+            animation: ${!!animation
+              ? `${animation.animation} ${animation.duration}ms forwards ease-in-out`
               : 'none'};
           `}
         />

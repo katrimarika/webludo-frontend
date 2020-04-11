@@ -69,7 +69,7 @@ export const toMoveActions = (data: any): MoveAction[] | false => {
 };
 const toMoveAnimation = (data: any): MoveAnimation | false => {
   if (!data) {
-    console.error('No move action when expected');
+    console.error('No move animation when expected');
     return false;
   }
   const pieceId = toInt(data.piece_id);
@@ -86,6 +86,20 @@ const toMoveAnimation = (data: any): MoveAnimation | false => {
     return false;
   } else {
     return { pieceId, startIndex, startArea, targetIndex, targetArea };
+  }
+};
+const toDoubledAnimation = (data: any): DoubledAnimation | false => {
+  if (!data) {
+    console.error('No doubled animation when expected');
+    return false;
+  }
+  const pieceId = toInt(data.piece_id);
+  const multiplier = toInt(data.multiplier);
+  if (!pieceId || !multiplier) {
+    console.error(`Invalid doubled animation`, data);
+    return false;
+  } else {
+    return { pieceId, multiplier };
   }
 };
 
@@ -161,33 +175,36 @@ export const toChanges = (data: any): Changes | false => {
   if (!data) {
     return {
       move: null,
+      doubled: null,
       effects: [],
     };
   }
-  const move = data && data.move ? toMoveAnimation(data.move) : null;
+  const move = data.move ? toMoveAnimation(data.move) : null;
+  const doubled = data.doubled ? toDoubledAnimation(data.doubled) : null;
   const invalidEffects: any[] = [];
-  const effects =
-    data && data.animated_effects
-      ? Array.isArray(data.animated_effects)
-        ? (data.animated_effects as any[]).reduce<MoveAnimation[]>(
-            (list, e) => {
-              const eat = toMoveAnimation(e);
-              if (eat) {
-                list.push(eat);
-              } else {
-                invalidEffects.push(e);
-              }
-              return list;
-            },
-            [],
-          )
-        : false
-      : [];
-  if (move === false || effects === false || invalidEffects.length) {
+  const effects = data.animated_effects
+    ? Array.isArray(data.animated_effects)
+      ? (data.animated_effects as any[]).reduce<MoveAnimation[]>((list, e) => {
+          const eat = toMoveAnimation(e);
+          if (eat) {
+            list.push(eat);
+          } else {
+            invalidEffects.push(e);
+          }
+          return list;
+        }, [])
+      : false
+    : [];
+  if (
+    move === false ||
+    doubled === false ||
+    effects === false ||
+    invalidEffects.length
+  ) {
     console.error('Invalid game changes', data);
     return false;
   }
-  return { move, effects };
+  return { move, doubled, effects };
 };
 
 export const toChatMessage = (data: any): ChatMessage | false => {
