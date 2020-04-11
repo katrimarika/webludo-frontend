@@ -31,7 +31,7 @@ const Settings: FunctionalComponent<{
         <Popup close={() => setSettingsOpen(false)} title="Settings">
           <MiniForm
             inputName="penalty-amount"
-            label="Fix penalty amount"
+            label="Fix penalty to amount"
             initialValue={player ? `${player.penalties}` : ''}
             buttonText="Fix"
             onSubmit={v => {
