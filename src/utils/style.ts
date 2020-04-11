@@ -22,6 +22,7 @@ export const theme = {
     gray: '#757575',
     silver: '#c0c0c0',
     lightgray: '#f1f1f1',
+    lightestGray: '#fafafa',
     white: '#fff',
     ivory: '#fffff0',
     highlight: '#d6e8f5',

@@ -32,21 +32,25 @@ const Chat: FunctionalComponent = () => {
       <div
         ref={containerRef}
         className={css`
-          border: 1px solid ${theme.colors.gray};
-          background: ${theme.colors.lightgray};
-          padding: 0.125rem 0.25rem;
-          height: 8rem;
+          border: 1px solid ${theme.colors.black};
+          background: ${theme.colors.lightestGray};
+          border-radius: 0.125rem;
+          padding: 0.25rem 0.375rem;
+          height: 4.5rem;
           display: flex;
           flex-direction: column;
           overflow-y: scroll;
+          @media screen and (orientation: landscape) {
+            height: 7.75rem;
+          }
         `}
       >
         {messages.map((m, i) => (
           <p
             key={`message-${m.player}-${i}`}
             className={css`
-              margin: 0.125rem 0;
-              line-height: 1.2;
+              margin: 0.25rem 0;
+              line-height: 1.3;
               font-size: 0.875rem;
             `}
           >

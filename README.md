@@ -18,9 +18,6 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 ## TODO
 
-- handle "doubled" animations, order: move - doubled - effects
-- better current player flash animation for multiplied pieces
-- better chat styles
 - handle less than 4 players (when api handles them)
 - sounds:
   1. die roll
