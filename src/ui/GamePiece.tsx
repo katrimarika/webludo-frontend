@@ -7,11 +7,14 @@ import { theme } from '../utils/style';
 import { colors } from '../utils/validation';
 
 const pulseAnimation = (color: Color) => keyframes`
-  from {
+  0% {
     fill: ${theme.colors[color].main};
   }
-  to {
+  50% {
     fill: ${theme.colors[color].text};
+  }
+  100% {
+    fill: ${theme.colors[color].main};
   }
 `;
 const directionNumber = (color: Color, val1: number, val2: number) =>
@@ -191,7 +194,7 @@ const GamePiece: FunctionalComponent<{
             !!animation
               ? `${animation.animation} ${animation.duration}ms forwards ease-in-out`
               : !!onClick
-              ? `${pulseAnimation(color)} 1s alternate infinite`
+              ? `${pulseAnimation(color)} 1s ease-in infinite`
               : 'none'
           };
         `}
@@ -201,9 +204,11 @@ const GamePiece: FunctionalComponent<{
         <circle
           cx={renderCoords[0]}
           cy={renderCoords[1]}
-          r="19"
+          r="15"
           className={css`
-            fill: ${theme.colors[color].text};
+            fill: transparent;
+            stroke-width: 7;
+            stroke: ${theme.colors[color].text};
             font-size: 1rem;
             pointer-events: none;
             transform: translate(0px, 0px);
