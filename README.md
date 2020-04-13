@@ -18,6 +18,7 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 ## TODO
 
+- api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
 - agreeing on a new raise round
 - jag bor i hembo
