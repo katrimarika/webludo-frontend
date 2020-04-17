@@ -148,6 +148,27 @@ export const useGameChannel = (
         )
       : setError(!channel ? 'No channel found' : 'No player found');
 
+  const callOwnHembo = () =>
+    channel && player
+      ? socket.callOwnHembo(
+          channel,
+          player.token,
+          () => null,
+          () => null,
+        )
+      : setError(!channel ? 'No channel found' : 'No player found');
+
+  const callMissedHembo = (color: Color) =>
+    channel && player
+      ? socket.callMissedHembo(
+          channel,
+          player.token,
+          color,
+          () => null,
+          () => null,
+        )
+      : setError(!channel ? 'No channel found' : 'No player found');
+
   return {
     playerColor,
     error,
@@ -156,5 +177,7 @@ export const useGameChannel = (
     penaltyDone,
     fixPenalty,
     postMessage,
+    callOwnHembo,
+    callMissedHembo,
   };
 };

@@ -202,6 +202,31 @@ const initSocketWithUrl = (url: string) => {
       .receive('error', onErrorStr(onError));
   };
 
+  const callOwnHembo = (
+    channel: Channel,
+    token: string,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('jag_bor_i_hembo', { token })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
+  const callMissedHembo = (
+    channel: Channel,
+    token: string,
+    player: Color,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('call_missed_hembo', { token, player })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
   return {
     joinLobbyChannel,
     leaveChannel,
@@ -212,6 +237,8 @@ const initSocketWithUrl = (url: string) => {
     decrementPenalty,
     fixPenalty,
     postChatMessage,
+    callOwnHembo,
+    callMissedHembo,
   };
 };
 
@@ -230,6 +257,8 @@ export const NO_SOCKET: SocketActions = {
   decrementPenalty: noop,
   fixPenalty: noop,
   postChatMessage: noop,
+  callOwnHembo: noop,
+  callMissedHembo: noop,
 };
 
 export const initSocket = (): SocketActions => {

@@ -2,8 +2,18 @@ import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { theme } from '../utils/style';
 import { colors } from '../utils/validation';
+import { useGameContext } from '../utils/gameContext';
 
 const HomeBase: FunctionalComponent<{ color: Color }> = ({ color }) => {
+  const { playerColor, callOwnHembo, callMissedHembo } = useGameContext();
+
+  const onClick =
+    playerColor === color
+      ? callOwnHembo
+      : !!playerColor
+      ? () => callMissedHembo(color)
+      : undefined;
+
   return (
     <g
       className={css`
@@ -11,7 +21,31 @@ const HomeBase: FunctionalComponent<{ color: Color }> = ({ color }) => {
         transform-origin: center;
       `}
     >
-      <svg x="0" y="0" width="1000" height="1000" viewBox="0 0 1000 1000">
+      <svg
+        x="0"
+        y="0"
+        width="1000"
+        height="1000"
+        viewBox="0 0 1000 1000"
+        onClick={onClick}
+        className={
+          onClick &&
+          css`
+            cursor: pointer;
+            &:hover,
+            &:focus,
+            &:active {
+              path {
+                stroke: ${theme.colors.boardCorner};
+                fill: ${theme.colors.boardCorner};
+              }
+              text {
+                opacity: 0.75;
+              }
+            }
+          `
+        }
+      >
         <path
           d={`M2,220 2,160 Q56,56 160,2 L220,2 Q76,76 2,220`}
           className={css`
