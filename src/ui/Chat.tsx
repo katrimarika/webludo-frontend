@@ -3,6 +3,7 @@ import { FunctionalComponent, h } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import { useGameContext } from '../utils/gameContext';
 import { theme } from '../utils/style';
+import ChatItem from './ChatItem';
 import MiniForm from './MiniForm';
 
 const Chat: FunctionalComponent = () => {
@@ -48,21 +49,7 @@ const Chat: FunctionalComponent = () => {
         `}
       >
         {messages.map((m, i) => (
-          <p
-            key={`message-${m.player}-${i}`}
-            className={css`
-              margin: 0.25rem 0;
-              line-height: 1.3;
-              font-size: 0.875rem;
-            `}
-          >
-            <span
-              className={css`
-                font-weight: bold;
-              `}
-            >{`${m.player}: `}</span>
-            <span>{m.message}</span>
-          </p>
+          <ChatItem key={`message-${m.type}-${m.timestamp}-${i}`} item={m} />
         ))}
       </div>
       {!!playerColor && (

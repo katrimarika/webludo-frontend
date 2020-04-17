@@ -61,7 +61,15 @@ type DieState = {
 
 type OnError = (e: string) => void;
 
-type ChatMessage = {
-  player: string;
-  message: string;
-};
+type ChatMessage =
+  | {
+      type: 'message';
+      player: string;
+      message: string;
+      timestamp: number;
+    }
+  | {
+      type: 'announcement';
+      message: string;
+      timestamp: number;
+    };

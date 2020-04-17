@@ -20,7 +20,6 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 - api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
-- automatic messages in chat with different style
 - sounds:
   1. die roll
   1. move

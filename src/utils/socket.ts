@@ -110,9 +110,16 @@ const initSocketWithUrl = (url: string) => {
     });
     channel.on('chat', resp => {
       log('received chat message', resp);
-      const message = toChatMessage(resp);
+      const message = toChatMessage('message', resp);
       if (message) {
         onChatMessage(message);
+      }
+    });
+    channel.on('announcement', resp => {
+      log('received announcement', resp);
+      const announcement = toChatMessage('announcement', resp);
+      if (announcement) {
+        onChatMessage(announcement);
       }
     });
     return channel;

@@ -217,16 +217,33 @@ export const toChanges = (data: any): Changes | false => {
   return { move, doubled: animatedDoubled, effects };
 };
 
-export const toChatMessage = (data: any): ChatMessage | false => {
+export const toChatMessage = (
+  type: ChatMessage['type'],
+  data: any,
+): ChatMessage | false => {
   if (!data) {
-    console.error('No chat message when expected');
+    console.error(
+      `No ${
+        type === 'announcement' ? 'announcement' : 'chat message'
+      } when expected`,
+    );
     return false;
   }
-  const player = toStr(data.player);
   const message = toStr(data.message);
-  if (!player || !message) {
-    console.error('Invalid chat message data', data);
-    return false;
+  const timestamp = new Date(data.timestamp).getTime();
+  if (type === 'announcement') {
+    if (!message || !timestamp) {
+      console.error('Invalid annoucement data', data);
+      return false;
+    }
+    return { type, message, timestamp };
+  } else if (type === 'message') {
+    const player = toStr(data.player);
+    if (!player || !message || !timestamp) {
+      console.error('Invalid chat message data', data);
+      return false;
+    }
+    return { type, player, message, timestamp };
   }
-  return { player, message };
+  return false;
 };
