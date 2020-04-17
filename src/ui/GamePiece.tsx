@@ -31,6 +31,11 @@ const GamePiece: FunctionalComponent<{
     animation: string;
     duration: number;
   } | null>(null);
+  const [disabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    setDisabled(false);
+  }, [onClick]);
 
   const renderCoords = [
     pieceCoord('x', piece) * 10,
@@ -188,7 +193,14 @@ const GamePiece: FunctionalComponent<{
               : 'none'
           };
         `}
-        onClick={onClick}
+        onClick={
+          onClick && !disabled
+            ? () => {
+                setDisabled(true); // to prevent double clicks that result in error
+                onClick();
+              }
+            : undefined
+        }
       />
       {multiplier > 1 && (
         <circle
