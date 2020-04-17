@@ -9,8 +9,17 @@ const PlayerInfo: FunctionalComponent<{
   player: Player;
   isCurrent: boolean;
   nextAction: NextAction;
+  newRaiseRound: boolean;
   onPenaltyDone?: () => void;
-}> = ({ player, isCurrent, nextAction, onPenaltyDone }) => (
+  onToggleAgree?: () => void;
+}> = ({
+  player,
+  isCurrent,
+  nextAction,
+  newRaiseRound,
+  onPenaltyDone,
+  onToggleAgree,
+}) => (
   <li
     className={css`
       display: flex;
@@ -66,6 +75,33 @@ const PlayerInfo: FunctionalComponent<{
           –🍺
         </Button>
       )}
+      {newRaiseRound &&
+        (onToggleAgree ? (
+          <Button
+            color="yellow"
+            extraCss={css`
+              margin-left: 0.5rem;
+              padding: 0.125rem 0.5rem 0.1875rem 0.6875rem;
+            `}
+            onClick={onToggleAgree}
+            title={`Change to ${
+              player.newRaiseRound ? 'disagree' : 'agree'
+            } on a new raising round`}
+          >
+            {player.newRaiseRound ? '👍' : '👎'}
+          </Button>
+        ) : (
+          <span
+            title={`${
+              player.newRaiseRound ? 'Agreed' : 'Disagreed'
+            } on a new raising round`}
+            className={css`
+              margin-left: 1rem;
+            `}
+          >
+            {player.newRaiseRound ? '👍' : '👎'}
+          </span>
+        ))}
     </div>
   </li>
 );

@@ -21,7 +21,6 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 - pulse animation on die system when it's your to roll + blur after roll
 - api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
-- agreeing on a new raise round
 - automatic messages in chat with different style
 - sounds:
   1. die roll

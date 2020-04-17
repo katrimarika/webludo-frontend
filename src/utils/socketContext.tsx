@@ -169,6 +169,17 @@ export const useGameChannel = (
         )
       : setError(!channel ? 'No channel found' : 'No player found');
 
+  const agreeNewRaiseRound = (agree: boolean) =>
+    channel && player
+      ? socket.agreeNewRaiseRound(
+          channel,
+          player.token,
+          agree,
+          () => null,
+          () => null,
+        )
+      : setError(!channel ? 'No channel found' : 'No player found');
+
   return {
     playerColor,
     error,
@@ -179,5 +190,6 @@ export const useGameChannel = (
     postMessage,
     callOwnHembo,
     callMissedHembo,
+    agreeNewRaiseRound,
   };
 };

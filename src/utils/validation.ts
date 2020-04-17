@@ -121,12 +121,17 @@ export const toGame = (data: any): Game | false => {
     colors.indexOf(a.color) > colors.indexOf(b.color) ? 1 : -1,
   );
   const invalidPlayers: any[] = [];
+  let cantRaise = 0;
   const players = sortedPlayers.reduce<Player[]>((list, p) => {
     const name = toStr(p.name);
     const color = toStr(p.color) as Color;
     const penalties = toInt(p.penalties);
+    const newRaiseRound = !!p.new_raising_round;
     if (name && color && colors.indexOf(color) !== -1) {
-      list.push({ name, color, penalties });
+      list.push({ name, color, penalties, newRaiseRound });
+      if (p.can_raise === false) {
+        cantRaise += 1;
+      }
     } else {
       invalidPlayers.push(p);
     }
@@ -170,6 +175,7 @@ export const toGame = (data: any): Game | false => {
     players,
     currentColor,
     pieces,
+    newRaiseRound: cantRaise >= players.length,
   };
 };
 

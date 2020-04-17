@@ -227,6 +227,19 @@ const initSocketWithUrl = (url: string) => {
       .receive('error', onErrorStr(onError));
   };
 
+  const agreeNewRaiseRound = (
+    channel: Channel,
+    token: string,
+    agree: boolean,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('new_raising_round', { token, agree })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
   return {
     joinLobbyChannel,
     leaveChannel,
@@ -239,6 +252,7 @@ const initSocketWithUrl = (url: string) => {
     postChatMessage,
     callOwnHembo,
     callMissedHembo,
+    agreeNewRaiseRound,
   };
 };
 
@@ -259,6 +273,7 @@ export const NO_SOCKET: SocketActions = {
   postChatMessage: noop,
   callOwnHembo: noop,
   callMissedHembo: noop,
+  agreeNewRaiseRound: noop,
 };
 
 export const initSocket = (): SocketActions => {

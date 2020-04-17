@@ -4,6 +4,7 @@ type Player = {
   name: string;
   color: Color;
   penalties: number;
+  newRaiseRound: boolean;
 };
 
 type Piece = {
@@ -21,6 +22,7 @@ type Game = {
   players: Player[];
   currentColor: Color | null;
   pieces: Piece[];
+  newRaiseRound: boolean;
 };
 
 type Changes = {

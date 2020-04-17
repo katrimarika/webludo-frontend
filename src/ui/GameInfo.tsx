@@ -11,13 +11,14 @@ const GameInfo: FunctionalComponent = () => {
     animationOngoing,
     actions,
     penaltyDone,
+    agreeNewRaiseRound,
   } = useGameContext();
 
   if (!game) {
     return null;
   }
 
-  const { players } = game;
+  const { players, newRaiseRound } = game;
   const playerIndex = players.findIndex(p => p.color === playerColor);
   const player = playerIndex !== -1 ? players[playerIndex] : null;
   const otherPlayers = player
@@ -60,7 +61,9 @@ const GameInfo: FunctionalComponent = () => {
             player={player}
             isCurrent={player.color === currentColor}
             nextAction={nextAction}
+            newRaiseRound={newRaiseRound}
             onPenaltyDone={player.penalties ? penaltyDone : undefined}
+            onToggleAgree={() => agreeNewRaiseRound(!player.newRaiseRound)}
           />
           <h2
             className={css`
@@ -78,6 +81,7 @@ const GameInfo: FunctionalComponent = () => {
           player={p}
           isCurrent={p.color === currentColor}
           nextAction={nextAction}
+          newRaiseRound={newRaiseRound}
         />
       ))}
     </ul>
