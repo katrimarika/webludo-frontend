@@ -103,7 +103,7 @@ const GamePiece: FunctionalComponent<{
 
   return area === 'center' && !animation ? (
     <g
-      key={`piece-${id}`}
+      key={`piece-center-${id}`}
       className={css`
         transform: translate(
             -${directionNumber(color, 27, 38)}px,

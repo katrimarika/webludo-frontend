@@ -21,19 +21,17 @@ const GamePieces: FunctionalComponent = () => {
   const { move, doubled, effects } = changes;
   // Sort pieces so that the one moved is rendered last and therefore on top of others
   // And other animated pieces are under the moving pieces but on top of others
-  const sortedPieces = !!move
-    ? pieces.sort((p1, p2) =>
-        move.pieceId === p1.id
-          ? 1
-          : move.pieceId === p2.id
-          ? -1
-          : effects.some(e => e.pieceId === p1.id)
-          ? 1
-          : effects.some(e => e.pieceId === p2.id)
-          ? -1
-          : 0,
-      )
-    : pieces;
+  const sortedPieces = pieces.sort((p1, p2) =>
+    !!move && move.pieceId === p1.id
+      ? 1
+      : !!move && move.pieceId === p2.id
+      ? -1
+      : effects.some(e => e.pieceId === p1.id)
+      ? 1
+      : effects.some(e => e.pieceId === p2.id)
+      ? -1
+      : 0,
+  );
   return (
     <g>
       {sortedPieces.map(p => {
