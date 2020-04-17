@@ -6,7 +6,7 @@ import { theme } from '../utils/style';
 import { colors } from '../utils/validation';
 
 const spotCss = css`
-  stroke: black;
+  stroke: ${theme.colors.black};
   stroke-width: 4;
   fill: ${theme.colors.white};
 `;
@@ -21,28 +21,18 @@ const backgroundLineCss = css`
   fill: transparent;
   stroke-linecap: round;
 `;
-const bd1 = 160; // board cut-corner distance
-const bd2 = 998 - bd1;
 const bid1 = 220; // board inner cut-corner distance
-const bid2 = 995 - bid1;
+const bid2 = 998 - bid1;
 const cd1 = 105; // center cut-corner start distance
 const cd2 = 145; // center cut-corner end distance
 
 const GameBoard: FunctionalComponent = () => (
   <g>
     <path
-      d={`M${bd1},2 ${bd2},2 Q944,56 998,${bd1} L998,${bd2} Q944,944 ${bd2},998 L${bd1},998 Q56,944 2,${bd2} L2,${bd1} Q56,56 ${bd1},2`}
+      d={`M${bid1},2 ${bid2},2 Q924,76 998,${bid1} L998,${bid2} Q924,924 ${bid2},998 L${bid1},998 Q76,924 2,${bid2} L2,${bid1} Q76,76 ${bid1},2 L${bid2},2`}
       className={css`
-        stroke: black;
-        stroke-width: 4;
-        fill: ${theme.colors.boardCorner};
-      `}
-    />
-    <path
-      d={`M${bid1},5 ${bid2},5 Q924,76 995,${bid1} L995,${bid2} Q924,924 ${bid2},995 L${bid1},995 Q76,924 5,${bid2} L5,${bid1} Q76,76 ${bid1},5`}
-      className={css`
-        stroke: black;
-        stroke-width: 4;
+        stroke: ${theme.colors.black};
+        stroke-width: 8;
         fill: ${theme.colors.white};
       `}
     />
@@ -198,7 +188,7 @@ const GameBoard: FunctionalComponent = () => (
       <polygon
         points={`${cd1},2 ${cd2},2 248,${cd1} 248,${cd2} ${cd2},248 ${cd1},248 2,${cd2} 2,${cd1}`}
         className={css`
-          stroke: black;
+          stroke: ${theme.colors.black};
           stroke-width: 3;
           fill: ${theme.colors.lightgray};
         `}

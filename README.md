@@ -23,6 +23,7 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 - handle less than 4 players (when api handles them)
 - agreeing on a new raise round
 - jag bor i hembo
+- calling missed jag bor i hembo
 - sounds:
   1. die roll
   1. move

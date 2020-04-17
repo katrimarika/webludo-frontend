@@ -1,10 +1,12 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
+import { useGameContext } from '../utils/gameContext';
+import { colors } from '../utils/validation';
 import DieSystem from './DieSystem';
 import GameBoard from './GameBoard';
 import GameOverlay from './GameOverlay';
 import GamePieces from './GamePieces';
-import { useGameContext } from '../utils/gameContext';
+import HomeBase from './HomeBase';
 
 const Game: FunctionalComponent = () => {
   const { disabled } = useGameContext();
@@ -31,6 +33,9 @@ const Game: FunctionalComponent = () => {
     >
       <svg width="100%" height="100%" viewBox="0 0 1000 1000">
         <GameBoard />
+        {colors.map(c => (
+          <HomeBase key={`homebase-${c}`} color={c} />
+        ))}
         <DieSystem />
         <GamePieces />
         {disabled && <GameOverlay text="" />}

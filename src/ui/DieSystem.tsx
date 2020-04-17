@@ -111,7 +111,7 @@ const DieSystem: FunctionalComponent = () => {
         cy="500"
         r="100"
         className={css`
-          stroke: black;
+          stroke: ${theme.colors.black};
           stroke-width: 3;
           fill: ${theme.colors.silver};
         `}
@@ -147,7 +147,7 @@ const DieSystem: FunctionalComponent = () => {
         r="90"
         className={css`
           font-size: 1rem;
-          stroke: black;
+          stroke: ${theme.colors.black};
           stroke-width: 3;
           fill: transparent;
           -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
