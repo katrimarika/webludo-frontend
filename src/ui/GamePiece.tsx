@@ -32,20 +32,10 @@ const GamePiece: FunctionalComponent<{
     duration: number;
   } | null>(null);
 
-  const renderCoords = animateMove
-    ? [
-        pieceCoord('x', {
-          ...piece,
-          area: animateMove.startArea,
-          index: animateMove.startIndex,
-        }) * 10,
-        pieceCoord('y', {
-          ...piece,
-          area: animateMove.startArea,
-          index: animateMove.startIndex,
-        }) * 10,
-      ]
-    : [pieceCoord('x', piece) * 10, pieceCoord('y', piece) * 10];
+  const renderCoords = [
+    pieceCoord('x', piece) * 10,
+    pieceCoord('y', piece) * 10,
+  ];
 
   useEffect(() => {
     if (!animation) {

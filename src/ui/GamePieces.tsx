@@ -47,7 +47,11 @@ const GamePieces: FunctionalComponent = () => {
           p.color === playerColor &&
           actions.find(a => a.pieceId === p.id);
         const drawPiece = moveAnimation
-          ? p
+          ? {
+              ...p,
+              area: moveAnimation.startArea,
+              index: moveAnimation.startIndex,
+            }
           : {
               ...p,
               area: effectsAnimation ? effectsAnimation.startArea : p.area,
