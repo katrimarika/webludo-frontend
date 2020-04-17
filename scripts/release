@@ -15,7 +15,7 @@ mv tmp.json package.json
 # Commit the version change and tag it
 echo "Commiting and tagging changes..."
 git add package.json
-git commit -m "Version $newVersion"
+git commit --quiet -m "Version $newVersion"
 git tag v$newVersion
 
 # Push master and tags
@@ -27,7 +27,7 @@ git push --quiet origin --tags
 echo "Merging changes to production..."
 git checkout --quiet production
 git pull --quiet 
-git merge -quiet  master
+git merge --quiet master
 
 # Push production and return to master
 echo "Pushing changes to production..."
