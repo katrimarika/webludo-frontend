@@ -29,6 +29,17 @@ const randomRolls = (current: number) => {
   const second = newPool[Math.floor(Math.random() * newPool.length)];
   return [first, second];
 };
+const pulseAnimation = keyframes`
+  0% {
+    fill: transparent;
+  }
+  50% {
+    fill: rgba(128, 128, 128, 0.5);
+  }
+  100% {
+    fill: transparent;
+  }
+`;
 
 const DieSystem: FunctionalComponent = () => {
   const {
@@ -155,11 +166,12 @@ const DieSystem: FunctionalComponent = () => {
           ${canRoll &&
             css`
               cursor: pointer;
+              animation: ${pulseAnimation} 2s ease-in infinite;
               &:hover,
-              &:focus,
-              &:active {
+              &:focus {
                 fill: rgba(128, 128, 128, 0.6);
                 stroke-width: 4;
+                animation: none;
               }
             `}
         `}
