@@ -22,7 +22,7 @@ const LobbyPage: FunctionalComponent<{ onCreateGame: () => void }> = ({
           margin: 0 0 1.25rem;
         `}
       >
-        KimbIe
+        Webludo
       </h1>
       <ErrorMessage prefix="Error: " text={channelError} />
       <MiniForm

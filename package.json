@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "kimble-frontend",
+  "name": "webludo-frontend",
   "version": "0.2.6",
   "license": "Apache-2.0",
   "devDependencies": {
