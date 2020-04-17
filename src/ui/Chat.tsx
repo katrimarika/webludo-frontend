@@ -22,6 +22,7 @@ const Chat: FunctionalComponent = () => {
       `}
     >
       <h2
+        id="chat-title"
         className={css`
           font-size: 1rem;
           margin: 0.5rem 0 0.25rem;
@@ -36,6 +37,7 @@ const Chat: FunctionalComponent = () => {
           background: ${theme.colors.lightestGray};
           border-radius: 0.125rem;
           padding: 0.25rem 0.375rem;
+          margin-bottom: 0.5rem;
           height: 4.5rem;
           display: flex;
           flex-direction: column;
@@ -66,7 +68,8 @@ const Chat: FunctionalComponent = () => {
       {!!playerColor && (
         <MiniForm
           inputName="chat-message"
-          label=""
+          labelledBy="chat-title"
+          placeholder="Say something..."
           buttonText="Send"
           onSubmit={postMessage}
           extraCss={css`

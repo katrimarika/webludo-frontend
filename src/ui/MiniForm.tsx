@@ -7,8 +7,10 @@ import Button from './Button';
 const MiniForm: FunctionalComponent<{
   inputName: string;
   title?: string;
-  label: string;
+  label?: string;
+  labelledBy?: string;
   buttonText: string;
+  placeholder?: string;
   initialValue?: string;
   buttonColor?: Color;
   extraCss?: string;
@@ -17,6 +19,8 @@ const MiniForm: FunctionalComponent<{
   inputName,
   title,
   label,
+  labelledBy,
+  placeholder,
   initialValue,
   buttonText,
   buttonColor,
@@ -43,6 +47,7 @@ const MiniForm: FunctionalComponent<{
     >
       {!!title && (
         <h2
+          id={`form-${title}`}
           className={css`
             font-size: 1.25rem;
             margin: 0 0 1rem;
@@ -64,20 +69,24 @@ const MiniForm: FunctionalComponent<{
             margin-right: 0.5rem;
           `}
         >
-          <label
-            htmlFor={id}
-            className={css`
-              display: block;
-              margin-bottom: 0.5rem;
-            `}
-          >
-            {label}
-          </label>
+          {label && (
+            <label
+              htmlFor={id}
+              className={css`
+                display: block;
+                margin-bottom: 0.5rem;
+              `}
+            >
+              {label}
+            </label>
+          )}
           <input
             id={id}
             name={inputName}
             autoComplete="off"
             value={inputText}
+            aria-labelledBy={labelledBy}
+            placeholder={placeholder}
             className={css`
               width: 100%;
               font-size: 1rem;
