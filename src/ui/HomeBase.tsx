@@ -1,18 +1,28 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
+import { useState } from 'preact/hooks';
+import { useGameContext } from '../utils/gameContext';
 import { theme } from '../utils/style';
 import { colors } from '../utils/validation';
-import { useGameContext } from '../utils/gameContext';
 
 const HomeBase: FunctionalComponent<{ color: Color }> = ({ color }) => {
   const { playerColor, callOwnHembo, callMissedHembo } = useGameContext();
+  const [loading, setLoading] = useState(false);
 
   const onClick =
-    playerColor === color
-      ? callOwnHembo
-      : !!playerColor
-      ? () => callMissedHembo(color)
-      : undefined;
+    !playerColor || loading
+      ? undefined
+      : playerColor === color
+      ? () => {
+          setLoading(true);
+          callOwnHembo();
+          setTimeout(() => setLoading(false), 500);
+        }
+      : () => {
+          setLoading(true);
+          callMissedHembo(color);
+          setTimeout(() => setLoading(false), 1000);
+        };
 
   return (
     <g
