@@ -24,10 +24,13 @@ const PlayerInfo: FunctionalComponent<{
     className={css`
       display: flex;
       align-items: center;
-      line-height: 1.4;
-      padding: 0.1875rem 0.5rem;
+      line-height: 1.2;
+      padding: 0.25rem 0.5rem;
       border-radius: 0.1875rem;
       background: ${isCurrent ? theme.colors.highlight : 'transparent'};
+      li + & {
+        margin-top: 0.25rem;
+      }
     `}
   >
     <div
@@ -41,27 +44,34 @@ const PlayerInfo: FunctionalComponent<{
       `}
     />
     <div>
-      <span>{player.name}</span>
-      {isCurrent && nextAction ? (
+      <span
+        className={css`
+          word-break: break-word;
+        `}
+      >
+        {player.name}
+      </span>
+      {isCurrent && (
         <span
           className={css`
             font-size: 0.875rem;
             color: ${theme.colors.gray};
             white-space: nowrap;
+            display: inline-block;
+            min-width: 6.45rem;
           `}
-        >{` – ${nextAction.toUpperCase()}!`}</span>
-      ) : null}
+        >
+          {`\u00a0–${nextAction ? ` ${nextAction.toUpperCase()}!` : ''}`}
+        </span>
+      )}
     </div>
     <div
       className={css`
         margin-left: auto;
+        white-space: nowrap;
       `}
     >
-      <span
-        className={css`
-          white-space: nowrap;
-        `}
-      >{`🍺${player.penalties}`}</span>
+      <span>{`🍺${player.penalties}`}</span>
       {!!onPenaltyDone && (
         <Button
           color="yellow"
