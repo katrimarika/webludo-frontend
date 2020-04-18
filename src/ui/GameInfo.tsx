@@ -12,6 +12,7 @@ const GameInfo: FunctionalComponent = () => {
     actions,
     penaltyDone,
     agreeNewRaiseRound,
+    turnColor,
   } = useGameContext();
 
   if (!game) {
@@ -25,10 +26,9 @@ const GameInfo: FunctionalComponent = () => {
     ? [...players.slice(playerIndex + 1), ...players.slice(0, playerIndex)]
     : players;
 
-  const currentColor =
-    disabled || animationOngoing ? null : (game && game.currentColor) || null;
+  const currentColor = disabled ? null : turnColor;
   const nextAction =
-    disabled || animationOngoing
+    disabled || animationOngoing || turnColor !== game.currentColor
       ? null
       : actions.some(a => a.type === 'raise')
       ? actions.length > 1

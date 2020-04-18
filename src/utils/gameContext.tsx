@@ -1,5 +1,5 @@
 import { createContext, FunctionComponent, h } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useContext, useState, useEffect } from 'preact/hooks';
 import { useGameChannel } from './socketContext';
 
 type GameChannelData = ReturnType<typeof useGameChannel>;
@@ -14,6 +14,7 @@ type GameContext = {
   disabled: boolean;
   animationOngoing: boolean;
   ownTurn: boolean;
+  turnColor: Color | null;
   changeAnimationComplete: (type: keyof Changes) => void;
   dieAnimationComplete: () => void;
 } & GameChannelData;
@@ -25,6 +26,7 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
   children,
 }) => {
   const [game, setGame] = useState<GameContext['game']>(null);
+  const [turnColor, setTurnColor] = useState<GameContext['turnColor']>(null);
   const [changes, setChanges] = useState<GameContext['changes']>({
     move: null,
     doubled: null,
@@ -64,6 +66,16 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
     m => setMessages(ms => [...ms, m]),
   );
 
+  // Change current turn color only after last animation has completed
+  useEffect(() => {
+    if (!changes.move && !changes.doubled && !changes.effects.length) {
+      const newTurnColor = (game && game.currentColor) || null;
+      if (newTurnColor !== turnColor) {
+        setTurnColor(newTurnColor);
+      }
+    }
+  }, [game, changes, turnColor]);
+
   const changeAnimationComplete: GameContext['changeAnimationComplete'] = type =>
     setChanges(oldChanges => {
       switch (type) {
@@ -90,7 +102,11 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
       changes.effects.length ||
       die.animate
     );
-  const ownTurn = !!playerColor && !!game && game.currentColor === playerColor;
+  const ownTurn =
+    !!playerColor &&
+    !!game &&
+    game.currentColor === playerColor &&
+    game.currentColor === turnColor;
 
   return (
     <GameContext.Provider
@@ -103,6 +119,7 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
         messages,
         disabled,
         ownTurn,
+        turnColor,
         animationOngoing,
         changeAnimationComplete,
         dieAnimationComplete,
