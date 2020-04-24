@@ -104,6 +104,11 @@ const GamePiece: FunctionalComponent<{
     }
   });
 
+  // If the piece is updated in the middle of an animation, cancel the animation
+  useEffect(() => {
+    setAnimation(null);
+  }, [piece]);
+
   const { id, color, area, index, multiplier } = piece;
 
   return area === 'center' && !animation ? (
