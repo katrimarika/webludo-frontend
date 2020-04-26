@@ -20,9 +20,27 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 - api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
+- teams
+- animations end when player state is updated during (e.g. someone finishes a penalty during a move animation)
+- update gained penalties and related announcements only after animations
+- update current player marker only after die animation (when no move action)
+- player names next to home bases
+- show who has raised
+- hembo button further from pieces in home base (e.g. no the size of the whole black area)
+- show on board whose turn it is (name & color)
+- better highlighting available actions (die/pieces)
+- total accumulated penalties count for each player
 - sounds:
   1. die roll
   1. move
   1. and so on...
   1. adjusting sound settings
   1. background music
+
+### Ideas
+
+- allow rolling die on not-own turn -> penalty
+- different levels of autonomy: from "automatic move when only one option" to "needing to move the piece yourself (and no limitations for correct spots)"
+- voice control, ezpecially for "jag bor i hembo"
+- voice chat
+- die animation variants (or even based on the previous and next results)
