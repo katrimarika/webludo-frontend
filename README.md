@@ -18,6 +18,8 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 ## TODO
 
+Not ordered by priority
+
 - api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
 - teams
@@ -30,6 +32,10 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 - show on board whose turn it is (name & color)
 - better highlighting available actions (die/pieces)
 - total accumulated penalties count for each player
+- exit button as a link not button and text "Home" not "Exit"
+- leave game (especially if joined only as a spectator)
+- changelog (code changes affecting users) on the lobby page
+- rules readable on home page
 - sounds:
   1. die roll
   1. move
@@ -39,7 +45,9 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 ### Ideas
 
+- prevent opening a non-existent game
 - allow rolling die on not-own turn -> penalty
+- playing agains AI
 - different levels of autonomy: from "automatic move when only one option" to "needing to move the piece yourself (and no limitations for correct spots)"
 - voice control, ezpecially for "jag bor i hembo"
 - voice chat
