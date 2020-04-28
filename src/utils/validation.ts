@@ -13,7 +13,7 @@ const toPiece = (data: any): Piece | false => {
   const id = toInt(data.id);
   const area = toStr(data.area) as Piece['area'];
   const index = toInt(data.position_index);
-  const color = toStr(data.player_color) as Color;
+  const color = toStr(data.team_color) as Color;
   const multiplier = toInt(data.multiplier);
   if (
     !id ||
@@ -109,29 +109,24 @@ export const toGame = (data: any): Game | false => {
   }
   const code = toStr(data.code);
   const name = toStr(data.name);
-  if (!code || !name) {
+  if (
+    !code ||
+    !name ||
+    !Array.isArray(data.players) ||
+    !Array.isArray(data.teams)
+  ) {
     console.error('Invalid game details', data);
     return false;
   }
-  // Ensure the players are in play order
-  const sortedPlayers = (Array.isArray(data.players)
-    ? (data.players as any[])
-    : []
-  ).sort((a, b) =>
-    colors.indexOf(a.color) > colors.indexOf(b.color) ? 1 : -1,
-  );
+
   const invalidPlayers: any[] = [];
-  let cantRaise = 0;
-  const players = sortedPlayers.reduce<Player[]>((list, p) => {
+  const players = (data.players as any[]).reduce<Player[]>((list, p) => {
+    const id = toInt(p.id);
     const name = toStr(p.name);
-    const color = toStr(p.color) as Color;
-    const penalties = toInt(p.penalties);
-    const newRaiseRound = !!p.new_raising_round;
-    if (name && color && colors.indexOf(color) !== -1) {
-      list.push({ name, color, penalties, newRaiseRound });
-      if (p.can_raise === false) {
-        cantRaise += 1;
-      }
+    const teamId = toInt(p.team_id) || null;
+    const donePenalties = toInt(p.completed_penalties);
+    if (id && name) {
+      list.push({ id, name, teamId, donePenalties });
     } else {
       invalidPlayers.push(p);
     }
@@ -141,14 +136,38 @@ export const toGame = (data: any): Game | false => {
     console.error('Invalid game players', invalidPlayers);
     return false;
   }
+
+  // Ensure the teams are in play order
+  const sortedTeams = (data.teams as any[]).sort((a, b) =>
+    colors.indexOf(a.color) > colors.indexOf(b.color) ? 1 : -1,
+  );
+  let invalidTeams: any[] = [];
+  const teams = sortedTeams.reduce<Team[]>((list, p) => {
+    const id = toInt(p.id);
+    const name = toStr(p.name);
+    const color = p.color === 'none' ? null : (toStr(p.color) as Color);
+    const penalties = toInt(p.penalties);
+    const canRaise = !!p.can_raise;
+    const newRaiseRound = !!p.new_raising_round;
+    if (id && name && (!color || colors.indexOf(color) !== -1)) {
+      list.push({ id, name, color, penalties, canRaise, newRaiseRound });
+    } else {
+      invalidTeams.push(p);
+    }
+    return list;
+  }, []);
+  if (invalidTeams.length) {
+    console.error('Invalid game teams', invalidTeams);
+    return false;
+  }
+
   const currentColor =
-    data.current_player === 'none'
-      ? null
-      : (toStr(data.current_player) as Color);
+    data.current_team === 'none' ? null : (toStr(data.current_team) as Color);
   if (!!currentColor && colors.indexOf(currentColor) === -1) {
     console.error('Invalid game current color', data);
     return false;
   }
+
   const invalidPieces: any[] = [];
   const piecesInGoal0 = { red: 0, green: 0, blue: 0, yellow: 0 };
   const pieces = Array.isArray(data.pieces)
@@ -169,13 +188,15 @@ export const toGame = (data: any): Game | false => {
   if (invalidPieces.length) {
     return false;
   }
+
   return {
     code,
     name,
     players,
+    teams,
     currentColor,
     pieces,
-    newRaiseRound: cantRaise >= players.length,
+    newRaiseRound: !teams.some(t => t.canRaise),
   };
 };
 

@@ -1,7 +1,6 @@
 import { createContext, FunctionComponent, h } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { Channel, initSocket, NO_SOCKET, SocketActions } from './socket';
-import { colors } from './validation';
 
 const SocketContext = createContext<SocketActions>(NO_SOCKET);
 
@@ -50,7 +49,7 @@ export const useGameChannel = (
   const socket = useSocket();
   const [channel, setChannel] = useState<Channel | null>(null);
   const [error, setError] = useState('');
-  const [player, setPlayer] = useState<{ color: Color; token: string } | null>(
+  const [player, setPlayer] = useState<{ id: number; token: string } | null>(
     null,
   );
 
@@ -75,13 +74,9 @@ export const useGameChannel = (
         const storedPlayer = window.localStorage.getItem(code);
         if (storedPlayer) {
           try {
-            const { color, token } = JSON.parse(storedPlayer);
-            if (
-              color &&
-              colors.indexOf(color) !== -1 &&
-              typeof token === 'string'
-            ) {
-              setPlayer({ color, token });
+            const { id, token } = JSON.parse(storedPlayer);
+            if (typeof id === 'number' && typeof token === 'string') {
+              setPlayer({ id, token });
             }
           } catch (e) {
             console.error('Could not parse stored player');
@@ -93,14 +88,14 @@ export const useGameChannel = (
     }
   }, []);
 
-  const playerColor = player ? player.color : null;
+  const playerId = player ? player.id : null;
 
   const joinGame = (name: string) => {
     if (channel) {
-      const onSuccess = (color: Color, token: string) => {
-        setPlayer({ color, token });
+      const onSuccess = (id: number, token: string) => {
+        setPlayer({ id, token });
         try {
-          window.localStorage.setItem(code, JSON.stringify({ color, token }));
+          window.localStorage.setItem(code, JSON.stringify({ id, token }));
         } catch (e) {
           console.error('Could not save token to local storage');
         }
@@ -181,7 +176,7 @@ export const useGameChannel = (
       : setError(!channel ? 'No channel found' : 'No player found');
 
   return {
-    playerColor,
+    playerId,
     error,
     joinGame,
     takeAction,

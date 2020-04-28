@@ -5,7 +5,7 @@ import GamePiece from './GamePiece';
 const GamePieces: FunctionalComponent = () => {
   const {
     game,
-    playerColor,
+    ownColor,
     actions,
     changes,
     animationOngoing,
@@ -42,7 +42,7 @@ const GamePieces: FunctionalComponent = () => {
         const availableAction =
           !animationOngoing &&
           p.color === currentColor &&
-          p.color === playerColor &&
+          p.color === ownColor &&
           actions.find(a => a.pieceId === p.id);
         const drawPiece = moveAnimation
           ? {

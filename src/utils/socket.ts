@@ -128,16 +128,16 @@ const initSocketWithUrl = (url: string) => {
   const joinGame = (
     channel: Channel,
     name: string,
-    onSuccess: (color: Color, token: string) => void,
+    onSuccess: (id: number, token: string) => void,
     onError: OnError,
   ) => {
     channel
       .push('join_game', { name })
       .receive('ok', resp => {
+        const id = toInt(resp.id);
         const token = toStr(resp.token);
-        const color = toStr(resp.color) as Color;
-        if (token && color && colors.indexOf(color) !== -1) {
-          onSuccess(color, token);
+        if (id && token) {
+          onSuccess(id, token);
         } else {
           onError('No valid token received');
         }

@@ -1,12 +1,12 @@
 import { css } from 'emotion';
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
-import PlayerInfo from './PlayerInfo';
+import TeamInfo from './TeamInfo';
 
 const GameInfo: FunctionalComponent = () => {
   const {
     game,
-    playerColor,
+    ownColor,
     disabled,
     animationOngoing,
     actions,
@@ -19,12 +19,12 @@ const GameInfo: FunctionalComponent = () => {
     return null;
   }
 
-  const { players, newRaiseRound } = game;
-  const playerIndex = players.findIndex(p => p.color === playerColor);
-  const player = playerIndex !== -1 ? players[playerIndex] : null;
-  const otherPlayers = player
-    ? [...players.slice(playerIndex + 1), ...players.slice(0, playerIndex)]
-    : players;
+  const { players, teams, newRaiseRound } = game;
+  const teamIndex = !ownColor ? -1 : teams.findIndex(t => t.color === ownColor);
+  const team = teamIndex !== -1 ? teams[teamIndex] : null;
+  const otherTeams = team
+    ? [...teams.slice(teamIndex + 1), ...teams.slice(0, teamIndex)]
+    : teams;
 
   const currentColor = disabled ? null : turnColor;
   const nextAction =
@@ -46,7 +46,7 @@ const GameInfo: FunctionalComponent = () => {
         list-style-type: none;
       `}
     >
-      {!!player && (
+      {!!team && (
         <Fragment>
           <h2
             className={css`
@@ -54,36 +54,60 @@ const GameInfo: FunctionalComponent = () => {
               margin: 0.5rem 0 0.25rem;
             `}
           >
-            You
+            Your team
           </h2>
-          <PlayerInfo
-            key={`player-${player.color}`}
-            player={player}
-            isCurrent={player.color === currentColor}
+          <TeamInfo
+            key={`team-${team.id}`}
+            team={team}
+            players={players.filter(p => p.teamId === team.id)}
+            isCurrent={team.color === currentColor}
             nextAction={nextAction}
             newRaiseRound={newRaiseRound}
-            onPenaltyDone={player.penalties ? penaltyDone : undefined}
-            onToggleAgree={() => agreeNewRaiseRound(!player.newRaiseRound)}
+            onPenaltyDone={team.penalties ? penaltyDone : undefined}
+            onToggleAgree={() => agreeNewRaiseRound(!team.newRaiseRound)}
           />
-          <h2
-            className={css`
-              font-size: 1rem;
-              margin: 0.5rem 0 0.25rem;
-            `}
-          >
-            Competitors
-          </h2>
         </Fragment>
       )}
-      {otherPlayers.map(p => (
-        <PlayerInfo
-          key={`player-${p.color}`}
-          player={p}
-          isCurrent={p.color === currentColor}
+      {otherTeams.length && (
+        <h2
+          className={css`
+            font-size: 1rem;
+            margin: 0.5rem 0 0.25rem;
+          `}
+        >
+          Competitors
+        </h2>
+      )}
+      {otherTeams.map(t => (
+        <TeamInfo
+          key={`team-${t.id}`}
+          team={t}
+          players={players.filter(p => p.teamId === t.id)}
+          isCurrent={t.color === currentColor}
           nextAction={nextAction}
           newRaiseRound={newRaiseRound}
         />
       ))}
+      <h2
+        className={css`
+          font-size: 1rem;
+          margin: 0.75rem 0 0.25rem;
+        `}
+      >
+        Spectators
+      </h2>
+      <div
+        className={css`
+          padding: 0.25rem 0;
+          line-height: 1.33;
+          font-size: 0.875rem;
+        `}
+      >
+        {players
+          .filter(p => !p.teamId)
+          .map(p => p.name)
+          .join(' • ')}
+      </div>
     </ul>
   );
 };

@@ -13,9 +13,9 @@ import Settings from './Settings';
 const GamePage: FunctionalComponent<{
   openSharePopup: () => void;
 }> = ({ openSharePopup }) => {
-  const { code, game, playerColor, error, joinGame } = useGameContext();
+  const { code, game, playerId, error, joinGame } = useGameContext();
 
-  const canJoin = !error && !playerColor && !!game && game.players.length < 4;
+  const canJoin = !error && !playerId && !!game;
 
   return (
     <PageWrapper>

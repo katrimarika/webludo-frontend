@@ -7,7 +7,7 @@ import ChatItem from './ChatItem';
 import MiniForm from './MiniForm';
 
 const Chat: FunctionalComponent = () => {
-  const { messages, postMessage, playerColor } = useGameContext();
+  const { messages, postMessage, playerId } = useGameContext();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const Chat: FunctionalComponent = () => {
           <ChatItem key={`message-${m.type}-${m.timestamp}-${i}`} item={m} />
         ))}
       </div>
-      {!!playerColor && (
+      {!!playerId && (
         <MiniForm
           inputName="chat-message"
           labelledBy="chat-title"
