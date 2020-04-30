@@ -13,6 +13,7 @@ const MiniForm: FunctionalComponent<{
   placeholder?: string;
   initialValue?: string;
   buttonColor?: Color;
+  fullWidth?: boolean;
   extraCss?: string;
   onSubmit: (v: string) => void;
 }> = ({
@@ -25,6 +26,7 @@ const MiniForm: FunctionalComponent<{
   buttonText,
   buttonColor,
   onSubmit,
+  fullWidth,
   extraCss,
   children,
 }) => {
@@ -65,7 +67,7 @@ const MiniForm: FunctionalComponent<{
         <div
           className={css`
             flex-grow: 1;
-            max-width: 20rem;
+            max-width: ${fullWidth ? 'none' : '20rem'};
             margin-right: 0.5rem;
           `}
         >

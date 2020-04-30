@@ -1,7 +1,6 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
-import { theme } from '../utils/style';
 
 export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
 
@@ -22,15 +21,27 @@ const PlayerNames: FunctionalComponent<{ players: Player[] }> = ({
       {players.length
         ? players.map((p, i) => (
             <span key={`player-name-${p.id}`}>
-              {i !== 0 && <span>{' • '}</span>}
+              {i !== 0 && (
+                <span
+                  className={css`
+                    @media screen and (orientation: landscape) {
+                      display: none;
+                    }
+                  `}
+                >
+                  {' • '}
+                </span>
+              )}
               <span
-                className={
-                  p.id === playerId
-                    ? css`
-                        font-weight: bold;
-                      `
-                    : undefined
-                }
+                className={css`
+                  @media screen and (orientation: landscape) {
+                    display: block;
+                  }
+                  ${p.id === playerId &&
+                    css`
+                      font-weight: bold;
+                    `}
+                `}
               >
                 {p.name}
               </span>

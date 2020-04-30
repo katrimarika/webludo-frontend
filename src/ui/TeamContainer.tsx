@@ -45,9 +45,9 @@ const TeamContainer: FunctionalComponent<{ color: Color }> = ({ color }) => {
   return (
     <div
       className={css`
+        position: relative;
         grid-column: ${color === 'red' || color === 'green' ? '1' : '3'};
         grid-row: ${color === 'red' || color === 'blue' ? '1' : '3'};
-        align-self: ${color === 'red' || color === 'blue' ? 'end' : 'start'};
         padding: 0.25rem 0.5rem 0.375rem;
         border-radius: 0.1875rem;
         background: ${isCurrent ? theme.colors.highlight : 'transparent'};
@@ -58,16 +58,12 @@ const TeamContainer: FunctionalComponent<{ color: Color }> = ({ color }) => {
               theme.colors[team.color].main
             }`
           : 'none'};
-        @media screen and (orientation: landscape) {
-          align-self: ${color === 'red' || color === 'blue' ? 'start' : 'end'};
-        }
       `}
     >
       <TeamInfo
         key={`team-${team.id}`}
         team={team}
         players={players.filter(p => p.teamId === team.id)}
-        isOwn={isOwnTeam}
         isCurrent={team.color === currentColor}
         nextAction={nextAction}
         newRaiseRound={newRaiseRound}
@@ -76,21 +72,21 @@ const TeamContainer: FunctionalComponent<{ color: Color }> = ({ color }) => {
         <div
           className={css`
             margin: 0.25rem 0 0.125rem;
+            position: relative;
           `}
         >
-          {!!team.penalties && (
-            <Button
-              color="yellow"
-              extraCss={css`
-                margin-right: 0.5rem;
-                padding: 0.125rem 0.5rem 0.1875rem 0.6875rem;
-              `}
-              onClick={penaltyDone}
-              title="Own penalty done"
-            >
-              –🍺
-            </Button>
-          )}
+          <Button
+            color="yellow"
+            extraCss={css`
+              margin-right: 0.5rem;
+              padding: 0.125rem 0.5rem 0.1875rem 0.6875rem;
+            `}
+            onClick={penaltyDone}
+            disabled={!team.penalties}
+            title="Own penalty done"
+          >
+            –🍺
+          </Button>
           {newRaiseRound && (
             <Button
               color="yellow"

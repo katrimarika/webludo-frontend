@@ -74,8 +74,9 @@ const GamePage: FunctionalComponent<{
         className={css`
           display: grid;
           grid-template-columns: 1fr auto 1fr;
-          grid-template-rows: auto auto auto;
+          grid-template-rows: 1fr auto 1fr;
           justify-content: stretch;
+          align-items: stretch;
           grid-gap: 0.75rem;
           margin-bottom: 1.5rem;
           @media screen and (orientation: landscape) {
@@ -100,17 +101,31 @@ const GamePage: FunctionalComponent<{
           <Game />
         </div>
       </div>
-      <Spectators />
+      <div
+        className={css`
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          grid-template-rows: auto auto;
+          grid-gap: 1rem 1.5rem;
+        `}
+      >
+        <Chat />
+        <Spectators />
+      </div>
       {canJoin && (
         <MiniForm
           inputName="player-name"
+          title="Join the game"
           label="Name"
           buttonText="Join"
+          placeholder="Enter a name to join"
           buttonColor="green"
           onSubmit={name => joinGame(name)}
+          extraCss={css`
+            margin-top: 2rem;
+          `}
         />
       )}
-      <Chat />
       <div
         className={css`
           margin-top: 2rem;

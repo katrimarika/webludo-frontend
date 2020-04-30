@@ -8,13 +8,12 @@ export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
 const TeamInfo: FunctionalComponent<{
   team: Team;
   players: Player[];
-  isOwn: boolean;
   isCurrent: boolean;
   nextAction: NextAction;
   newRaiseRound: boolean;
 }> = ({ team, players, isCurrent, nextAction, newRaiseRound }) => (
   <Fragment>
-    <h3
+    <h2
       className={css`
         margin: 0 0 0.25rem;
         line-height: 1.2;
@@ -23,7 +22,7 @@ const TeamInfo: FunctionalComponent<{
       `}
     >
       {team.name}
-    </h3>
+    </h2>
     <PlayerNames players={players} />
     <div
       className={css`
@@ -42,19 +41,22 @@ const TeamInfo: FunctionalComponent<{
             team.newRaiseRound ? 'Agreed' : 'Disagreed'
           } on a new raising round`}
         >
-          {team.newRaiseRound ? '👍' : '👎'}
+          {team.newRaiseRound ? ' 👍' : ' 👎'}
         </span>
       )}
     </div>
-    {isCurrent && (
+    {isCurrent && nextAction && (
       <div
         className={css`
+          position: absolute;
+          bottom: 0.375rem;
+          right: 0.5rem;
           margin-top: 0.25rem;
           font-size: 0.875rem;
           color: ${theme.colors.gray};
         `}
       >
-        {`\u00a0–${nextAction ? ` ${nextAction.toUpperCase()}!` : ''}`}
+        {`${nextAction.toUpperCase()}!`}
       </div>
     )}
   </Fragment>
