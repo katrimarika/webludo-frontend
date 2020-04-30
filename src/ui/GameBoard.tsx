@@ -142,6 +142,8 @@ const GameBoard: FunctionalComponent = () => (
                 fill: ${theme.colors[colors[i]].text};
                 text-anchor: middle;
                 font-size: 44px;
+                pointer-events: none;
+                user-select: none;
               `}
             >
               {j + 1}
@@ -161,6 +163,8 @@ const GameBoard: FunctionalComponent = () => (
             fill: ${theme.colors[colors[i]].text};
             font-size: 22.5px;
             text-anchor: middle;
+            pointer-events: none;
+            user-select: none;
           `}
         >
           Start

@@ -28,7 +28,6 @@ Not ordered by priority
 - update current player marker only after die animation (when no move action)
 - player names next to home bases
 - show who has raised
-- hembo button further from pieces in home base (e.g. no the size of the whole black area)
 - show on board whose turn it is (name & color)
 - better highlighting available actions (die/pieces)
 - total accumulated penalties count for each player

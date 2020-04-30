@@ -31,31 +31,7 @@ const HomeBase: FunctionalComponent<{ color: Color }> = ({ color }) => {
         transform-origin: center;
       `}
     >
-      <svg
-        x="0"
-        y="0"
-        width="1000"
-        height="1000"
-        viewBox="0 0 1000 1000"
-        onClick={onClick}
-        className={
-          onClick &&
-          css`
-            cursor: pointer;
-            &:hover,
-            &:focus,
-            &:active {
-              path {
-                stroke: ${theme.colors.boardCorner};
-                fill: ${theme.colors.boardCorner};
-              }
-              text {
-                opacity: 0.75;
-              }
-            }
-          `
-        }
-      >
+      <svg x="0" y="0" width="1000" height="1000" viewBox="0 0 1000 1000">
         <path
           d={`M2,220 2,160 Q56,56 160,2 L220,2 Q76,76 2,220`}
           className={css`
@@ -65,11 +41,37 @@ const HomeBase: FunctionalComponent<{ color: Color }> = ({ color }) => {
           `}
         />
         <g
+          onClick={onClick}
           className={css`
             transform: rotate(135deg);
             transform-origin: 74px 74px;
+            ${onClick &&
+              css`
+                cursor: pointer;
+                &:hover,
+                &:focus,
+                &:active {
+                  rect {
+                    fill: ${theme.colors.boardCorner};
+                  }
+                  text {
+                    opacity: 0.75;
+                  }
+                }
+              `}
           `}
         >
+          <rect
+            x={74}
+            y={74}
+            height={40}
+            width={160}
+            rx={50}
+            className={css`
+              fill: ${theme.colors.black};
+              transform: translate(-80px, -31px);
+            `}
+          />
           <text
             x={74}
             y={74}
@@ -79,6 +81,8 @@ const HomeBase: FunctionalComponent<{ color: Color }> = ({ color }) => {
               font-weight: bold;
               letter-spacing: 1px;
               text-anchor: middle;
+              pointer-events: none;
+              user-select: none;
             `}
           >
             hembo
