@@ -1,9 +1,7 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
-import { setHash } from '../utils/hash';
-import { theme } from '../utils/style';
-import Button from './Button';
+import { buttonCss, theme } from '../utils/style';
 import Chat from './Chat';
 import ErrorMessage from './ErrorMessage';
 import Game from './Game';
@@ -122,9 +120,15 @@ const GamePage: FunctionalComponent<{
           margin-top: 2rem;
         `}
       >
-        <Button color="red" onClick={() => setHash('')}>
-          Exit
-        </Button>
+        <a
+          className={css`
+            ${buttonCss('red')}
+            text-decoration: none;
+          `}
+          href="/"
+        >
+          Exit to lobby
+        </a>
         <Settings
           extraCss={css`
             margin-left: 0.75rem;

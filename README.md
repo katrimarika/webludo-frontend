@@ -32,7 +32,6 @@ Not ordered by priority
 - show on board whose turn it is (name & color)
 - better highlighting available actions (die/pieces)
 - total accumulated penalties count for each player
-- exit button as a link not button and text "Home" not "Exit"
 - leave game (especially if joined only as a spectator)
 - changelog (code changes affecting users) on the lobby page
 - rules readable on home page
