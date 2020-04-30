@@ -1,108 +1,63 @@
 import { css } from 'emotion';
-import { FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 import { theme } from '../utils/style';
+import PlayerNames from './PlayerNames';
 
 export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
 
 const TeamInfo: FunctionalComponent<{
   team: Team;
   players: Player[];
+  isOwn: boolean;
   isCurrent: boolean;
   nextAction: NextAction;
   newRaiseRound: boolean;
 }> = ({ team, players, isCurrent, nextAction, newRaiseRound }) => (
-  <li
-    className={css`
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.1875rem;
-      background: ${isCurrent ? theme.colors.highlight : 'transparent'};
-      li + & {
-        margin-top: 0.25rem;
-      }
-    `}
-  >
+  <Fragment>
+    <h3
+      className={css`
+        margin: 0 0 0.25rem;
+        line-height: 1.2;
+        font-size: 1rem;
+        word-break: break-word;
+      `}
+    >
+      {team.name}
+    </h3>
+    <PlayerNames players={players} />
     <div
       className={css`
-        display: flex;
-        align-items: center;
         line-height: 1.2;
       `}
     >
-      <div
+      <span
         className={css`
-          flex: 0 0 0.625rem;
-          background: ${team.color
-            ? theme.colors[team.color].main
-            : theme.colors.gray};
-          height: 0.625rem;
-          width: 0.625rem;
-          border-radius: 0.625rem;
-          margin-right: 0.5rem;
+          white-space: nowrap;
         `}
-      />
-      <div>
+        title={`Team penalties to complete: ${team.penalties}`}
+      >{` 🍺${team.penalties}`}</span>
+      {newRaiseRound && (
         <span
-          className={css`
-            word-break: break-word;
-          `}
+          title={`${
+            team.newRaiseRound ? 'Agreed' : 'Disagreed'
+          } on a new raising round`}
         >
-          {team.name}
+          {team.newRaiseRound ? '👍' : '👎'}
         </span>
-        {isCurrent && (
-          <span
-            className={css`
-              font-size: 0.875rem;
-              color: ${theme.colors.gray};
-              white-space: nowrap;
-              display: inline-block;
-              min-width: 6.45rem;
-            `}
-          >
-            {`\u00a0–${nextAction ? ` ${nextAction.toUpperCase()}!` : ''}`}
-          </span>
-        )}
-      </div>
+      )}
+    </div>
+    {isCurrent && (
       <div
         className={css`
-          margin-left: auto;
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: flex-end;
-          align-items: flex-end;
+          margin-top: 0.25rem;
+          font-size: 0.875rem;
+          color: ${theme.colors.gray};
         `}
       >
-        <span
-          className={css`
-            white-space: nowrap;
-          `}
-          title={`Penalties to complete: ${team.penalties}`}
-        >{`🍺${team.penalties}`}</span>
-        {newRaiseRound && (
-          <span
-            title={`${
-              team.newRaiseRound ? 'Agreed' : 'Disagreed'
-            } on a new raising round`}
-            className={css`
-              margin-left: 0.75rem;
-              margin-top: 0.25rem;
-            `}
-          >
-            {team.newRaiseRound ? '👍' : '👎'}
-          </span>
-        )}
+        {`\u00a0–${nextAction ? ` ${nextAction.toUpperCase()}!` : ''}`}
       </div>
-    </div>
-    <div
-      className={css`
-        font-size: 0.875rem;
-        line-height: 1.33;
-        padding-top: 0.125rem;
-        padding-left: 1.125rem; /* to align with team name */
-      `}
-    >
-      {players.length ? players.map(p => p.name).join(' • ') : 'no players'}
-    </div>
-  </li>
+    )}
+  </Fragment>
 );
 
 export default TeamInfo;
