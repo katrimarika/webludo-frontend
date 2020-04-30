@@ -10,8 +10,6 @@ const TeamContainer: FunctionalComponent<{ color: Color }> = ({ color }) => {
     game,
     ownColor,
     disabled,
-    animationOngoing,
-    actions,
     penaltyDone,
     agreeNewRaiseRound,
     turnColor,
@@ -31,21 +29,10 @@ const TeamContainer: FunctionalComponent<{ color: Color }> = ({ color }) => {
   const isOwnTeam = !!ownColor && team && team.color === ownColor;
   const currentColor = disabled ? null : turnColor;
   const isCurrent = team.color === currentColor;
-  const nextAction =
-    disabled || animationOngoing || turnColor !== game.currentColor
-      ? null
-      : actions.some(a => a.type === 'raise')
-      ? actions.length > 1
-        ? ('raise/move' as const)
-        : ('raise/roll' as const)
-      : !!actions.length
-      ? ('move' as const)
-      : ('roll' as const);
 
   return (
     <div
       className={css`
-        position: relative;
         grid-column: ${color === 'red' || color === 'green' ? '1' : '3'};
         grid-row: ${color === 'red' || color === 'blue' ? '1' : '3'};
         padding: 0.25rem 0.5rem 0.375rem;
@@ -61,18 +48,14 @@ const TeamContainer: FunctionalComponent<{ color: Color }> = ({ color }) => {
       `}
     >
       <TeamInfo
-        key={`team-${team.id}`}
         team={team}
         players={players.filter(p => p.teamId === team.id)}
-        isCurrent={team.color === currentColor}
-        nextAction={nextAction}
         newRaiseRound={newRaiseRound}
       />
       {isOwnTeam && (
         <div
           className={css`
             margin: 0.25rem 0 0.125rem;
-            position: relative;
           `}
         >
           <Button

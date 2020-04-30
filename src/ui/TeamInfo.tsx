@@ -1,6 +1,5 @@
 import { css } from 'emotion';
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { theme } from '../utils/style';
 import PlayerNames from './PlayerNames';
 
 export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
@@ -8,10 +7,8 @@ export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
 const TeamInfo: FunctionalComponent<{
   team: Team;
   players: Player[];
-  isCurrent: boolean;
-  nextAction: NextAction;
   newRaiseRound: boolean;
-}> = ({ team, players, isCurrent, nextAction, newRaiseRound }) => (
+}> = ({ team, players, newRaiseRound }) => (
   <Fragment>
     <h2
       className={css`
@@ -45,20 +42,6 @@ const TeamInfo: FunctionalComponent<{
         </span>
       )}
     </div>
-    {isCurrent && nextAction && (
-      <div
-        className={css`
-          position: absolute;
-          bottom: 0.375rem;
-          right: 0.5rem;
-          margin-top: 0.25rem;
-          font-size: 0.875rem;
-          color: ${theme.colors.gray};
-        `}
-      >
-        {`${nextAction.toUpperCase()}!`}
-      </div>
-    )}
   </Fragment>
 );
 
