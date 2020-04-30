@@ -1,6 +1,7 @@
 import { css } from 'emotion';
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
+import Button from './Button';
 import TeamInfo from './TeamInfo';
 
 const GameInfo: FunctionalComponent = () => {
@@ -48,14 +49,56 @@ const GameInfo: FunctionalComponent = () => {
     >
       {!!team && (
         <Fragment>
-          <h2
+          <div
             className={css`
-              font-size: 1rem;
-              margin: 0.5rem 0 0.25rem;
+              display: flex;
+              align-items: flex-end;
+              margin: 0.75rem 0 0.25rem;
             `}
           >
-            Your team
-          </h2>
+            <h2
+              className={css`
+                margin: 0;
+                font-size: 1rem;
+              `}
+            >
+              Your team
+            </h2>
+            <div
+              className={css`
+                margin-left: auto;
+              `}
+            >
+              {!!team.penalties && (
+                <Button
+                  color="yellow"
+                  extraCss={css`
+                    margin-left: 0.5rem;
+                    padding: 0.125rem 0.5rem 0.1875rem 0.6875rem;
+                  `}
+                  onClick={penaltyDone}
+                  title="Penalty done"
+                >
+                  –🍺
+                </Button>
+              )}
+              {newRaiseRound && (
+                <Button
+                  color="yellow"
+                  extraCss={css`
+                    margin-left: 0.5rem;
+                    padding: 0.125rem 0.5rem 0.1875rem 0.6875rem;
+                  `}
+                  onClick={() => agreeNewRaiseRound(!team.newRaiseRound)}
+                  title={`Change to ${
+                    team.newRaiseRound ? 'disagree' : 'agree'
+                  } on a new raising round`}
+                >
+                  {team.newRaiseRound ? '👎' : '👍'}
+                </Button>
+              )}
+            </div>
+          </div>
           <TeamInfo
             key={`team-${team.id}`}
             team={team}
@@ -63,8 +106,6 @@ const GameInfo: FunctionalComponent = () => {
             isCurrent={team.color === currentColor}
             nextAction={nextAction}
             newRaiseRound={newRaiseRound}
-            onPenaltyDone={team.penalties ? penaltyDone : undefined}
-            onToggleAgree={() => agreeNewRaiseRound(!team.newRaiseRound)}
           />
         </Fragment>
       )}
@@ -72,7 +113,7 @@ const GameInfo: FunctionalComponent = () => {
         <h2
           className={css`
             font-size: 1rem;
-            margin: 0.5rem 0 0.25rem;
+            margin: 0.75rem 0 0.25rem;
           `}
         >
           Competitors

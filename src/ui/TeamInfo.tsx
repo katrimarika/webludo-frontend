@@ -1,7 +1,6 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { theme } from '../utils/style';
-import Button from './Button';
 
 export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
 
@@ -11,17 +10,7 @@ const TeamInfo: FunctionalComponent<{
   isCurrent: boolean;
   nextAction: NextAction;
   newRaiseRound: boolean;
-  onPenaltyDone?: () => void;
-  onToggleAgree?: () => void;
-}> = ({
-  team,
-  players,
-  isCurrent,
-  nextAction,
-  newRaiseRound,
-  onPenaltyDone,
-  onToggleAgree,
-}) => (
+}> = ({ team, players, isCurrent, nextAction, newRaiseRound }) => (
   <li
     className={css`
       padding: 0.25rem 0.5rem;
@@ -76,50 +65,31 @@ const TeamInfo: FunctionalComponent<{
       <div
         className={css`
           margin-left: auto;
-          white-space: nowrap;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          align-items: flex-end;
         `}
       >
-        <span>{`🍺${team.penalties}`}</span>
-        {!!onPenaltyDone && (
-          <Button
-            color="yellow"
-            extraCss={css`
-              margin-left: 0.5rem;
-              padding: 0.125rem 0.5rem 0.1875rem 0.6875rem;
+        <span
+          className={css`
+            white-space: nowrap;
+          `}
+          title={`Penalties to complete: ${team.penalties}`}
+        >{`🍺${team.penalties}`}</span>
+        {newRaiseRound && (
+          <span
+            title={`${
+              team.newRaiseRound ? 'Agreed' : 'Disagreed'
+            } on a new raising round`}
+            className={css`
+              margin-left: 0.75rem;
+              margin-top: 0.25rem;
             `}
-            onClick={onPenaltyDone}
-            title="Penalty done"
           >
-            –🍺
-          </Button>
+            {team.newRaiseRound ? '👍' : '👎'}
+          </span>
         )}
-        {newRaiseRound &&
-          (onToggleAgree ? (
-            <Button
-              color="yellow"
-              extraCss={css`
-                margin-left: 0.5rem;
-                padding: 0.125rem 0.5rem 0.1875rem 0.6875rem;
-              `}
-              onClick={onToggleAgree}
-              title={`Change to ${
-                team.newRaiseRound ? 'disagree' : 'agree'
-              } on a new raising round`}
-            >
-              {team.newRaiseRound ? '👍' : '👎'}
-            </Button>
-          ) : (
-            <span
-              title={`${
-                team.newRaiseRound ? 'Agreed' : 'Disagreed'
-              } on a new raising round`}
-              className={css`
-                margin-left: 1rem;
-              `}
-            >
-              {team.newRaiseRound ? '👍' : '👎'}
-            </span>
-          ))}
       </div>
     </div>
     <div
