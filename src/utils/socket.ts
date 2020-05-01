@@ -43,17 +43,19 @@ const initSocketWithUrl = (url: string) => {
   const createGame = (
     channel: Channel,
     name: string,
-    onSuccess: (code: string) => void,
+    onSuccess: (code: string, hostToken: string) => void,
     onError: OnError,
   ) => {
     channel
       .push('create_game', { name })
       .receive('ok', resp => {
+        log('created game', resp);
         const code = toStr(resp && resp.code);
-        if (code) {
-          onSuccess(code);
+        const hostToken = toStr(resp && resp.host_token);
+        if (code && hostToken) {
+          onSuccess(code, hostToken);
         } else {
-          onError('No valid code received');
+          onError('No valid code or host token received');
         }
       })
       .receive('error', onErrorStr(onError));

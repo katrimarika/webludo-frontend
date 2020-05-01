@@ -31,10 +31,23 @@ export const useLobbyChannel = () => {
     name: string,
     onSuccess: (code: string) => void,
     onError: OnError,
-  ) =>
-    channel
-      ? socket.createGame(channel, name, onSuccess, onError)
-      : setChannelError('No channel found');
+  ) => {
+    if (channel) {
+      const handleSuccess = (code: string, token: string) => {
+        try {
+          window.localStorage.setItem(`${code}-host`, token);
+          onSuccess(code);
+        } catch (e) {
+          onError(
+            'Could not save host token to local storage. Please check your browser settings.',
+          );
+        }
+      };
+      socket.createGame(channel, name, handleSuccess, onError);
+    } else {
+      setChannelError('No channel found');
+    }
+  };
 
   return [channelError, createGame] as const;
 };
@@ -52,6 +65,7 @@ export const useGameChannel = (
   const [player, setPlayer] = useState<{ id: number; token: string } | null>(
     null,
   );
+  const [hostToken, setHostToken] = useState<string | null>(null);
 
   useEffect(() => {
     if (!channel) {
@@ -86,6 +100,16 @@ export const useGameChannel = (
         console.error('Could not read from local storage');
       }
     }
+    if (!hostToken) {
+      try {
+        const storedHostToken = window.localStorage.getItem(`${code}-host`);
+        if (storedHostToken) {
+          setHostToken(storedHostToken);
+        }
+      } catch (e) {
+        console.error('Could not read from local storage');
+      }
+    }
   }, []);
 
   const playerId = player ? player.id : null;
@@ -93,11 +117,13 @@ export const useGameChannel = (
   const joinGame = (name: string) => {
     if (channel) {
       const onSuccess = (id: number, token: string) => {
-        setPlayer({ id, token });
         try {
           window.localStorage.setItem(code, JSON.stringify({ id, token }));
+          setPlayer({ id, token });
         } catch (e) {
-          console.error('Could not save token to local storage');
+          setError(
+            'Could not save player token to local storage. Please check your browser settings.',
+          );
         }
       };
       socket.joinGame(channel, name, onSuccess, setError);

@@ -35,6 +35,7 @@ Not ordered by priority
 - leave game (especially if joined only as a spectator)
 - changelog (code changes affecting users) on the lobby page
 - rules readable on home page
+- local multiplayer
 - sounds:
   1. die roll
   1. move
