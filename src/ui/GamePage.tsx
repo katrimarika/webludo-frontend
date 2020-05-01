@@ -74,10 +74,10 @@ const GamePage: FunctionalComponent<{
         className={css`
           display: grid;
           grid-template-columns: 1fr auto 1fr;
-          grid-template-rows: 1fr auto 1fr;
+          grid-template-rows: min-content auto min-content;
           justify-content: stretch;
           align-items: stretch;
-          grid-gap: 0.75rem;
+          grid-gap: 2%;
           margin-bottom: 1.5rem;
           @media screen and (orientation: landscape) {
             grid-template-columns: 1fr 2fr 1fr;
