@@ -3,14 +3,13 @@ import { FunctionalComponent, h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { theme } from '../utils/style';
 
-const Popup: FunctionalComponent<{ close: () => void; title: string }> = ({
+const Popup: FunctionalComponent<{ close?: () => void }> = ({
   close,
-  title,
   children,
 }) => {
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
-      if (e.code === 'Escape') {
+      if (e.code === 'Escape' && close) {
         close();
       }
     };
@@ -32,7 +31,7 @@ const Popup: FunctionalComponent<{ close: () => void; title: string }> = ({
         align-items: center;
       `}
       onClick={e => {
-        if (e.currentTarget === e.target) {
+        if (e.currentTarget === e.target && close) {
           close();
         }
       }}
@@ -46,14 +45,6 @@ const Popup: FunctionalComponent<{ close: () => void; title: string }> = ({
           padding: 1.5rem;
         `}
       >
-        <h2
-          className={css`
-            font-size: 1.25rem;
-            margin: 0 0 1rem;
-          `}
-        >
-          {title}
-        </h2>
         {children}
       </div>
     </div>

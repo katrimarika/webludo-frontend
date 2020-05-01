@@ -1,9 +1,10 @@
+import { css } from 'emotion';
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+import { useGameContext } from '../utils/gameContext';
 import Button from './Button';
 import MiniForm from './MiniForm';
 import Popup from './Popup';
-import { useGameContext } from '../utils/gameContext';
 
 const Settings: FunctionalComponent<{
   extraCss?: string;
@@ -28,7 +29,15 @@ const Settings: FunctionalComponent<{
         Settings
       </Button>
       {settingsOpen && (
-        <Popup close={() => setSettingsOpen(false)} title="Settings">
+        <Popup close={() => setSettingsOpen(false)}>
+          <h2
+            className={css`
+              font-size: 1.25rem;
+              margin: 0 0 1rem;
+            `}
+          >
+            Settings
+          </h2>
           <MiniForm
             inputName="penalty-amount"
             label="Fix penalty to amount"

@@ -1,12 +1,26 @@
-import { css } from 'emotion';
+import { css, keyframes } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
-import { useRef } from 'preact/hooks';
-import { theme } from '../utils/style';
+import { useRef, useState } from 'preact/hooks';
+import CopyIcon from '../assets/copy.svg';
 import { useGameContext } from '../utils/gameContext';
+import { theme } from '../utils/style';
+
+const fadeAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+`;
 
 const GameTitle: FunctionalComponent = () => {
   const { code, game } = useGameContext();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const [copied, setCopied] = useState(false);
 
   return (
     <div
@@ -39,6 +53,7 @@ const GameTitle: FunctionalComponent = () => {
             padding: 0;
             border: none;
             background: none;
+            white-space: nowrap;
             cursor: pointer;
             &:hover,
             &:focus,
@@ -46,23 +61,51 @@ const GameTitle: FunctionalComponent = () => {
               text-decoration: underline;
             }
           `}
+          title="Copy link to this game"
           onClick={() => {
             if (textAreaRef.current) {
               textAreaRef.current.select();
               document.execCommand('copy');
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1500);
             }
           }}
         >
-          {code}
+          <span>{code}</span>
+          <img
+            src={CopyIcon}
+            className={css`
+              height: 0.75rem;
+              margin-left: 0.125rem;
+            `}
+          />
         </button>
+        {copied && (
+          <div
+            className={css`
+              font-size: 0.75rem;
+              color: ${theme.colors.green.text};
+              position: absolute;
+              top: 100%;
+              right: 0;
+              pointer-events: none;
+              display: ${copied ? 'block' : 'none'};
+              animation: ${fadeAnimation} 1500ms ease-out;
+            `}
+          >
+            Copied
+          </div>
+        )}
         <textarea
           readOnly
           ref={textAreaRef}
           className={css`
-            display: block;
+            display: inline-block;
             opacity: 0;
             height: 0;
+            width: 0;
             padding: 0;
+            border: none;
           `}
         >
           {window.location.href}
