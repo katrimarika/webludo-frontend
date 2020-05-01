@@ -8,13 +8,17 @@ const Popup: FunctionalComponent<{ close?: () => void }> = ({
   children,
 }) => {
   useEffect(() => {
+    document.body.classList.add('noscroll');
     const listener = (e: KeyboardEvent) => {
       if (e.code === 'Escape' && close) {
         close();
       }
     };
     document.addEventListener('keydown', listener);
-    return () => document.removeEventListener('keydown', listener);
+    return () => {
+      document.body.classList.remove('noscroll');
+      document.removeEventListener('keydown', listener);
+    };
   }, []);
 
   return (
@@ -43,6 +47,14 @@ const Popup: FunctionalComponent<{ close?: () => void }> = ({
           border: 1px solid ${theme.colors.highlight};
           border-radius: 0.1875rem;
           padding: 1.5rem;
+          max-width: 1024px;
+          margin: 1rem 1.5rem;
+          max-height: 90vh;
+          overflow-y: auto;
+          overflow-x: hidden;
+          @media screen and (orientation: landscape) and (min-width: 1440px) {
+            margin: 1.5rem 3rem;
+          }
         `}
       >
         {children}

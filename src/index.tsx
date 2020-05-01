@@ -27,6 +27,9 @@ injectGlobal`
   body {
     margin: 0;
     background: ${theme.colors.lightgray};
+    &.noscroll {
+      overflow: hidden;
+    }
   }
   * {
     box-sizing: border-box;
