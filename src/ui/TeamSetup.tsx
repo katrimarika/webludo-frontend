@@ -4,14 +4,14 @@ import { theme } from '../utils/style';
 
 const TeamSetup: FunctionalComponent<{
   team: Team;
-  title: string;
+  index: number;
   playerId: number | null;
   players: Player[];
   join?: () => void;
-}> = ({ team, title, playerId, players, join }) => (
+}> = ({ team, index, playerId, players, join }) => (
   <button
     key={`team-setup-${team.id}`}
-    title={`Join team ${title}`}
+    title={`Join team ${team.name || index}`}
     className={css`
       background: none;
       border: 2px solid transparent;
@@ -47,7 +47,7 @@ const TeamSetup: FunctionalComponent<{
         word-break: break-word;
       `}
     >
-      {title}
+      {team.name || `Team ${index}`}
     </div>
     {players.map(p => (
       <div

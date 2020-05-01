@@ -59,7 +59,7 @@ const GameSetup: FunctionalComponent = () => {
         {game.teams.map((team, i) => (
           <TeamSetup
             key={`team-setup-${team.id}`}
-            title={team.name || `Team ${i + 1}`}
+            index={i + 1}
             team={team}
             playerId={playerId}
             players={game.players.filter(p => p.teamId === team.id)}

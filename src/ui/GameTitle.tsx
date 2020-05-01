@@ -47,7 +47,7 @@ const GameTitle: FunctionalComponent = () => {
         <button
           className={css`
             font-size: 1rem;
-            color: ${theme.colors.gray};
+            color: ${theme.colors.boardPath};
             font-weight: bold;
             margin-left: 0.25rem;
             padding: 0;
@@ -84,7 +84,7 @@ const GameTitle: FunctionalComponent = () => {
           <div
             className={css`
               font-size: 0.75rem;
-              color: ${theme.colors.green.text};
+              color: ${theme.colors.gray};
               position: absolute;
               top: 100%;
               right: 0;
