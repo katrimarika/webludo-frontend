@@ -52,7 +52,7 @@ const MiniForm: FunctionalComponent<{
           id={`form-${title}`}
           className={css`
             font-size: 1.25rem;
-            margin: 0 0 1rem;
+            margin: 0 0 0.5rem;
           `}
         >
           {title}

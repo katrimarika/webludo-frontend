@@ -147,6 +147,19 @@ const initSocketWithUrl = (url: string) => {
       .receive('error', onErrorStr(onError));
   };
 
+  const joinTeam = (
+    channel: Channel,
+    token: string,
+    id: number,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('join_team', { team_id: id, token })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
   const takeAction = (
     channel: Channel,
     token: string,
@@ -255,6 +268,7 @@ const initSocketWithUrl = (url: string) => {
     createGame,
     joinGameChannel,
     joinGame,
+    joinTeam,
     takeAction,
     decrementPenalty,
     fixPenalty,
@@ -276,6 +290,7 @@ export const NO_SOCKET: SocketActions = {
   leaveChannel: noop,
   createGame: noop,
   joinGame: noop,
+  joinTeam: noop,
   takeAction: noop,
   decrementPenalty: noop,
   fixPenalty: noop,

@@ -107,6 +107,7 @@ const GameTitle: FunctionalComponent = () => {
             padding: 0;
             border: none;
           `}
+          tabIndex={-1}
         >
           {window.location.href}
         </textarea>

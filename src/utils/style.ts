@@ -33,6 +33,7 @@ export const theme = {
 };
 
 export const buttonCss = (color: Color = 'blue') => css`
+  font-family: inherit;
   font-size: 1rem;
   border: 2px solid ${theme.colors[color].text};
   border-radius: 4px;
