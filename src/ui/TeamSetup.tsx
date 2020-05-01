@@ -1,14 +1,14 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { theme } from '../utils/style';
+import PlayerNames from './PlayerNames';
 
 const TeamSetup: FunctionalComponent<{
   team: Team;
   index: number;
-  playerId: number | null;
   players: Player[];
   join?: () => void;
-}> = ({ team, index, playerId, players, join }) => (
+}> = ({ team, index, players, join }) => (
   <button
     key={`team-setup-${team.id}`}
     title={`Join team ${team.name || index}`}
@@ -49,31 +49,7 @@ const TeamSetup: FunctionalComponent<{
     >
       {team.name || `Team ${index}`}
     </div>
-    {players.map(p => (
-      <div
-        key={`setup-player-${team.id}-${p.id}`}
-        className={css`
-          line-height: 1.2;
-          font-size: 0.875rem;
-          margin-bottom: 0.25rem;
-          font-weight: ${p.id === playerId ? 'bold' : 'normal'};
-        `}
-      >
-        {p.name}
-      </div>
-    ))}
-    {!players.length && (
-      <div
-        className={css`
-          line-height: 1.2;
-          font-size: 0.875rem;
-          margin-bottom: 0.25rem;
-          color: ${theme.colors.gray};
-        `}
-      >
-        no players
-      </div>
-    )}
+    <PlayerNames players={players} wrapAlways={true} />
   </button>
 );
 

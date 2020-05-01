@@ -197,6 +197,7 @@ export const toGame = (data: any): Game | false => {
     currentColor,
     pieces,
     newRaiseRound: !teams.some(t => t.canRaise),
+    canBeStarted: !!data.can_be_started,
     hasStarted: !!data.has_started,
   };
 };

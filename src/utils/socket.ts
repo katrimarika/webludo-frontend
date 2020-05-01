@@ -160,6 +160,18 @@ const initSocketWithUrl = (url: string) => {
       .receive('error', onErrorStr(onError));
   };
 
+  const startGame = (
+    channel: Channel,
+    hostToken: string,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('start_game', { host_token: hostToken })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
   const takeAction = (
     channel: Channel,
     token: string,
@@ -269,6 +281,7 @@ const initSocketWithUrl = (url: string) => {
     joinGameChannel,
     joinGame,
     joinTeam,
+    startGame,
     takeAction,
     decrementPenalty,
     fixPenalty,
@@ -291,6 +304,7 @@ export const NO_SOCKET: SocketActions = {
   createGame: noop,
   joinGame: noop,
   joinTeam: noop,
+  startGame: noop,
   takeAction: noop,
   decrementPenalty: noop,
   fixPenalty: noop,

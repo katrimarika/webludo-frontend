@@ -33,6 +33,7 @@ type Game = {
   currentColor: Color | null;
   pieces: Piece[];
   newRaiseRound: boolean;
+  canBeStarted: boolean;
   hasStarted: boolean;
 };
 

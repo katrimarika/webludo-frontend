@@ -4,7 +4,9 @@ import { useGameContext } from '../utils/gameContext';
 import { theme } from '../utils/style';
 import GameTitle from './GameTitle';
 import MiniForm from './MiniForm';
+import PlayerNames from './PlayerNames';
 import Popup from './Popup';
+import StartGame from './StartGame';
 import TeamSetup from './TeamSetup';
 
 const GameSetup: FunctionalComponent = () => {
@@ -42,7 +44,7 @@ const GameSetup: FunctionalComponent = () => {
             color: ${theme.colors.gray};
           `}
         >
-          click to join
+          click a team to join
         </span>
       </h2>
       <div
@@ -61,7 +63,6 @@ const GameSetup: FunctionalComponent = () => {
             key={`team-setup-${team.id}`}
             index={i + 1}
             team={team}
-            playerId={playerId}
             players={game.players.filter(p => p.teamId === team.id)}
             join={
               ownTeam && ownTeam.id === team.id
@@ -84,22 +85,12 @@ const GameSetup: FunctionalComponent = () => {
           margin-bottom: 1.5rem;
         `}
       >
-        {game.players
-          .filter(p => !p.teamId)
-          .map(p => (
-            <div
-              key={`setup-spectator-${p.id}`}
-              className={css`
-                line-height: 1.2;
-                font-size: 0.875rem;
-                margin-bottom: 0.25rem;
-                font-weight: ${p.id === playerId ? 'bold' : 'normal'};
-              `}
-            >
-              {p.name}
-            </div>
-          ))}
+        <PlayerNames
+          players={game.players.filter(p => !p.teamId)}
+          wrapAlways={true}
+        />
       </div>
+      <StartGame />
     </Popup>
   );
 };
