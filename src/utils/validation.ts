@@ -144,12 +144,12 @@ export const toGame = (data: any): Game | false => {
   let invalidTeams: any[] = [];
   const teams = sortedTeams.reduce<Team[]>((list, p) => {
     const id = toInt(p.id);
-    const name = toStr(p.name);
+    const name = toStr(p.name) || undefined;
     const color = p.color === 'none' ? null : (toStr(p.color) as Color);
     const penalties = toInt(p.penalties);
     const canRaise = !!p.can_raise;
     const newRaiseRound = !!p.new_raising_round;
-    if (id && name && (!color || colors.indexOf(color) !== -1)) {
+    if (id && (!color || colors.indexOf(color) !== -1)) {
       list.push({ id, name, color, penalties, canRaise, newRaiseRound });
     } else {
       invalidTeams.push(p);
@@ -197,6 +197,7 @@ export const toGame = (data: any): Game | false => {
     currentColor,
     pieces,
     newRaiseRound: !teams.some(t => t.canRaise),
+    hasStarted: !!data.has_started,
   };
 };
 

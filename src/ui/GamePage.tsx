@@ -128,7 +128,7 @@ const GamePage: FunctionalComponent<{
       {canJoin && (
         <MiniForm
           inputName="player-name"
-          title="Join the game"
+          title="Join as spectator to chat"
           label="Name"
           buttonText="Join"
           placeholder="Enter a name to join"

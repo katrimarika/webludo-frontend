@@ -10,16 +10,18 @@ const TeamInfo: FunctionalComponent<{
   newRaiseRound: boolean;
 }> = ({ team, players, newRaiseRound }) => (
   <Fragment>
-    <h2
-      className={css`
-        margin: 0 0 0.25rem;
-        line-height: 1.2;
-        font-size: 1rem;
-        word-break: break-word;
-      `}
-    >
-      {team.name}
-    </h2>
+    {team.name && (
+      <h2
+        className={css`
+          margin: 0 0 0.25rem;
+          line-height: 1.2;
+          font-size: 1rem;
+          word-break: break-word;
+        `}
+      >
+        {team.name}
+      </h2>
+    )}
     <PlayerNames players={players} />
     <div
       className={css`

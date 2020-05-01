@@ -9,7 +9,7 @@ type Player = {
 
 type Team = {
   id: number;
-  name: string;
+  name?: string;
   color: Color | null; // teams do not have colors until they are formed
   penalties: number;
   canRaise: boolean;
@@ -33,6 +33,7 @@ type Game = {
   currentColor: Color | null;
   pieces: Piece[];
   newRaiseRound: boolean;
+  hasStarted: boolean;
 };
 
 type Changes = {
