@@ -26,6 +26,7 @@ Not ordered by priority
 - animations end when player state is updated during (e.g. someone finishes a penalty during a move animation)
 - update gained penalties and related announcements only after animations
 - update current player marker only after die animation (when no move action)
+- new game button (option to use current players with new teams or empty)
 - player names next to home bases
 - show who has raised
 - show on board whose turn it is (name & color)

@@ -2,14 +2,25 @@ import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useRef, useState } from 'preact/hooks';
 import { theme } from '../utils/style';
-import Popup from './Popup';
 
-const SharePopup: FunctionalComponent<{ close: () => void }> = ({ close }) => {
+const ShareLink: FunctionalComponent = () => {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [copied, setCopied] = useState(false);
 
   return (
-    <Popup close={close} title="Link to this game">
+    <div
+      className={css`
+        position: relative;
+      `}
+    >
+      <h3
+        className={css`
+          font-size: 1rem;
+          margin: 0 0 0.5rem;
+        `}
+      >
+        Link to this game
+      </h3>
       <button
         className={css`
           font-size: 1rem;
@@ -78,8 +89,8 @@ const SharePopup: FunctionalComponent<{ close: () => void }> = ({ close }) => {
           Copied
         </div>
       )}
-    </Popup>
+    </div>
   );
 };
 
-export default SharePopup;
+export default ShareLink;

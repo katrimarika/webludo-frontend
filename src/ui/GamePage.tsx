@@ -1,68 +1,27 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
-import { buttonCss, theme } from '../utils/style';
+import { buttonCss } from '../utils/style';
 import { colors } from '../utils/validation';
 import Chat from './Chat';
 import ErrorMessage from './ErrorMessage';
 import Game from './Game';
+import GameSetup from './GameSetup';
+import GameTitle from './GameTitle';
 import MiniForm from './MiniForm';
 import PageWrapper from './PageWrapper';
 import Settings from './Settings';
 import Spectators from './Spectators';
 import TeamContainer from './TeamContainer';
 
-const GamePage: FunctionalComponent<{
-  openSharePopup: () => void;
-}> = ({ openSharePopup }) => {
-  const { code, game, playerId, error, joinGame } = useGameContext();
+const GamePage: FunctionalComponent = () => {
+  const { game, playerId, error, joinGame } = useGameContext();
 
   const canJoin = !error && !playerId && !!game;
 
   return (
     <PageWrapper>
-      <h1
-        className={css`
-          font-size: 1.5rem;
-          margin: 0 0 1rem;
-          text-align: center;
-          @media screen and (orientation: landscape) {
-            text-align: initial;
-          }
-        `}
-      >
-        {game && game.name ? (
-          <span>{game.name}</span>
-        ) : (
-          <span
-            className={css`
-              color: ${theme.colors.gray};
-            `}
-          >
-            {'<No name>'}
-          </span>
-        )}
-        <button
-          className={css`
-            font-size: 1rem;
-            color: ${theme.colors.gray};
-            font-weight: bold;
-            border: none;
-            background: none;
-            padding: 0;
-            margin-left: 0.25rem;
-            cursor: pointer;
-            &:hover,
-            &:focus,
-            &:active {
-              text-decoration: underline;
-            }
-          `}
-          onClick={openSharePopup}
-        >
-          {code}
-        </button>
-      </h1>
+      <GameTitle />
       <ErrorMessage
         prefix="Error: "
         text={error}
@@ -159,6 +118,7 @@ const GamePage: FunctionalComponent<{
           `}
         />
       </div>
+      {!!game && !game.hasStarted && <GameSetup />}
     </PageWrapper>
   );
 };
