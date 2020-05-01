@@ -1,6 +1,38 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
+import { theme } from '../utils/style';
+
+const positionCss = (color: Color) => {
+  switch (color) {
+    case 'red':
+      return css`
+        top: 0.5rem;
+        left: -0.5rem;
+        transform: rotate(-45deg);
+      `;
+    case 'blue':
+      return css`
+        top: 0.5rem;
+        right: -0.5rem;
+        transform: rotate(45deg);
+      `;
+    case 'yellow':
+      return css`
+        bottom: 0.5rem;
+        right: -0.5rem;
+        transform: rotate(-45deg);
+      `;
+    case 'green':
+      return css`
+        bottom: 0.5rem;
+        left: -0.5rem;
+        transform: rotate(45deg);
+      `;
+    default:
+      return undefined;
+  }
+};
 
 const NextAction: FunctionalComponent = () => {
   const {
@@ -11,34 +43,31 @@ const NextAction: FunctionalComponent = () => {
     actions,
   } = useGameContext();
 
-  if (!game) {
+  if (
+    !game ||
+    disabled ||
+    animationOngoing ||
+    !turnColor ||
+    turnColor !== game.currentColor
+  ) {
     return null;
   }
 
-  const nextAction =
-    disabled || animationOngoing || turnColor !== game.currentColor
-      ? null
-      : actions.some(a => a.type === 'raise')
-      ? actions.length > 1
-        ? ('raise/move' as const)
-        : ('raise/roll' as const)
-      : !!actions.length
-      ? ('move' as const)
-      : ('roll' as const);
-
-  if (!nextAction) {
-    return null;
-  }
+  const nextAction = actions.some(a => a.type === 'raise')
+    ? ('raise' as const)
+    : !!actions.length
+    ? ('move' as const)
+    : ('roll' as const);
 
   return (
     <div
       className={css`
         position: absolute;
-        top: 14%;
-        left: 0;
-        right: 0;
+        ${positionCss(turnColor)}
+        width: 3rem;
         display: flex;
         justify-content: center;
+        color: ${theme.colors.boardCorner};
       `}
     >
       <div
