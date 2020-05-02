@@ -1,5 +1,6 @@
 import { css } from 'emotion';
 import { Fragment, FunctionalComponent, h } from 'preact';
+import { capitalize } from '../utils/helpers';
 import PlayerNames from './PlayerNames';
 
 export type NextAction = 'roll' | 'move' | 'raise/move' | 'raise/roll' | null;
@@ -10,7 +11,7 @@ const TeamInfo: FunctionalComponent<{
   newRaiseRound: boolean;
 }> = ({ team, players, newRaiseRound }) => (
   <Fragment>
-    {team.name && (
+    {(team.name || team.color) && (
       <h2
         className={css`
           margin: 0 0 0.25rem;
@@ -19,7 +20,7 @@ const TeamInfo: FunctionalComponent<{
           word-break: break-word;
         `}
       >
-        {team.name}
+        {team.name || `${capitalize(team.color || '')} team`}
       </h2>
     )}
     <PlayerNames players={players} />

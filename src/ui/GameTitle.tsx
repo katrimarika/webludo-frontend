@@ -7,6 +7,9 @@ import { theme } from '../utils/style';
 
 const fadeAnimation = keyframes`
   0% {
+    opacity: 0;
+  }
+  1% {
     opacity: 1;
   }
   70% {
@@ -99,7 +102,7 @@ const GameTitle: FunctionalComponent<{ prefix?: string }> = ({ prefix }) => {
               right: 0;
               pointer-events: none;
               display: ${copied ? 'block' : 'none'};
-              animation: ${fadeAnimation} 1500ms ease-out;
+              animation: ${fadeAnimation} 1600ms ease-out;
             `}
           >
             Copied
@@ -111,10 +114,9 @@ const GameTitle: FunctionalComponent<{ prefix?: string }> = ({ prefix }) => {
           className={css`
             display: inline-block;
             opacity: 0;
-            height: 0;
-            width: 0;
-            padding: 0;
-            border: none;
+            position: absolute;
+            z-index: -1;
+            pointer-events: none;
           `}
           tabIndex={-1}
         >

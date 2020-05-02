@@ -8,15 +8,27 @@ const StartGame: FunctionalComponent = () => {
 
   const canBeStarted = game && game.canBeStarted;
 
-  return (
-    <Fragment>
+  if (!hostToken) {
+    return (
       <div>
         {!canBeStarted
           ? 'Waiting for players...'
-          : !hostToken
-          ? 'Waiting for host to start the game...'
-          : 'You cannot edit the teams after starting.'}
+          : 'Waiting for host to start the game...'}
       </div>
+    );
+  }
+
+  return (
+    <Fragment>
+      {canBeStarted && (
+        <div
+          className={css`
+            font-size: 0.875rem;
+          `}
+        >
+          You can now start the game. Teams cannot be changed after starting.
+        </div>
+      )}
       {!!hostToken && (
         <Button
           color="green"

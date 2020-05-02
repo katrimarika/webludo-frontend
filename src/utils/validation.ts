@@ -137,12 +137,8 @@ export const toGame = (data: any): Game | false => {
     return false;
   }
 
-  // Ensure the teams are in play order
-  const sortedTeams = (data.teams as any[]).sort((a, b) =>
-    colors.indexOf(a.color) > colors.indexOf(b.color) ? 1 : -1,
-  );
   let invalidTeams: any[] = [];
-  const teams = sortedTeams.reduce<Team[]>((list, p) => {
+  const teams = (data.teams as any[]).reduce<Team[]>((list, p) => {
     const id = toInt(p.id);
     const name = toStr(p.name) || undefined;
     const color = p.color === 'none' ? null : (toStr(p.color) as Color);

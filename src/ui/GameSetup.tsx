@@ -101,10 +101,6 @@ const GameSetup: FunctionalComponent = () => {
               border-color: ${theme.colors.blue.main};
             }
           }
-          &:disabled {
-            background: ${theme.colors.highlight};
-            border-color: ${theme.colors.blue.main};
-          }
         `}
         onClick={!!ownTeam ? leaveTeam : undefined}
         disabled={!ownTeam}

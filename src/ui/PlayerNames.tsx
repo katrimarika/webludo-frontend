@@ -57,6 +57,16 @@ const PlayerNames: FunctionalComponent<{
         <span
           className={css`
             color: ${theme.colors.gray};
+            ${wrapAlways
+              ? css`
+                  display: block;
+                  margin-bottom: 0.25rem;
+                `
+              : css`
+                  @media screen and (orientation: landscape) {
+                    display: block;
+                  }
+                `}
           `}
         >
           no players
