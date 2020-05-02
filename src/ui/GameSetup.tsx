@@ -18,7 +18,7 @@ const GameSetup: FunctionalComponent = () => {
 
   return (
     <Popup>
-      <GameTitle />
+      <GameTitle prefix="Setup: " />
       {!playerId && (
         <MiniForm
           inputName="player-name"

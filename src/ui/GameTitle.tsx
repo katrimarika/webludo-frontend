@@ -17,7 +17,7 @@ const fadeAnimation = keyframes`
   }
 `;
 
-const GameTitle: FunctionalComponent = () => {
+const GameTitle: FunctionalComponent<{ prefix?: string }> = ({ prefix }) => {
   const { code, game } = useGameContext();
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [copied, setCopied] = useState(false);
@@ -33,10 +33,20 @@ const GameTitle: FunctionalComponent = () => {
           display: inline;
           font-size: 1.5rem;
           margin: 0;
-          color: ${!game || !game.name ? theme.colors.gray : 'inherit'};
         `}
       >
-        {(game && game.name) || '<No name>'}
+        {!!prefix && <span>{prefix}</span>}
+        {game && game.name ? (
+          <span>{game.name}</span>
+        ) : (
+          <span
+            className={css`
+              color: ${theme.colors.gray};
+            `}
+          >
+            {'<No name>'}
+          </span>
+        )}{' '}
       </h1>
       <div
         className={css`
@@ -49,7 +59,6 @@ const GameTitle: FunctionalComponent = () => {
             font-size: 1rem;
             color: ${theme.colors.boardPath};
             font-weight: bold;
-            margin-left: 0.25rem;
             padding: 0;
             border: none;
             background: none;
