@@ -10,8 +10,7 @@ const TeamSetup: FunctionalComponent<{
   join?: () => void;
 }> = ({ team, index, players, join }) => (
   <button
-    key={`team-setup-${team.id}`}
-    title={`Join team ${team.name || index}`}
+    title={!!join ? `Join team ${team.name || index}` : undefined}
     className={css`
       background: none;
       border: 2px solid transparent;

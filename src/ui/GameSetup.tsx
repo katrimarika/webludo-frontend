@@ -10,7 +10,14 @@ import StartGame from './StartGame';
 import TeamSetup from './TeamSetup';
 
 const GameSetup: FunctionalComponent = () => {
-  const { game, playerId, ownTeam, joinGame, joinTeam } = useGameContext();
+  const {
+    game,
+    playerId,
+    ownTeam,
+    joinGame,
+    joinTeam,
+    leaveTeam,
+  } = useGameContext();
 
   if (!game) {
     return null;
@@ -72,24 +79,50 @@ const GameSetup: FunctionalComponent = () => {
           />
         ))}
       </div>
-      <h2
+      <button
+        title={!!ownTeam ? 'Join spectators (only watching)' : undefined}
         className={css`
-          font-size: 1.25rem;
-          margin: 0 0 0.5rem;
+          background: none;
+          width: calc(100% + 1rem);
+          border: 2px solid transparent;
+          padding: 0.25rem 0.5rem;
+          margin: -0.25rem -0.5rem 1rem;
+          text-align: initial;
+          display: flex;
+          flex-direction: column;
+          color: ${theme.colors.black};
+          font-family: inherit;
+          border-radius: 4px;
+          &:not(:disabled) {
+            cursor: pointer;
+            &:hover,
+            &:focus,
+            &:active {
+              border-color: ${theme.colors.blue.main};
+            }
+          }
+          &:disabled {
+            background: ${theme.colors.highlight};
+            border-color: ${theme.colors.blue.main};
+          }
         `}
+        onClick={!!ownTeam ? leaveTeam : undefined}
+        disabled={!ownTeam}
       >
-        Spectators
-      </h2>
-      <div
-        className={css`
-          margin-bottom: 1.5rem;
-        `}
-      >
+        <div
+          className={css`
+            margin: 0 0 0.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+          `}
+        >
+          Spectators
+        </div>
         <PlayerNames
           players={game.players.filter(p => !p.teamId)}
           wrapAlways={true}
         />
-      </div>
+      </button>
       <StartGame />
     </Popup>
   );
