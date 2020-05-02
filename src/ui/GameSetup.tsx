@@ -71,8 +71,9 @@ const GameSetup: FunctionalComponent = () => {
             index={i + 1}
             team={team}
             players={game.players.filter(p => p.teamId === team.id)}
+            highlight={!!ownTeam && ownTeam.id === team.id}
             join={
-              ownTeam && ownTeam.id === team.id
+              !playerId || (ownTeam && ownTeam.id === team.id)
                 ? undefined
                 : () => joinTeam(team.id)
             }

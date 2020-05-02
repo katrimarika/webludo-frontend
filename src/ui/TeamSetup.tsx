@@ -7,8 +7,9 @@ const TeamSetup: FunctionalComponent<{
   team: Team;
   index: number;
   players: Player[];
+  highlight: boolean;
   join?: () => void;
-}> = ({ team, index, players, join }) => (
+}> = ({ team, index, players, highlight, join }) => (
   <button
     title={!!join ? `Join team ${team.name || index}` : undefined}
     className={css`
@@ -30,10 +31,11 @@ const TeamSetup: FunctionalComponent<{
           border-color: ${theme.colors.blue.main};
         }
       }
-      &:disabled {
-        background: ${theme.colors.highlight};
-        border-color: ${theme.colors.blue.main};
-      }
+      ${highlight &&
+        css`
+          background: ${theme.colors.highlight};
+          border-color: ${theme.colors.blue.main};
+        `}
     `}
     onClick={join}
     disabled={!join}

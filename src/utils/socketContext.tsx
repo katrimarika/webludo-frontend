@@ -72,7 +72,10 @@ export const useGameChannel = (
       const gameChannel = socket.joinGameChannel(
         code,
         setInitialData,
-        onGameChange,
+        (g, a, c) => {
+          onGameChange(g, a, c);
+          setError('');
+        },
         onRoll,
         onMessage,
         setError,
@@ -149,7 +152,13 @@ export const useGameChannel = (
 
   const takeAction = (action: 'roll' | MoveAction) =>
     channel && player
-      ? socket.takeAction(channel, player.token, action, () => null, setError)
+      ? socket.takeAction(
+          channel,
+          player.token,
+          action,
+          () => null,
+          () => null,
+        )
       : setError(!channel ? 'No channel found' : 'No player found');
 
   const penaltyDone = () =>

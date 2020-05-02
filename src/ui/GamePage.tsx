@@ -36,7 +36,7 @@ const GamePage: FunctionalComponent = () => {
           grid-template-rows: min-content auto min-content;
           justify-content: stretch;
           align-items: stretch;
-          grid-gap: 2%;
+          grid-gap: 1rem 0.5rem;
           margin-bottom: 1.5rem;
           @media screen and (orientation: landscape) {
             grid-template-columns: 1fr 2fr 1fr;
@@ -86,7 +86,7 @@ const GamePage: FunctionalComponent = () => {
       </div>
       {canJoin && (
         <MiniForm
-          inputName="player-name"
+          inputName="spectator-name"
           title="Join as spectator to chat"
           label="Name"
           buttonText="Join"

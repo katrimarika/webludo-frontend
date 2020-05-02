@@ -263,12 +263,12 @@ const initSocketWithUrl = (url: string) => {
   const callMissedHembo = (
     channel: Channel,
     token: string,
-    player: Color,
+    team: Color,
     onSuccess: () => void,
     onError: OnError,
   ) => {
     channel
-      .push('call_missed_hembo', { token, player })
+      .push('call_missed_hembo', { token, team })
       .receive('ok', onSuccess)
       .receive('error', onErrorStr(onError));
   };

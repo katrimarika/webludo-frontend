@@ -20,6 +20,8 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 Not ordered by priority
 
+- fix next action text position to be more consistent across different screen sizes
+- smaller game board on big landscape (to fit chat on screen at the same time)
 - api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
 - teams

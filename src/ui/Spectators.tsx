@@ -10,7 +10,11 @@ const Spectators: FunctionalComponent = () => {
     return null;
   }
 
-  const { players } = game;
+  const players = game.players.filter(p => !p.teamId);
+
+  if (!players.length) {
+    return null;
+  }
 
   return (
     <div
@@ -31,7 +35,7 @@ const Spectators: FunctionalComponent = () => {
       >
         Spectators
       </h2>
-      <PlayerNames players={players.filter(p => !p.teamId)} />
+      <PlayerNames players={players} />
     </div>
   );
 };
