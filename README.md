@@ -20,7 +20,8 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 Not ordered by priority
 
-- fix next action text position to be more consistent across different screen sizes
+- scrambe teams button for game host in setup
+- host can put players in teams in game setup
 - api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
 - animations end when player state is updated during (e.g. someone finishes a penalty during a move animation)
