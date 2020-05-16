@@ -32,6 +32,13 @@ Not ordered by priority
 - leave game (especially if joined only as a spectator)
 - changelog (code changes affecting users) on the lobby page
 - rules readable on home page
+- prevent double clicking start game button
+- show in tab when new messages
+- tag players in chat messages
+- confett rain when first player finishes
+- toasts or overlays of announcements
+- chat to the side on extra wide screens
+- links as clickable links in chat
 - local multiplayer
 - sounds:
   1. die roll
@@ -42,7 +49,6 @@ Not ordered by priority
 
 ### Ideas
 
-- toasts or overlays of announcements
 - prevent opening a non-existent game
 - allow rolling die on not-own turn -> penalty
 - playing agains AI
