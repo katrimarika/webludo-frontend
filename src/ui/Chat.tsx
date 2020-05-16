@@ -42,7 +42,7 @@ const Chat: FunctionalComponent = () => {
           border: 1px solid ${theme.colors.black};
           background: ${theme.colors.lightestGray};
           border-radius: 0.125rem;
-          padding: 0.25rem 0.375rem;
+          padding: 0.375rem 0.375rem 0.125rem;
           margin-bottom: 0.5rem;
           height: 4.5rem;
           display: flex;

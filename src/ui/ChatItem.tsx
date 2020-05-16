@@ -13,9 +13,11 @@ const ChatItem: FunctionalComponent<{ item: ChatMessage }> = ({ item }) => {
         minutes < 10 ? '0' : ''
       }${minutes}`}
       className={css`
-        margin: 0.25rem 0;
+        margin: 0;
+        padding-bottom: 0.5rem;
         line-height: 1.3;
         font-size: 0.875rem;
+        word-break: break-word;
       `}
     >
       {item.type === 'announcement' ? (
