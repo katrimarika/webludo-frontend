@@ -28,9 +28,6 @@ Not ordered by priority
 - update gained penalties and related announcements only after animations
 - update current player marker only after die animation (when no move action)
 - new game button (option to use current players with new teams or empty)
-- player names next to home bases
-- show who has raised
-- show on board whose turn it is (name & color)
 - better highlighting available actions (die/pieces)
 - total accumulated penalties count for each player
 - leave game (especially if joined only as a spectator)
