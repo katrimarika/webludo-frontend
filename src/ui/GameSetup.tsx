@@ -6,6 +6,7 @@ import GameTitle from './GameTitle';
 import MiniForm from './MiniForm';
 import PlayerNames from './PlayerNames';
 import Popup from './Popup';
+import ScrambleTeams from './ScrambleTeams';
 import StartGame from './StartGame';
 import TeamSetup from './TeamSetup';
 
@@ -37,23 +38,34 @@ const GameSetup: FunctionalComponent = () => {
           onSubmit={name => joinGame(name)}
         />
       )}
-      <h2
+      <div
         className={css`
-          font-size: 1.25rem;
-          margin: 0 0 0.5rem;
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.75rem;
         `}
       >
-        <span>{`Teams `}</span>
-        <span
+        <h2
           className={css`
-            font-size: 1rem;
-            font-weight: normal;
-            color: ${theme.colors.gray};
+            font-size: 1.25rem;
+            margin: 0;
+            line-height: 1;
+            flex-grow: 1;
           `}
         >
-          click a team to join
-        </span>
-      </h2>
+          <span>{`Teams `}</span>
+          <span
+            className={css`
+              font-size: 1rem;
+              font-weight: normal;
+              color: ${theme.colors.gray};
+            `}
+          >
+            click a team to join
+          </span>
+        </h2>
+        <ScrambleTeams />
+      </div>
       <div
         className={css`
           width: 40rem;
@@ -61,7 +73,7 @@ const GameSetup: FunctionalComponent = () => {
           display: grid;
           grid-template-columns: 1fr 1fr;
           grid-template-rows: min-content min-content;
-          grid-gap: 1rem 1.5rem;
+          grid-gap: 0.5rem 1rem;
           margin-bottom: 1.5rem;
         `}
       >
@@ -84,10 +96,10 @@ const GameSetup: FunctionalComponent = () => {
         title={!!ownTeam ? 'Join spectators (only watching)' : undefined}
         className={css`
           background: none;
-          width: calc(100% + 1rem);
+          width: calc(100% + 0.5rem);
           border: 2px solid transparent;
           padding: 0.25rem 0.5rem;
-          margin: -0.25rem -0.5rem 1rem;
+          margin: -0.25rem 0 1rem -0.5rem;
           text-align: initial;
           display: flex;
           flex-direction: column;

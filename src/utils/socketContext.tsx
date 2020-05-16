@@ -145,6 +145,11 @@ export const useGameChannel = (
       ? socket.leaveTeam(channel, player.token, () => null, setError)
       : setError(!channel ? 'No channel found' : 'No player found');
 
+  const scrambleTeams = () =>
+    channel && hostToken
+      ? socket.scrambleTeams(channel, hostToken, () => null, setError)
+      : setError(!channel ? 'No channel found' : 'No host token found');
+
   const startGame = () =>
     channel && hostToken
       ? socket.startGame(channel, hostToken, () => null, setError)
@@ -232,6 +237,7 @@ export const useGameChannel = (
     joinGame,
     joinTeam,
     leaveTeam,
+    scrambleTeams,
     startGame,
     takeAction,
     penaltyDone,

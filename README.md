@@ -20,7 +20,6 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 Not ordered by priority
 
-- scrambe teams button for game host in setup
 - host can put players in teams in game setup
 - api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
@@ -43,6 +42,7 @@ Not ordered by priority
 
 ### Ideas
 
+- toasts or overlays of announcements
 - prevent opening a non-existent game
 - allow rolling die on not-own turn -> penalty
 - playing agains AI

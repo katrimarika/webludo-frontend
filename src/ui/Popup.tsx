@@ -48,10 +48,13 @@ const Popup: FunctionalComponent<{ close?: () => void }> = ({
           border-radius: 0.1875rem;
           padding: 1.5rem;
           max-width: 1024px;
-          margin: 1rem 1.5rem;
+          margin: 1rem;
           max-height: 90vh;
           overflow-y: auto;
           overflow-x: hidden;
+          @media screen and (orientation: landscape) {
+            margin: 1.5rem;
+          }
           @media screen and (orientation: landscape) and (min-width: 1440px) {
             margin: 1.5rem 3rem;
           }
