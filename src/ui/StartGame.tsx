@@ -20,27 +20,25 @@ const StartGame: FunctionalComponent = () => {
 
   return (
     <Fragment>
-      {canBeStarted && (
-        <div
-          className={css`
-            font-size: 0.875rem;
-          `}
-        >
-          You can now start the game. Teams cannot be changed after starting.
-        </div>
-      )}
-      {!!hostToken && (
-        <Button
-          color="green"
-          onClick={() => startGame()}
-          disabled={!canBeStarted}
-          extraCss={css`
-            margin-top: 0.5rem;
-          `}
-        >
-          Start game
-        </Button>
-      )}
+      <div
+        className={css`
+          font-size: 0.875rem;
+        `}
+      >
+        {canBeStarted
+          ? 'You can now start the game. Teams cannot be changed after starting.'
+          : 'Waiting for players...'}
+      </div>
+      <Button
+        color="green"
+        onClick={() => startGame()}
+        disabled={!canBeStarted}
+        extraCss={css`
+          margin-top: 0.5rem;
+        `}
+      >
+        Start game
+      </Button>
     </Fragment>
   );
 };
