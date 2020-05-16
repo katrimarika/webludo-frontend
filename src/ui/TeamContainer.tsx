@@ -66,7 +66,7 @@ const TeamContainer: FunctionalComponent<{ color: Color }> = ({ color }) => {
             `}
             onClick={penaltyDone}
             disabled={!team.penalties}
-            title="Own penalty done"
+            title="Team penalty complete"
           >
             –🍺
           </Button>
