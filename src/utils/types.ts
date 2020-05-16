@@ -1,9 +1,18 @@
 type Color = 'red' | 'yellow' | 'blue' | 'green';
 
 type Player = {
+  id: number;
   name: string;
-  color: Color;
+  teamId: number | null;
+  donePenalties: number;
+};
+
+type Team = {
+  id: number;
+  name?: string;
+  color: Color | null; // teams do not have colors until they are formed
   penalties: number;
+  canRaise: boolean;
   newRaiseRound: boolean;
 };
 
@@ -20,9 +29,12 @@ type Game = {
   code: string;
   name: string;
   players: Player[];
+  teams: Team[];
   currentColor: Color | null;
   pieces: Piece[];
   newRaiseRound: boolean;
+  canBeStarted: boolean;
+  hasStarted: boolean;
 };
 
 type Changes = {

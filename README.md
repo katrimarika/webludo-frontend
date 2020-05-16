@@ -20,20 +20,19 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 
 Not ordered by priority
 
+- host can put players in teams in game setup
 - api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
-- teams
 - animations end when player state is updated during (e.g. someone finishes a penalty during a move animation)
 - update gained penalties and related announcements only after animations
 - update current player marker only after die animation (when no move action)
-- player names next to home bases
-- show who has raised
-- show on board whose turn it is (name & color)
+- new game button (option to use current players with new teams or empty)
 - better highlighting available actions (die/pieces)
 - total accumulated penalties count for each player
 - leave game (especially if joined only as a spectator)
 - changelog (code changes affecting users) on the lobby page
 - rules readable on home page
+- local multiplayer
 - sounds:
   1. die roll
   1. move
@@ -43,6 +42,7 @@ Not ordered by priority
 
 ### Ideas
 
+- toasts or overlays of announcements
 - prevent opening a non-existent game
 - allow rolling die on not-own turn -> penalty
 - playing agains AI

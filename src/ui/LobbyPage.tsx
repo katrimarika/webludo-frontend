@@ -7,9 +7,7 @@ import ErrorMessage from './ErrorMessage';
 import MiniForm from './MiniForm';
 import PageWrapper from './PageWrapper';
 
-const LobbyPage: FunctionalComponent<{ onCreateGame: () => void }> = ({
-  onCreateGame,
-}) => {
+const LobbyPage: FunctionalComponent = () => {
   const [channelError, createGame] = useLobbyChannel();
   const [createError, setCreateError] = useState('');
   const [openError, setOpenError] = useState('');
@@ -59,10 +57,7 @@ const LobbyPage: FunctionalComponent<{ onCreateGame: () => void }> = ({
         onSubmit={v =>
           createGame(
             v,
-            code => {
-              setHash(code);
-              onCreateGame();
-            },
+            code => setHash(code),
             e => setCreateError(e),
           )
         }

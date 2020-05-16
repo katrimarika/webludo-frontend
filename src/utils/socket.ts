@@ -43,17 +43,19 @@ const initSocketWithUrl = (url: string) => {
   const createGame = (
     channel: Channel,
     name: string,
-    onSuccess: (code: string) => void,
+    onSuccess: (code: string, hostToken: string) => void,
     onError: OnError,
   ) => {
     channel
       .push('create_game', { name })
       .receive('ok', resp => {
+        log('created game', resp);
         const code = toStr(resp && resp.code);
-        if (code) {
-          onSuccess(code);
+        const hostToken = toStr(resp && resp.host_token);
+        if (code && hostToken) {
+          onSuccess(code, hostToken);
         } else {
-          onError('No valid code received');
+          onError('No valid code or host token received');
         }
       })
       .receive('error', onErrorStr(onError));
@@ -128,20 +130,69 @@ const initSocketWithUrl = (url: string) => {
   const joinGame = (
     channel: Channel,
     name: string,
-    onSuccess: (color: Color, token: string) => void,
+    onSuccess: (id: number, token: string) => void,
     onError: OnError,
   ) => {
     channel
       .push('join_game', { name })
       .receive('ok', resp => {
+        const id = toInt(resp.id);
         const token = toStr(resp.token);
-        const color = toStr(resp.color) as Color;
-        if (token && color && colors.indexOf(color) !== -1) {
-          onSuccess(color, token);
+        if (id && token) {
+          onSuccess(id, token);
         } else {
           onError('No valid token received');
         }
       })
+      .receive('error', onErrorStr(onError));
+  };
+
+  const joinTeam = (
+    channel: Channel,
+    token: string,
+    id: number,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('join_team', { team_id: id, token })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
+  const leaveTeam = (
+    channel: Channel,
+    token: string,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('leave_team', { token })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
+  const scrambleTeams = (
+    channel: Channel,
+    hostToken: string,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('scramble_players', { host_token: hostToken })
+      .receive('ok', onSuccess)
+      .receive('error', onErrorStr(onError));
+  };
+
+  const startGame = (
+    channel: Channel,
+    hostToken: string,
+    onSuccess: () => void,
+    onError: OnError,
+  ) => {
+    channel
+      .push('start_game', { host_token: hostToken })
+      .receive('ok', onSuccess)
       .receive('error', onErrorStr(onError));
   };
 
@@ -224,12 +275,12 @@ const initSocketWithUrl = (url: string) => {
   const callMissedHembo = (
     channel: Channel,
     token: string,
-    player: Color,
+    team: Color,
     onSuccess: () => void,
     onError: OnError,
   ) => {
     channel
-      .push('call_missed_hembo', { token, player })
+      .push('call_missed_hembo', { token, team })
       .receive('ok', onSuccess)
       .receive('error', onErrorStr(onError));
   };
@@ -253,6 +304,10 @@ const initSocketWithUrl = (url: string) => {
     createGame,
     joinGameChannel,
     joinGame,
+    joinTeam,
+    leaveTeam,
+    scrambleTeams,
+    startGame,
     takeAction,
     decrementPenalty,
     fixPenalty,
@@ -274,6 +329,10 @@ export const NO_SOCKET: SocketActions = {
   leaveChannel: noop,
   createGame: noop,
   joinGame: noop,
+  joinTeam: noop,
+  leaveTeam: noop,
+  scrambleTeams: noop,
+  startGame: noop,
   takeAction: noop,
   decrementPenalty: noop,
   fixPenalty: noop,

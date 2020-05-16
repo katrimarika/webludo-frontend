@@ -3,28 +3,22 @@ import { FunctionalComponent, h } from 'preact';
 import { memo } from 'preact/compat';
 
 const GameOverlay: FunctionalComponent<{ text: string }> = ({ text }) => (
-  <g>
-    <rect
-      x="0"
-      y="0"
-      width="1000"
-      height="1000"
-      className={css`
-        fill: white;
-        opacity: 0.85;
-      `}
-    />
-    <text
-      x="500"
-      y="515"
-      className={css`
-        text-anchor: middle;
-        font-size: 44px;
-      `}
-    >
-      {text}
-    </text>
-  </g>
+  <div
+    className={css`
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      opacity: 0.85;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    `}
+  >
+    <div>{text}</div>
+  </div>
 );
 
 export default memo(GameOverlay);

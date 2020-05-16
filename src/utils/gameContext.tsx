@@ -13,6 +13,8 @@ type GameContext = {
   messages: ChatMessage[];
   disabled: boolean;
   animationOngoing: boolean;
+  ownColor: Color | null;
+  ownTeam: Team | null;
   ownTurn: boolean;
   turnColor: Color | null;
   changeAnimationComplete: (type: keyof Changes) => void;
@@ -41,7 +43,7 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
   });
   const [actions, setActions] = useState<GameContext['actions']>([]);
   const [messages, setMessages] = useState<GameContext['messages']>([]);
-  const { playerColor, error, ...restChannelData } = useGameChannel(
+  const { playerId, error, ...restChannelData } = useGameChannel(
     code,
     (newGame, newActions, newRoll) => {
       setGame(newGame);
@@ -102,11 +104,14 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
       changes.effects.length ||
       die.animate
     );
+  const ownPlayer =
+    (playerId && game && game.players.find(p => p.id === playerId)) || null;
+  const ownTeam =
+    (ownPlayer && game && game.teams.find(t => t.id === ownPlayer.teamId)) ||
+    null;
+  const ownColor = ownTeam ? ownTeam.color : null;
   const ownTurn =
-    !!playerColor &&
-    !!game &&
-    game.currentColor === playerColor &&
-    game.currentColor === turnColor;
+    !!game && game.currentColor === ownColor && game.currentColor === turnColor;
 
   return (
     <GameContext.Provider
@@ -123,7 +128,9 @@ export const GameProvider: FunctionComponent<{ code: string }> = ({
         animationOngoing,
         changeAnimationComplete,
         dieAnimationComplete,
-        playerColor,
+        playerId,
+        ownTeam,
+        ownColor,
         error,
         ...restChannelData,
       }}

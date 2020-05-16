@@ -6,13 +6,13 @@ import { theme } from '../utils/style';
 import { colors } from '../utils/validation';
 
 const HomeBase: FunctionalComponent<{ color: Color }> = ({ color }) => {
-  const { playerColor, callOwnHembo, callMissedHembo } = useGameContext();
+  const { ownColor, callOwnHembo, callMissedHembo } = useGameContext();
   const [loading, setLoading] = useState(false);
 
   const onClick =
-    !playerColor || loading
+    !ownColor || loading
       ? undefined
-      : playerColor === color
+      : ownColor === color
       ? () => {
           setLoading(true);
           callOwnHembo();

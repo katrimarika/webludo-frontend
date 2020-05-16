@@ -1,120 +1,103 @@
 import { css } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
-import { buttonCss, theme } from '../utils/style';
+import { buttonCss } from '../utils/style';
+import { colors } from '../utils/validation';
 import Chat from './Chat';
 import ErrorMessage from './ErrorMessage';
 import Game from './Game';
-import GameInfo from './GameInfo';
+import GameSetup from './GameSetup';
+import GameTitle from './GameTitle';
 import MiniForm from './MiniForm';
 import PageWrapper from './PageWrapper';
 import Settings from './Settings';
+import Spectators from './Spectators';
+import TeamContainer from './TeamContainer';
 
-const GamePage: FunctionalComponent<{
-  openSharePopup: () => void;
-}> = ({ openSharePopup }) => {
-  const { code, game, playerColor, error, joinGame } = useGameContext();
+const GamePage: FunctionalComponent = () => {
+  const { game, playerId, error, joinGame } = useGameContext();
 
-  const canJoin = !error && !playerColor && !!game && game.players.length < 4;
+  const canJoin = !error && !playerId && !!game;
 
   return (
     <PageWrapper>
+      <GameTitle />
+      <ErrorMessage
+        prefix="Error: "
+        text={error}
+        styles={css`
+          margin-bottom: 0.5rem;
+        `}
+      />
       <div
         className={css`
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          grid-template-rows: min-content auto min-content;
+          justify-content: stretch;
+          align-items: stretch;
+          grid-gap: 1rem 0.5rem;
+          margin-bottom: 1.5rem;
           @media screen and (orientation: landscape) {
-            flex-direction: row;
-            align-items: flex-start;
+            grid-template-columns: 1fr auto 1fr;
           }
         `}
       >
+        {colors.map(c => (
+          <TeamContainer key={`team-${c}`} color={c} />
+        ))}
         <div
           className={css`
-            padding-bottom: 1.5rem;
-            width: 100%;
-            max-width: 67vh;
+            position: relative;
+            justify-self: center;
+            grid-column: 1 / span 3;
+            grid-row: 2;
+            width: calc(100vw - 3rem);
+            height: calc(100vw - 3rem);
+            max-width: 45vh;
+            max-height: 45vh;
             @media screen and (orientation: landscape) {
-              max-width: 45%;
-              padding: 0 2rem 0 0;
-              flex-grow: 1;
+              grid-column: 2;
+              grid-row: 1 / span 3;
+              width: calc(100vh - 5rem);
+              height: calc(100vh - 5rem);
+              max-width: 45vw;
+              max-height: 45vw;
             }
-          `}
-        >
-          <h1
-            className={css`
-              font-size: 1.5rem;
-              margin: 0 0 0.75rem;
-              text-align: center;
-              @media screen and (orientation: landscape) {
-                text-align: initial;
-              }
-            `}
-          >
-            {game && game.name ? (
-              <span>{game.name}</span>
-            ) : (
-              <span
-                className={css`
-                  color: ${theme.colors.gray};
-                `}
-              >
-                {'<No name>'}
-              </span>
-            )}
-            <button
-              className={css`
-                font-size: 1rem;
-                color: ${theme.colors.gray};
-                font-weight: bold;
-                border: none;
-                background: none;
-                padding: 0;
-                margin-left: 0.25rem;
-                cursor: pointer;
-                &:hover,
-                &:focus,
-                &:active {
-                  text-decoration: underline;
-                }
-              `}
-              onClick={openSharePopup}
-            >
-              {code}
-            </button>
-          </h1>
-          <ErrorMessage
-            prefix="Error: "
-            text={error}
-            styles={css`
-              margin-bottom: 0.5rem;
-            `}
-          />
-          <GameInfo />
-          {canJoin && (
-            <MiniForm
-              inputName="player-name"
-              label="Name"
-              buttonText="Join"
-              buttonColor="green"
-              onSubmit={name => joinGame(name)}
-            />
-          )}
-          <Chat />
-        </div>
-        <div
-          className={css`
-            flex-shrink: 0;
-            padding-top: 0.5rem;
-            @media screen and (orientation: landscape) {
-              margin: 0 auto;
+            @media screen and (orientation: landscape) and (min-width: 1440px) {
+              max-width: 620px;
+              max-height: 620px;
             }
           `}
         >
           <Game />
         </div>
       </div>
+      <div
+        className={css`
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          grid-template-rows: auto auto;
+          grid-gap: 1rem 1.5rem;
+        `}
+      >
+        <Chat />
+        <Spectators />
+      </div>
+      {canJoin && (
+        <MiniForm
+          inputName="spectator-name"
+          title="Join as spectator to chat"
+          label="Name"
+          buttonText="Join"
+          placeholder="Enter a name to join"
+          buttonColor="green"
+          onSubmit={name => joinGame(name)}
+          extraCss={css`
+            margin-top: 2rem;
+          `}
+        />
+      )}
       <div
         className={css`
           margin-top: 2rem;
@@ -135,6 +118,7 @@ const GamePage: FunctionalComponent<{
           `}
         />
       </div>
+      {!!game && !game.hasStarted && <GameSetup />}
     </PageWrapper>
   );
 };

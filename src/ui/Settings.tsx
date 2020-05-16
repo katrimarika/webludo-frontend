@@ -1,22 +1,23 @@
+import { css } from 'emotion';
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+import { useGameContext } from '../utils/gameContext';
 import Button from './Button';
 import MiniForm from './MiniForm';
 import Popup from './Popup';
-import { useGameContext } from '../utils/gameContext';
 
 const Settings: FunctionalComponent<{
   extraCss?: string;
 }> = ({ extraCss }) => {
-  const { game, playerColor, fixPenalty } = useGameContext();
+  const { game, ownColor, fixPenalty } = useGameContext();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  if (!playerColor || !game) {
+  if (!ownColor || !game) {
     // If nothing can be done, do not show settings at all
     return null;
   }
 
-  const player = game.players.find(p => p.color === playerColor);
+  const team = game.teams.find(p => p.color === ownColor);
 
   return (
     <Fragment>
@@ -28,11 +29,19 @@ const Settings: FunctionalComponent<{
         Settings
       </Button>
       {settingsOpen && (
-        <Popup close={() => setSettingsOpen(false)} title="Settings">
+        <Popup close={() => setSettingsOpen(false)}>
+          <h2
+            className={css`
+              font-size: 1.25rem;
+              margin: 0 0 1rem;
+            `}
+          >
+            Settings
+          </h2>
           <MiniForm
             inputName="penalty-amount"
             label="Fix penalty to amount"
-            initialValue={player ? `${player.penalties}` : ''}
+            initialValue={team ? `${team.penalties}` : ''}
             buttonText="Fix"
             onSubmit={v => {
               const newVal = parseInt(v, 10);

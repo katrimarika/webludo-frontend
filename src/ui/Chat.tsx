@@ -7,7 +7,7 @@ import ChatItem from './ChatItem';
 import MiniForm from './MiniForm';
 
 const Chat: FunctionalComponent = () => {
-  const { messages, postMessage, playerColor } = useGameContext();
+  const { messages, postMessage, playerId } = useGameContext();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -19,14 +19,19 @@ const Chat: FunctionalComponent = () => {
   return (
     <div
       className={css`
-        margin-top: 1rem;
+        grid-column: 1 / span 2;
+        grid-row: 1;
+        @media screen and (orientation: landscape) {
+          grid-column: 1;
+          grid-row: 1 / span 2;
+        }
       `}
     >
       <h2
         id="chat-title"
         className={css`
           font-size: 1rem;
-          margin: 0.5rem 0 0.25rem;
+          margin: 0 0 0.25rem;
         `}
       >
         Chat
@@ -52,13 +57,14 @@ const Chat: FunctionalComponent = () => {
           <ChatItem key={`message-${m.type}-${m.timestamp}-${i}`} item={m} />
         ))}
       </div>
-      {!!playerColor && (
+      {!!playerId && (
         <MiniForm
           inputName="chat-message"
           labelledBy="chat-title"
           placeholder="Say something..."
           buttonText="Send"
           onSubmit={postMessage}
+          fullWidth={true}
           extraCss={css`
             margin: 0;
           `}
