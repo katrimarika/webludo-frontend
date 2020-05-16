@@ -75,8 +75,10 @@ const toMoveAnimation = (data: any): MoveAnimation | false => {
   const pieceId = toInt(data.piece_id);
   const startIndex = toInt(data.start_index);
   const startArea = toStr(data.start_area) as Piece['area'];
+  const startMultiplier = toInt(data.start_multiplier);
   const targetIndex = toInt(data.target_index);
   const targetArea = toStr(data.target_area) as Piece['area'];
+  const targetMultiplier = toInt(data.target_multiplier);
   if (
     !pieceId ||
     areas.indexOf(startArea) === -1 ||
@@ -85,7 +87,15 @@ const toMoveAnimation = (data: any): MoveAnimation | false => {
     console.error(`Invalid move animation`, data);
     return false;
   } else {
-    return { pieceId, startIndex, startArea, targetIndex, targetArea };
+    return {
+      pieceId,
+      startIndex,
+      startArea,
+      startMultiplier,
+      targetIndex,
+      targetArea,
+      targetMultiplier,
+    };
   }
 };
 const toDoubledAnimation = (data: any): DoubledAnimation | false => {

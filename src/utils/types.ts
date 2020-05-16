@@ -54,8 +54,10 @@ type MoveAnimation = {
   pieceId: number;
   startArea: Piece['area'];
   startIndex: number;
+  startMultiplier: number; // may be 0
   targetArea: Piece['area'];
   targetIndex: number;
+  targetMultiplier: number; // may be 0
 };
 
 type DoubledAnimation = {

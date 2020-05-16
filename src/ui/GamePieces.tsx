@@ -49,6 +49,12 @@ const GamePieces: FunctionalComponent = () => {
               ...p,
               area: moveAnimation.startArea,
               index: moveAnimation.startIndex,
+              multiplier: doubledAnimation
+                ? doubledAnimation.multiplier === 1
+                  ? 2
+                  : 1
+                : (effectsAnimation && effectsAnimation.startMultiplier) ||
+                  p.multiplier,
             }
           : {
               ...p,
@@ -58,7 +64,8 @@ const GamePieces: FunctionalComponent = () => {
                 ? doubledAnimation.multiplier === 1
                   ? 2
                   : 1
-                : p.multiplier,
+                : (effectsAnimation && effectsAnimation.startMultiplier) ||
+                  p.multiplier,
             };
         return (
           <GamePiece
