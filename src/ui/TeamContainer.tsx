@@ -37,11 +37,15 @@ const TeamContainer: FunctionalComponent<{ color: Color }> = ({ color }) => {
         grid-row: ${color === 'red' || color === 'blue' ? '1' : '3'};
         padding: 0.25rem 0.5rem 0.375rem;
         border-radius: 0.1875rem;
-        background: ${isCurrent ? theme.colors.highlight : 'transparent'};
+        background: ${isCurrent
+          ? team.color
+            ? theme.colors[team.color].light
+            : theme.colors.highlight
+          : 'transparent'};
         border: 2px solid
           ${team.color ? theme.colors[team.color].main : theme.colors.highlight};
         box-shadow: ${team.color && isOwnTeam
-          ? `inset 1px 1px ${theme.colors[team.color].main}, inset -1px -1px ${
+          ? `inset 2px 2px ${theme.colors[team.color].main}, inset -2px -2px ${
               theme.colors[team.color].main
             }`
           : 'none'};

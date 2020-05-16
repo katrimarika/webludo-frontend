@@ -18,6 +18,7 @@ const TeamInfo: FunctionalComponent<{
           margin: 0 0 0.25rem;
           line-height: 1.2;
           font-size: 1rem;
+          font-weight: bold;
           word-break: break-word;
         `}
       >

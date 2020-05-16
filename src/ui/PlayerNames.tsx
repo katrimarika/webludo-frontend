@@ -36,7 +36,6 @@ const PlayerNames: FunctionalComponent<{
             )}
             <span
               className={css`
-                font-weight: ${p.id === playerId ? 'bold' : 'normal'};
                 ${wrapAlways
                   ? css`
                       display: block;
@@ -50,6 +49,16 @@ const PlayerNames: FunctionalComponent<{
               `}
             >
               {p.name}
+              {p.id === playerId && (
+                <span
+                  className={css`
+                    font-weight: bold;
+                    white-space: nowrap;
+                  `}
+                >
+                  {' (you)'}
+                </span>
+              )}
             </span>
           </span>
         ))

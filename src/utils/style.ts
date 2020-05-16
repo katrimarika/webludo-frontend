@@ -5,20 +5,24 @@ export const theme = {
     red: {
       main: '#ee0000',
       text: '#a00000',
+      light: '#f9ecec',
     },
     blue: {
       main: '#0046ff',
       text: '#0000a7',
+      light: '#eceff9',
     },
     yellow: {
       main: '#ffd400',
       text: '#dab600',
+      light: '#f9f7ec',
     },
     green: {
       main: '#008a00',
       text: '#005800',
+      light: '#ecf9ec',
     },
-    black: '#000',
+    black: '#111',
     gray: '#757575',
     silver: '#c0c0c0',
     lightgray: '#f1f1f1',
