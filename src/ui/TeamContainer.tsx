@@ -35,7 +35,7 @@ const TeamContainer: FunctionalComponent<{ color: Color }> = ({ color }) => {
       className={css`
         grid-column: ${color === 'red' || color === 'green' ? '1' : '3'};
         grid-row: ${color === 'red' || color === 'blue' ? '1' : '3'};
-        padding: 0.25rem 0.5rem 0.375rem;
+        padding: 0.25rem 0.375rem 0.375rem;
         border-radius: 0.1875rem;
         background: ${isCurrent
           ? team.color

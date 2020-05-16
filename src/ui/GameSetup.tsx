@@ -98,8 +98,8 @@ const GameSetup: FunctionalComponent = () => {
           background: none;
           width: calc(100% + 0.5rem);
           border: 2px solid transparent;
-          padding: 0.25rem 0.5rem;
-          margin: -0.25rem 0 1rem -0.5rem;
+          padding: 0.25rem 0.375rem;
+          margin: -0.25rem 0 1rem -0.375rem;
           text-align: initial;
           display: flex;
           flex-direction: column;

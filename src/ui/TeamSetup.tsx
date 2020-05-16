@@ -15,8 +15,8 @@ const TeamSetup: FunctionalComponent<{
     className={css`
       background: none;
       border: 2px solid transparent;
-      padding: 0.25rem 0.5rem;
-      margin: -0.25rem 0 0 -0.5rem;
+      padding: 0.25rem 0.375rem;
+      margin: -0.25rem 0 0 -0.375rem;
       text-align: initial;
       display: flex;
       flex-direction: column;

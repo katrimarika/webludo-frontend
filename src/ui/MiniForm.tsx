@@ -94,7 +94,7 @@ const MiniForm: FunctionalComponent<{
               font-size: 1rem;
               border: 2px solid ${theme.colors.black};
               border-radius: 3px;
-              padding: 0.375rem 0.5rem 0.4375rem;
+              padding: 0.375rem 0.375rem 0.4375rem;
             `}
             onInput={e => setInputText(e.currentTarget.value)}
           />
