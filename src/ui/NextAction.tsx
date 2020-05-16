@@ -67,6 +67,7 @@ const NextAction: FunctionalComponent = () => {
         color: ${theme.colors.boardCorner};
         width: 15%;
         height: 15%;
+        pointer-events: none;
       `}
     >
       <svg
