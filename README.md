@@ -21,10 +21,8 @@ Point PRs to `master` branch. Production is deployed automatically from `product
 Not ordered by priority
 
 - fix next action text position to be more consistent across different screen sizes
-- smaller game board on big landscape (to fit chat on screen at the same time)
 - api sending negative indices for pieces in goal for multiple pieces 0
 - handle less than 4 players (when api handles them)
-- teams
 - animations end when player state is updated during (e.g. someone finishes a penalty during a move animation)
 - update gained penalties and related announcements only after animations
 - update current player marker only after die animation (when no move action)

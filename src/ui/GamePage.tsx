@@ -39,7 +39,7 @@ const GamePage: FunctionalComponent = () => {
           grid-gap: 1rem 0.5rem;
           margin-bottom: 1.5rem;
           @media screen and (orientation: landscape) {
-            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-columns: 1fr auto 1fr;
           }
         `}
       >
@@ -54,19 +54,19 @@ const GamePage: FunctionalComponent = () => {
             grid-row: 2;
             width: calc(100vw - 3rem);
             height: calc(100vw - 3rem);
-            max-width: 60vh;
-            max-height: 60vh;
+            max-width: 45vh;
+            max-height: 45vh;
             @media screen and (orientation: landscape) {
               grid-column: 2;
               grid-row: 1 / span 3;
-              width: calc(100vh - 3.5rem);
-              height: calc(100vh - 3.5rem);
-              max-width: 50vw;
-              max-height: 50vw;
+              width: calc(100vh - 5rem);
+              height: calc(100vh - 5rem);
+              max-width: 45vw;
+              max-height: 45vw;
             }
             @media screen and (orientation: landscape) and (min-width: 1440px) {
-              max-width: 700px;
-              max-height: 700px;
+              max-width: 620px;
+              max-height: 620px;
             }
           `}
         >
