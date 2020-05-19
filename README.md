@@ -2,7 +2,7 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/ee12766a-ab4d-4610-985b-1acdb8d9edb5/deploy-status)](https://app.netlify.com/sites/loving-ardinghelli-fa9c33/deploys)
 
-A static web application for a virtual "Kalja-Kimble" boardgame. Built using Preact, Typescript, Parcel and Phoenix. Made for [Klipi's Phoenix backend](https://github.com/klipi/webludo-server).
+A static web application for a virtual "Kalja-Kimble" boardgame. Built using Preact, Typescript, Parcel and Phoenix. Made for [oniskanen's Phoenix backend](https://github.com/oniskanen/webludo-server).
 
 ## Development workflow
 
