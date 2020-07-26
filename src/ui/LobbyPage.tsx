@@ -22,7 +22,13 @@ const LobbyPage: FunctionalComponent = () => {
       >
         Webludo
       </h1>
-      <ErrorMessage prefix="Error: " text={channelError} />
+      <ErrorMessage
+        prefix="Error: "
+        text={channelError}
+        styles={css`
+          margin-bottom: 1rem;
+        `}
+      />
       <MiniForm
         inputName="game-code"
         title="Open an existing game"

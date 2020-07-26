@@ -27,6 +27,10 @@ const initSocketWithUrl = (url: string) => {
   const socket = new Socket(url);
   socket.connect();
 
+  const setSocketErrorHandler = (onError: OnError) => {
+    socket.onError(() => onError('Websocket connection failed.'));
+  };
+
   const joinLobbyChannel = (onSuccess: () => void, onError: OnError) => {
     const channel = socket.channel('lobby', {});
     channel
@@ -299,6 +303,7 @@ const initSocketWithUrl = (url: string) => {
   };
 
   return {
+    setSocketErrorHandler,
     joinLobbyChannel,
     leaveChannel,
     createGame,
@@ -324,6 +329,8 @@ const noop: (...args: any[]) => any = () => {
   // no-op
 };
 export const NO_SOCKET: SocketActions = {
+  setSocketErrorHandler: (onError: OnError) =>
+    onError('No socket connection url.'),
   joinLobbyChannel: noop,
   joinGameChannel: noop,
   leaveChannel: noop,

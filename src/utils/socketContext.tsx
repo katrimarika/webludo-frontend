@@ -20,6 +20,7 @@ export const useLobbyChannel = () => {
   const [channelError, setChannelError] = useState('');
 
   useEffect(() => {
+    socket.setSocketErrorHandler(setChannelError);
     if (!channel) {
       const lobbyChannel = socket.joinLobbyChannel(() => null, setChannelError);
       setChannel(lobbyChannel);
@@ -68,6 +69,7 @@ export const useGameChannel = (
   const [hostToken, setHostToken] = useState<string | null>(null);
 
   useEffect(() => {
+    socket.setSocketErrorHandler(setError);
     if (!channel) {
       const gameChannel = socket.joinGameChannel(
         code,
