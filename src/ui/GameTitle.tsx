@@ -1,7 +1,7 @@
 import { css, keyframes } from 'emotion';
 import { FunctionalComponent, h } from 'preact';
 import { useRef, useState } from 'preact/hooks';
-import CopyIcon from '../assets/copy.svg';
+import CopyIcon from 'url:../assets/copy.svg';
 import { useGameContext } from '../utils/gameContext';
 import { theme } from '../utils/style';
 
