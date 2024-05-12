@@ -1,4 +1,4 @@
-import { css, keyframes } from 'emotion';
+import { css, keyframes } from '@emotion/css';
 import { FunctionalComponent, h } from 'preact';
 import { useRef, useState } from 'preact/hooks';
 import CopyIcon from '../assets/copy.svg';

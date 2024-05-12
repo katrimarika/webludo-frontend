@@ -1,4 +1,4 @@
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
 import { colors } from '../utils/validation';

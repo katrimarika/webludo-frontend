@@ -1,4 +1,4 @@
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { useGameContext } from '../utils/gameContext';

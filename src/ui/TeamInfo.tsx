@@ -1,4 +1,4 @@
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { capitalize } from '../utils/helpers';
 import { theme } from '../utils/style';

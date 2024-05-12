@@ -1,4 +1,4 @@
-import { css, keyframes } from 'emotion';
+import { css, keyframes } from '@emotion/css';
 import { FunctionalComponent, h } from 'preact';
 import { memo } from 'preact/compat';
 import { useEffect, useState } from 'preact/hooks';

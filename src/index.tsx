@@ -1,4 +1,4 @@
-import { injectGlobal } from 'emotion';
+import { injectGlobal } from '@emotion/css';
 import { h, render } from 'preact';
 import App from './ui/App';
 import { theme } from './utils/style';

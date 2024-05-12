@@ -1,4 +1,4 @@
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { memo } from 'preact/compat';
 import { arrowCoord, goalCoord, homeCoord, playCoord } from '../utils/helpers';

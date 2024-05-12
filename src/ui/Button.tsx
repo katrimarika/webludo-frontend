@@ -1,4 +1,4 @@
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 import { FunctionalComponent, h } from 'preact';
 import { buttonCss } from '../utils/style';
 
