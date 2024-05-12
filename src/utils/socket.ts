@@ -350,7 +350,7 @@ export const NO_SOCKET: SocketActions = {
 };
 
 export const initSocket = (): SocketActions => {
-  const url = process.env.SOCKET_URL;
+  const url = import.meta.env.VITE_SOCKET_URL;
   if (!url) {
     console.error('No socket connection url!');
     return NO_SOCKET;
