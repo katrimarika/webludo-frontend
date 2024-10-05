@@ -14,7 +14,7 @@ To check code style: `npm run lint`
 
 Create a production build: `npm run build`
 
-Point PRs to `master` branch. Production is deployed automatically from `production` branch. Do a release with the provided script in `master` branch `npm run release`.
+Point PRs to `main` branch. Production is deployed automatically from `production` branch. Do a release with the provided script in `main` branch `npm run release`.
 
 ## TODO
 

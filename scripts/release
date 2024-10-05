@@ -18,20 +18,20 @@ git add package.json
 git commit --quiet -m "Version $newVersion"
 git tag v$newVersion
 
-# Push master and tags
+# Push main and tags
 echo "Pushing changes to origin..."
-git push --quiet origin master
+git push --quiet origin main
 git push --quiet origin --tags
 
-# Checkout production, pull and merge master to it
+# Checkout production, pull and merge main to it
 echo "Merging changes to production..."
 git checkout --quiet production
 git pull --quiet 
-git merge --quiet master
+git merge --quiet main
 
-# Push production and return to master
+# Push production and return to main
 echo "Pushing changes to production..."
 git push --quiet origin production
-git checkout --quiet master
+git checkout --quiet main
 
 echo "DONE!"
