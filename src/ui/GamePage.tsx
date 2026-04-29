@@ -1,4 +1,4 @@
-import { css } from '@emotion/css';
+import { css, cx } from '@emotion/css';
 import { FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
 import { buttonCss } from '../utils/style';
@@ -104,10 +104,12 @@ const GamePage: FunctionalComponent = () => {
         `}
       >
         <a
-          className={css`
-            ${buttonCss('red')}
-            text-decoration: none;
-          `}
+          className={cx(
+            buttonCss('red'),
+            css`
+              text-decoration: none;
+            `,
+          )}
           href="/"
         >
           Exit to lobby
