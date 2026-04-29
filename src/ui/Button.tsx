@@ -1,4 +1,4 @@
-import { css } from '@emotion/css';
+import { cx } from '@emotion/css';
 import { FunctionalComponent, h } from 'preact';
 import { buttonCss } from '../utils/style';
 
@@ -11,13 +11,7 @@ const Button: FunctionalComponent<{
   children,
   ...rest
 }) => (
-  <button
-    className={css`
-      ${buttonCss(color)}
-      ${extraCss}
-    `}
-    {...rest}
-  >
+  <button className={cx(buttonCss(color), extraCss)} {...rest}>
     {children}
   </button>
 );

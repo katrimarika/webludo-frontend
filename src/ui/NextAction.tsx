@@ -1,4 +1,4 @@
-import { css } from '@emotion/css';
+import { css, cx } from '@emotion/css';
 import { FunctionalComponent, h } from 'preact';
 import { useGameContext } from '../utils/gameContext';
 import { theme } from '../utils/style';
@@ -61,14 +61,16 @@ const NextAction: FunctionalComponent = () => {
 
   return (
     <div
-      className={css`
-        position: absolute;
-        ${positionCss(turnColor)}
-        color: ${theme.colors.boardCorner};
-        width: 15%;
-        height: 15%;
-        pointer-events: none;
-      `}
+      className={cx(
+        positionCss(turnColor),
+        css`
+          position: absolute;
+          color: ${theme.colors.boardCorner};
+          width: 15%;
+          height: 15%;
+          pointer-events: none;
+        `,
+      )}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
